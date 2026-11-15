@@ -10,7 +10,7 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 [[headers]]
-  for = "/*.jpg"
+  for = "/a/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
 
