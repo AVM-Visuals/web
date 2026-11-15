@@ -924,7 +924,7 @@ body.splash-open{overflow:hidden}
   // opening effects: camera flashes (Visuals) / golden rain (Atelier)
   function splashFx(kind,dur,cv,soft){
     var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;
-    var d=1,W=c.width=innerWidth*d,H=c.height=innerHeight*d,x=c.getContext('2d');
+    var d=(kind==='gold'?1:.5),W=c.width=innerWidth*d,H=c.height=innerHeight*d,x=c.getContext('2d');
     var t0=performance.now(),last=t0,R=Math.random;
     var parts=[],flashes=[];
     if(kind==='gold'){
@@ -974,7 +974,7 @@ body.splash-open{overflow:hidden}
           var A2=(a<35?a/35:Math.exp(-(a-35)/170))*f.k;
           var g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,M*(soft?.14:.75));
           g.addColorStop(0,'rgba(255,255,255,'+(A2*.9)+')');g.addColorStop(.08,'rgba(245,248,255,'+(A2*.55)+')');g.addColorStop(.4,'rgba(225,233,255,'+(A2*.18)+')');g.addColorStop(1,'rgba(210,220,255,0)');
-          x.globalAlpha=1;x.fillStyle=g;x.fillRect(0,0,W,H);
+          var R0=M*(soft?.14:.75);x.globalAlpha=1;x.fillStyle=g;x.fillRect(f.x-R0,f.y-R0,R0*2,R0*2);
           // soft tapered light rays flying out in every direction
           x.save();x.translate(f.x,f.y);x.rotate(f.rot+a/1400);
           for(var q=0;q<f.rays;q++){
