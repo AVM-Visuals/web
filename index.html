@@ -926,7 +926,7 @@ body.splash-open{overflow:hidden}
     var h=location.hash.slice(1),tgt=h&&document.getElementById(h),shared=tgt&&tgt.closest('footer');
     var at=shared?current==='atelier':h.indexOf('atelier')===0,brand=at?'atelier':'visuals';
     if(brand!==current){
-      document.body.dataset.brand=brand;
+      document.body.dataset.brand=brand;document.documentElement.style.backgroundColor=brand==='atelier'?'#F2ECE3':'#0a0a0a';
       vV.hidden=at;vA.hidden=!at;
       document.querySelectorAll('[data-for]').forEach(function(el){el.hidden=el.dataset.for!==brand});
       swV.toggleAttribute('aria-current',!at);swA.toggleAttribute('aria-current',at);
