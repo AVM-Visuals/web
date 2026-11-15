@@ -76,16 +76,18 @@ body[data-brand="atelier"].pattern-dark{background:var(--tex-light-site);backgro
 
 /* header + brand switch */
 header{position:sticky;top:0;z-index:10;background:var(--header);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:48px;height:76px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:40px;height:76px}
 
-@media (min-width:1181px) and (max-width:1440px){nav .navlink[href="#kde-nas-najdete"]{display:none}}
+
 .logo{display:flex;align-items:center;text-decoration:none}
 .logo img{height:38px;width:auto}
 .logo-at{display:flex;align-items:center;gap:10px}
+.bar>.logo{flex-shrink:0}.logo-at b{white-space:nowrap}
+body.navtight nav .navlink[href="#kde-nas-najdete"]{display:none!important}
 .logo-at img{height:23px}
 .logo-at i{width:1.5px;height:38px;background:linear-gradient(transparent,var(--gold),transparent)}
 .logo-at b{font:300 15px var(--body);letter-spacing:.42em;color:var(--text)}
-nav{display:flex;gap:18px;align-items:center}
+nav{display:flex;gap:10px;align-items:center}
 nav .navlink{white-space:nowrap}
 nav a{text-decoration:none;font-weight:500;font-size:14px;color:var(--text2)}
 nav a:hover{color:var(--gold)}
@@ -1030,6 +1032,15 @@ body.splash-open{overflow:hidden}
     requestAnimationFrame(frame);
   }
   window.splashFxRef=splashFx;
+  // keep the header on one line: if the nav doesn't fit next to the logo, drop the least important link
+  (function(){var bar=document.querySelector('.bar');if(!bar)return;
+  function fit(){var b=document.body;b.classList.remove('navtight');if(innerWidth<=1180)return;
+    var nv=bar.querySelector('nav'),lg=[].filter.call(bar.querySelectorAll('.logo'),function(e){return e.offsetParent})[0];if(!nv||!lg)return;
+    var cs=getComputedStyle(bar),avail=bar.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    if(lg.getBoundingClientRect().width+40+nv.scrollWidth>avail)b.classList.add('navtight')}
+  addEventListener('resize',fit);addEventListener('hashchange',function(){setTimeout(fit,60)});document.addEventListener('click',function(e){if(e.target.closest('.langs,.switch'))setTimeout(fit,80)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);setTimeout(fit,300);setTimeout(fit,3000);fit()})();
+
   // in-page section links: land the section heading right under the sticky header
   window.secTo=function(el,instant){var hd=document.querySelector('header'),t=(el.matches('h1,h2')?el:(el.querySelector('h2,h1')||el));
     var y=t.getBoundingClientRect().top+window.scrollY-(hd?hd.getBoundingClientRect().height:0)-14;window.scrollTo({top:Math.max(0,y),behavior:instant?'auto':'smooth'})};
