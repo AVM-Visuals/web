@@ -432,6 +432,15 @@ html{background:#0a0a0a}body[data-brand="visuals"] .reel{box-shadow:0 -10px 30px
 @media (max-width:760px){
   header{background:var(--bg)}
 }
+@media (max-width:760px){
+  .bar{padding-top:8px;padding-bottom:8px;row-gap:6px}
+  .logo img{height:26px}.logo-at img{height:16px}.logo-at i{height:26px}.logo-at b{font-size:12px}
+  nav{gap:6px 12px}
+  nav .switch a{padding:5px 12px;font-size:12px}
+  .socials a{width:30px;height:30px}.socials svg{width:18px;height:18px}
+  .langs button{width:24px;height:24px}.langs svg{width:18px;height:12px}
+  nav .navlink{font-size:12px;padding:0}
+}
 .reel::after{content:"";position:absolute;left:0;right:0;top:100%;height:160px;background:#0a0a0a}
 /* Ukrainian: Teko has no Cyrillic, use Oswald */
 html[lang="uk"]{--display:"Oswald","Arial Narrow",sans-serif}
@@ -935,7 +944,7 @@ body.splash-open{overflow:hidden}
       }
       current=brand;
     }
-    if(h&&h!=='atelier'&&h!=='top'){var el=document.getElementById(h);if(el){el.scrollIntoView();return}}
+    if(h&&h!=='atelier'&&h!=='top'){var el=document.getElementById(h);if(el){window.secTo?secTo(el,true):el.scrollIntoView();return}}
     window.scrollTo(0,0);
   }
   addEventListener('hashchange',route);route();
@@ -1017,6 +1026,12 @@ body.splash-open{overflow:hidden}
     requestAnimationFrame(frame);
   }
   window.splashFxRef=splashFx;
+  // in-page section links: land the section heading right under the sticky header
+  window.secTo=function(el,instant){var hd=document.querySelector('header'),t=(el.matches('h1,h2')?el:(el.querySelector('h2,h1')||el));
+    var y=t.getBoundingClientRect().top+window.scrollY-(hd?hd.getBoundingClientRect().height:0)-14;window.scrollTo({top:Math.max(0,y),behavior:instant?'auto':'smooth'})};
+  document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);if(!id||id==='top'||id==='atelier')return;
+    var el=document.getElementById(id);if(!el||!el.offsetParent)return;e.preventDefault();history.replaceState(null,'','#'+id);secTo(el)});
+
   (function(){var on=false;function chk(){var v=window.scrollY>90;if(v!==on){on=v;document.body.classList.toggle('scrolled',v)}}addEventListener('scroll',chk,{passive:true});chk()})();
 
   // client bar: constant slow speed + tooltip with name/type (+ video hint when linked)
