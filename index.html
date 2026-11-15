@@ -417,7 +417,6 @@ html{background:#0a0a0a}body[data-brand="visuals"] .reel{box-shadow:0 -10px 30px
 }
 .nbr{display:none}
 @media (max-width:760px){
-  header{position:relative}
   .bar{flex-direction:column;justify-content:center;align-items:center;padding-top:14px;padding-bottom:12px;row-gap:12px}
   nav{width:100%;flex-wrap:wrap;justify-content:center;gap:10px 13px}
   .nbr{display:block;flex-basis:100%;height:0}
@@ -429,6 +428,13 @@ html{background:#0a0a0a}body[data-brand="visuals"] .reel{box-shadow:0 -10px 30px
   nav .navlink{order:6;display:inline-block;font-size:12.5px;padding:2px 0}
   nav .navlink[hidden]{display:none}
   .socials{gap:6px}
+}
+@media (max-width:760px){
+  header{background:var(--bg)}
+  body.scrolled .bar{row-gap:8px;padding-top:8px;padding-bottom:8px}
+  body.scrolled .bar>.logo{display:none!important}
+  body.scrolled nav .socials,body.scrolled nav .langs,body.scrolled nav .nbr:not(.nbr2){display:none!important}
+  body.scrolled nav .switch a{padding:5px 12px;font-size:12px}
 }
 .reel::after{content:"";position:absolute;left:0;right:0;top:100%;height:160px;background:#0a0a0a}
 /* Ukrainian: Teko has no Cyrillic, use Oswald */
@@ -927,7 +933,7 @@ body.splash-open{overflow:hidden}
       if(!at)swV.setAttribute('aria-current','page');else swA.setAttribute('aria-current','page');
       document.title=at?'AVM Atelier':'AVM Visuals';
       var sp=document.getElementById('splash');
-      if(current!==null&&sp&&sp.hidden){
+      if(current!==null&&(!sp||sp.hidden)){
         var mv=at?vA:vV;mv.classList.remove('enter');void mv.offsetWidth;mv.classList.add('enter');
         if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&window.splashFxRef)window.splashFxRef(at?'gold':'flash',3400,document.getElementById('switch-fx'),!at);
       }
@@ -1015,6 +1021,7 @@ body.splash-open{overflow:hidden}
     requestAnimationFrame(frame);
   }
   window.splashFxRef=splashFx;
+  (function(){var on=false;function chk(){var v=window.scrollY>90;if(v!==on){on=v;document.body.classList.toggle('scrolled',v)}}addEventListener('scroll',chk,{passive:true});chk()})();
 
   // client bar: constant slow speed + tooltip with name/type (+ video hint when linked)
   (function(){
@@ -1158,7 +1165,7 @@ body.splash-open{overflow:hidden}
     if(splash.classList.contains('leaving'))return;
     var go=a.dataset.go;
     if(location.hash==='#'+go)route();else location.hash=go;
-    function done(){splash.hidden=true;document.body.classList.remove('splash-open','splash-out');splash.classList.remove('leaving','go-v','go-a','fade');window.scrollTo(0,0)}
+    function done(){splash.hidden=true;setTimeout(function(){if(splash.parentNode)splash.parentNode.removeChild(splash)},50);document.body.classList.remove('splash-open','splash-out');splash.classList.remove('leaving','go-v','go-a','fade');window.scrollTo(0,0)}
     if(reduce){done();return}
     splash.classList.add('leaving',go==='top'?'go-v':'go-a');document.body.classList.add('splash-out');
     splashFx(go==='top'?'flash':'gold',go==='top'?3000:3400);
