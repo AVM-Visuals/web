@@ -288,7 +288,7 @@ html[lang="uk"] .hero-mark{--hf:clamp(44px,6vw,96px)}
 @media (max-width:520px){.services .svc:nth-child(n){border-left:0;padding-left:0}}
 
 /* brand switch: subtle effect + fade-in of the new page */
-.switch-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+.switch-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90;display:none}
 main.enter{animation:viewIn 2.5s cubic-bezier(.25,.1,.25,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){main.enter{animation:none}}
@@ -296,7 +296,7 @@ main.enter{animation:viewIn 2.5s cubic-bezier(.25,.1,.25,1)}
 /* camera cursor + click flash */
 html,body,*{cursor:url('/a/cursor_cam_back.svg') 10 16,auto!important}
 input:not([type=button]):not([type=submit]),textarea{cursor:text!important}
-.click-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:120}
+.click-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:120;display:none}
 
 /* Visuals: fixed film-strip of client logos winding onto a reel */
 .reel{position:fixed;left:0;right:0;bottom:0;height:82px;z-index:40;background:#0a0a0a;border-top:1px solid rgba(216,178,74,.35);box-shadow:0 -10px 30px rgba(0,0,0,.35)}
@@ -947,7 +947,7 @@ body.splash-open{overflow:hidden}
 
   // opening effects: camera flashes (Visuals) / golden rain (Atelier)
   function splashFx(kind,dur,cv,soft){
-    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;
+    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv)cv.style.display='block';
     var d=(kind==='gold'?1:.5),W=c.width=innerWidth*d,H=c.height=innerHeight*d,x=c.getContext('2d');
     var t0=performance.now(),last=t0,R=Math.random;
     var parts=[],flashes=[];
@@ -1016,7 +1016,7 @@ body.splash-open{overflow:hidden}
         });
         x.globalAlpha=1;x.globalCompositeOperation='source-over';
       }
-      if(el<dur)requestAnimationFrame(frame);else x.clearRect(0,0,W,H);
+      if(el<dur)requestAnimationFrame(frame);else{x.clearRect(0,0,W,H);if(cv)cv.style.display='none'}
     }
     requestAnimationFrame(frame);
   }
@@ -1147,7 +1147,7 @@ body.splash-open{overflow:hidden}
         x.globalAlpha=Math.max(0,.04*A);x.fillStyle=light?'#FFF4D6':'#fff';x.fillRect(0,0,c.width,c.height);x.globalAlpha=1;
         return true});
       x.globalCompositeOperation='source-over';
-      if(fl.length)requestAnimationFrame(loop);else{running=false;x.clearRect(0,0,c.width,c.height)}
+      if(fl.length)requestAnimationFrame(loop);else{running=false;x.clearRect(0,0,c.width,c.height);c.style.display='none'}
     }
     document.addEventListener('pointerdown',function(e){
       if(e.pointerType==='touch'||e.button!==0)return;
@@ -1155,7 +1155,7 @@ body.splash-open{overflow:hidden}
       if(e.target.closest('input,textarea,select'))return;
       var lt=document.body.classList.contains('splash-open')?!!e.target.closest('.half.a'):document.body.dataset.brand==='atelier';
       fl.push({x:e.clientX*d,y:e.clientY*d,t:performance.now(),r:Math.random()*6.28,light:lt});
-      if(!running){running=true;requestAnimationFrame(loop)}
+      if(!running){running=true;c.style.display='block';requestAnimationFrame(loop)}
     });
   })();
   // splash chooser: shown on every load / refresh
