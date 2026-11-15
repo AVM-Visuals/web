@@ -474,20 +474,21 @@ body.splash-open{overflow:hidden}
   .half.v:hover .sp-logo,.half.a:hover .sp-logo{transform:translate(-50%,-50%) scale(1.03)}
 }
 .sp-fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;will-change:contents}
-/* opening effect after a choice – GPU-only (transform/opacity) */
-.splash.leaving{background:transparent;transition:opacity 1.2s cubic-bezier(.4,0,.2,1)}
-.splash.leaving .half,.splash.leaving .seam{transition:transform 1.6s cubic-bezier(.65,0,.25,1),opacity 1.2s ease;will-change:transform}
-.splash.leaving.go-v .half.a,.splash.leaving.go-v .seam{transform:translate3d(105%,0,0)}
-.splash.leaving.go-a .half.v,.splash.leaving.go-a .seam{transform:translate3d(-105%,0,0)}
-.splash.leaving .sp-logo{transition:transform 1.6s cubic-bezier(.65,0,.25,1),opacity .8s ease}
+/* opening effect after a choice */
+.splash.leaving{transition:--t 1.7s cubic-bezier(.65,0,.25,1),--b 1.7s cubic-bezier(.65,0,.25,1),opacity 1.3s cubic-bezier(.4,0,.2,1)}
+.splash.leaving.go-v{--t:104%!important;--b:104%!important}
+.splash.leaving.go-a{--t:-4%!important;--b:-4%!important}
+.splash.leaving .sp-logo{transition:transform 1.9s cubic-bezier(.65,0,.25,1),left 1.9s cubic-bezier(.65,0,.25,1),right 1.9s cubic-bezier(.65,0,.25,1),top 1.9s cubic-bezier(.65,0,.25,1),opacity .9s ease}
 .splash.go-v .half.a .sp-logo,.splash.go-a .half.v .sp-logo{opacity:0!important}
-.splash.go-v .half.v .sp-logo,.splash.go-a .half.a .sp-logo{transform:translateY(-50%) scale(1.12)!important}
+.splash.go-v .half.v .sp-logo,.splash.go-a .half.a .sp-logo{transform:translateY(-50%) scale(1.14)!important}
+.splash.go-v .half.v .sp-logo{left:50%;top:50%;transform:translate(-50%,-50%) scale(1.14)!important}
+.splash.go-a .half.a .sp-logo{right:50%;top:50%;transform:translate(50%,-50%) scale(1.14)!important}
 .splash.fade{opacity:0}
+.splash.leaving .half{transition:transform 3s cubic-bezier(.4,0,.2,1)}
+.splash.fade .half{transform:scale(1.04)}
 .splash.fade .sp-logo{opacity:0}
 @media (max-aspect-ratio:4/5){
-  .splash.leaving.go-v .half.a,.splash.leaving.go-v .seam{transform:translate3d(0,105%,0)}
-  .splash.leaving.go-a .half.v,.splash.leaving.go-a .seam{transform:translate3d(0,-105%,0)}
-  .splash.go-v .half.v .sp-logo,.splash.go-a .half.a .sp-logo{transform:translate(-50%,-50%) scale(1.1)!important}
+  .splash.go-v .half.v .sp-logo,.splash.go-a .half.a .sp-logo{top:50%;left:50%;right:auto;transform:translate(-50%,-50%) scale(1.12)!important}
 }
 @media (prefers-reduced-motion:reduce){.splash,.sp-logo{transition:none}}
 
@@ -932,7 +933,7 @@ body.splash-open{overflow:hidden}
     }else{
       var times=soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
       times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(.04+R()*.92)*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
-      if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});}
+      if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});flashes.push({t:1560,big:true});}
       else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
     }
     function star(px,py,s,rot){x.save();x.translate(px,py);x.rotate(rot);x.beginPath();for(var q=0;q<8;q++){var rr=q%2?s*.35:s*1.8,a=q*Math.PI/4;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill();x.restore()}
@@ -1143,8 +1144,8 @@ body.splash-open{overflow:hidden}
     if(reduce){done();return}
     splash.classList.add('leaving',go==='top'?'go-v':'go-a');document.body.classList.add('splash-out');
     splashFx(go==='top'?'flash':'gold',go==='top'?3000:3400);
-    setTimeout(function(){splash.classList.add('fade')},1300);
-    setTimeout(done,2600);
+    setTimeout(function(){splash.classList.add('fade')},1900);
+    setTimeout(done,3300);
   })});
 
   document.getElementById('reopen').addEventListener('click',function(){
