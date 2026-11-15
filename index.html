@@ -288,7 +288,7 @@ html[lang="uk"] .hero-mark{--hf:clamp(44px,6vw,96px)}
 @media (max-width:520px){.services .svc:nth-child(n){border-left:0;padding-left:0}}
 
 /* brand switch: subtle effect + fade-in of the new page */
-.switch-fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90;display:none}
+.switch-fx{position:fixed;left:0;right:0;top:56px;bottom:110px;width:100%;height:auto;pointer-events:none;z-index:90;display:none}
 main.enter{animation:viewIn 2.5s cubic-bezier(.25,.1,.25,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){main.enter{animation:none}}
@@ -463,7 +463,7 @@ body.splash-open{overflow:hidden}
 .half.v{background:#151515;clip-path:polygon(0 0,var(--t) 0,var(--b) 100%,0 100%)}
 .half.a{background:#F2ECE3;clip-path:polygon(var(--t) 0,100% 0,100% 100%,var(--b) 100%)}
 .half.v{background:var(--tex-dark);background-color:#151515}
-.half.a{background:var(--tex-light);background-color:#151515}
+.half.a{background:var(--tex-light);background-color:#F2ECE3}
 .seam{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#B8901F,#F3DC8C 45%,#D8B24A 55%,#A87F1C);clip-path:polygon(calc(var(--t) - var(--g)) 0,calc(var(--t) + var(--g)) 0,calc(var(--b) + var(--g)) 100%,calc(var(--b) - var(--g)) 100%)}
 .sp-logo{position:absolute;top:50%;transform:translateY(-50%);width:min(27.5vw,454px);display:grid;justify-items:center;gap:2vw;transition:transform .6s cubic-bezier(.6,0,.2,1),opacity .6s}
 .half.v .sp-logo{left:calc(25% - min(27.5vw,454px)/2);top:45%}
@@ -948,7 +948,7 @@ body.splash-open{overflow:hidden}
   // opening effects: camera flashes (Visuals) / golden rain (Atelier)
   function splashFx(kind,dur,cv,soft){
     var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv)cv.style.display='block';
-    var d=(kind==='gold'?1:.5),W=c.width=innerWidth*d,H=c.height=innerHeight*d,x=c.getContext('2d');
+    var d=(kind==='gold'?1:.5),W=c.width=(c.clientWidth||innerWidth)*d,H=c.height=(c.clientHeight||innerHeight)*d,x=c.getContext('2d');
     var t0=performance.now(),last=t0,R=Math.random;
     var parts=[],flashes=[];
     if(kind==='gold'){
