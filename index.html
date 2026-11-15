@@ -76,13 +76,15 @@ body[data-brand="atelier"].pattern-dark{background:var(--tex-light-site);backgro
 
 /* header + brand switch */
 header{position:sticky;top:0;z-index:10;background:var(--header);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:20px;height:76px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:48px;height:76px}
+@media (min-width:761px){nav{position:relative;padding-left:28px}nav::before{content:"";position:absolute;left:0;top:50%;width:1px;height:30px;transform:translateY(-50%);background:linear-gradient(transparent,var(--gold),transparent);opacity:.7}}
+@media (min-width:1181px) and (max-width:1440px){nav .navlink[href="#kde-nas-najdete"]{display:none}}
 .logo{display:flex;align-items:center;text-decoration:none}
 .logo img{height:38px;width:auto}
 .logo-at{display:flex;align-items:center;gap:10px}
 .logo-at img{height:23px}
 .logo-at i{width:1.5px;height:38px;background:linear-gradient(transparent,var(--gold),transparent)}
-.logo-at b{font:300 15px var(--body);letter-spacing:.5em;color:var(--text)}
+.logo-at b{font:300 15px var(--body);letter-spacing:.42em;color:var(--text)}
 nav{display:flex;gap:18px;align-items:center}
 nav .navlink{white-space:nowrap}
 nav a{text-decoration:none;font-weight:500;font-size:14px;color:var(--text2)}
@@ -288,7 +290,8 @@ html[lang="uk"] .hero-mark{--hf:clamp(44px,6vw,96px)}
 @media (max-width:520px){.services .svc:nth-child(n){border-left:0;padding-left:0}}
 
 /* brand switch: subtle effect + fade-in of the new page */
-.switch-fx{position:fixed;left:0;right:0;top:56px;bottom:110px;width:100%;height:auto;pointer-events:none;z-index:90;display:none}
+.switch-fx{position:fixed;left:0;right:0;top:var(--hdr,76px);bottom:110px;width:100%;height:auto;pointer-events:none;z-index:90;display:none;-webkit-mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent)}
+body[data-brand="atelier"] .switch-fx{bottom:6px;-webkit-mask-image:linear-gradient(transparent,#000 6%);mask-image:linear-gradient(transparent,#000 6%)}
 main.enter{animation:viewIn 2.5s cubic-bezier(.25,.1,.25,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){main.enter{animation:none}}
@@ -952,7 +955,7 @@ body.splash-open{overflow:hidden}
 
   // opening effects: camera flashes (Visuals) / golden rain (Atelier)
   function splashFx(kind,dur,cv,soft){
-    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv)cv.style.display='block';
+    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv){var hd0=document.querySelector('header');if(hd0)cv.style.setProperty('--hdr',Math.round(hd0.getBoundingClientRect().bottom)+'px');cv.style.display='block';}
     var d=(kind==='gold'?1:.5),W=c.width=(c.clientWidth||innerWidth)*d,H=c.height=(c.clientHeight||innerHeight)*d,x=c.getContext('2d');
     var t0=performance.now(),last=t0,R=Math.random;
     var parts=[],flashes=[];
