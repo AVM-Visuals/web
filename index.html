@@ -933,7 +933,7 @@ body.splash-open{overflow:hidden}
     }else{
       var times=soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
       times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(.04+R()*.92)*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
-      if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});flashes.push({t:1560,big:true});}
+      if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});}
       else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
     }
     function star(px,py,s,rot){x.save();x.translate(px,py);x.rotate(rot);x.beginPath();for(var q=0;q<8;q++){var rr=q%2?s*.35:s*1.8,a=q*Math.PI/4;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill();x.restore()}
