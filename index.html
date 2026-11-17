@@ -620,6 +620,11 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
 .drone .dr-lines{position:absolute;left:0;top:0;width:100%;height:1px;overflow:visible;pointer-events:none;transition:opacity .45s}
 .drone .dr-lines path{fill:none;stroke:#D8B24A;stroke-width:1.3;stroke-linecap:round;opacity:.9}
 .drone.quiet .dr-lines{opacity:0}
+
+.reel-pick{transform-origin:50% 0;transform:translateX(-50%) translateY(120px) scale(.3);transition:opacity .35s,transform .8s cubic-bezier(.22,.9,.28,1.04)}
+.reel-pick.on{transform:translateX(-50%) translateY(0) scale(1) rotate(var(--sw,0deg))}
+.drone.carry .dr-lines{opacity:1}
+.drone.carry .dr-lines path{stroke-width:1.5}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1228,7 +1233,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
       if(blocked()){d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');pgx=null;requestAnimationFrame(frame);return}d.style.visibility='';
       var dw=body.offsetWidth,bh=ban.offsetHeight||46,br=reelEl().getBoundingClientRect(),pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on'),B=bounds();
       if(pickOpen&&mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint');travel=true;pgx=null}
-      if(!pickOpen&&mode==='pick'){mode='patrol';setText(0);goTo(pickTarget(null,pos.x+dw/2));pgx=null}
+      if(!pickOpen&&mode==='pick'){pk&&pk.style.removeProperty('--sw');mode='patrol';setText(0);goTo(pickTarget(null,pos.x+dw/2));pgx=null}
       if(mode==='patrol'){
         if(!tgt||!document.body.contains(tgt))goTo(pickTarget(null));
         var overBar=mouse.t&&mouse.in&&mouse.y>br.top-6&&mouse.y<br.bottom&&mouse.x>B.L-20&&mouse.x<B.R+20;
@@ -1237,12 +1242,12 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
         else if(!hov&&!travel&&arrT&&now-arrT>dwell){goTo(neighbour(B));pgx=null;dwell=1400+Math.random()*1800}}
       var gx=goalX(dw),tvx=pgx==null?0:(gx-pgx)/(dt||.016);pgx=gx;
       var ct=document.getElementById('client-tip'),tipOn=mode==='patrol'&&ct&&ct.classList.contains('on'),showBan=hov||tipOn;
-      d.classList.toggle('quiet',!showBan);document.body.classList.toggle('dr-on',hov&&!tipOn);
-      var gy;if(mode==='pick'){var pr=pk.getBoundingClientRect();gy=showBan?pr.top-(dw*.34+46+bh+10):pr.top-dw*.4-8;if(gy<70)gy=70}else{var base=tipOn?ct.getBoundingClientRect().top-4:br.top;gy=showBan?base-(dw*.34+46+bh+14):base-dw*.4-6}
+      var carry=mode==='pick';if(carry)showBan=false;d.classList.toggle('quiet',!showBan);var above=carry&&pk.getBoundingClientRect().top-(pos.y+dw*.33)>6;d.classList.toggle('carry',above);d.style.zIndex=carry&&!above?'129':'';document.body.classList.toggle('dr-on',hov&&!tipOn);
+      var gy;if(mode==='pick'){var pr=pk.getBoundingClientRect();gy=pr.top-dw*.4-44;if(gy<64)gy=64}else{var base=tipOn?ct.getBoundingClientRect().top-4:br.top;gy=showBan?base-(dw*.34+46+bh+14):base-dw*.4-6}
       var VMAX=overBar||mode==='pick'?260:(innerWidth<700?120:170),AMAX=overBar||mode==='pick'?340:(innerWidth<700?95:125);
       var ex=gx-pos.x,brake=Math.sqrt(2*AMAX*.55*Math.abs(ex))*(ex<0?-1:1),vdes=cl(Math.abs(brake)<Math.abs(ex*2.6)?brake:ex*2.6,VMAX)+tvx,ax=reduce?0:cl((vdes-v.x)*7,AMAX*1.6);
       if(reduce){pos.x=gx;v.x=tvx}else{v.x+=ax*dt;pos.x+=v.x*dt}
-      var ey=gy-pos.y,vdy=cl(ey*1.2,190),ay=cl((vdy-v.y)*2,220);if(reduce){pos.y=gy;v.y=0}else{v.y+=ay*dt;pos.y+=v.y*dt}
+      var ey=gy-pos.y,vdy=cl(ey*(mode==='pick'?4:1.2),mode==='pick'?900:190),ay=cl((vdy-v.y)*(mode==='pick'?8:2),mode==='pick'?2600:220);if(reduce){pos.y=gy;v.y=0}else{v.y+=ay*dt;pos.y+=v.y*dt}
       if(travel&&Math.abs(ex)<14&&Math.abs(v.x-tvx)<45){travel=false;arrT=now}
       var arrived=!travel&&mode==='patrol';if(tgt)tgt.classList.toggle('dr-hint',arrived);
       // body tilt follows relative velocity + acceleration (like a real quadcopter)
@@ -1257,7 +1262,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
         function rotP(x,y,cx,cy,c,s_){var dx=x-cx,dy=y-cy;return [cx+dx*c-dy*s_,cy+dx*s_+dy*c]}
         var f1=rotP(dw*35/120,dw*39/120,ox,oy,ct2,st2),f2=rotP(dw*85/120,dw*39/120,ox,oy,ct2,st2);
         var px0=dw/2,py0=dw*.34,y0=py0+46,bw=ban.offsetWidth||150,tr2=th*Math.PI/180,c3=Math.cos(tr2),s3=Math.sin(tr2);
-        var a1=rotP(px0-bw*.32,y0,px0,py0,c3,s3),a2=rotP(px0+bw*.32,y0,px0,py0,c3,s3);
+        var a1=rotP(px0-bw*.32,y0,px0,py0,c3,s3),a2=rotP(px0+bw*.32,y0,px0,py0,c3,s3);if(carry){var pr2=pk.getBoundingClientRect();a1=[pr2.left+22-pos.x,pr2.top+1-pos.y];a2=[pr2.right-22-pos.x,pr2.top+1-pos.y];pk.style.setProperty('--sw',(th*.1).toFixed(2)+'deg')}
         [[f1,a1],[f2,a2]].forEach(function(pq,i){var p=pq[0],q=pq[1],mx=(p[0]+q[0])/2-thv*.35,my=(p[1]+q[1])/2+5+Math.abs(th)*.18;lines[i].setAttribute('d','M'+p[0].toFixed(1)+' '+p[1].toFixed(1)+' Q'+mx.toFixed(1)+' '+my.toFixed(1)+' '+q[0].toFixed(1)+' '+q[1].toFixed(1))})}
       requestAnimationFrame(frame)}
     addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.t=performance.now();mouse.in=true},{passive:true});document.addEventListener('mouseout',function(e){if(!e.relatedTarget)mouse.in=false});addEventListener('blur',function(){mouse.in=false});
