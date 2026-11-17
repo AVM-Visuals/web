@@ -586,7 +586,7 @@ body.splash-open{overflow:hidden}
 }
 
 /* drone hint */
-.drone{position:fixed;left:0;top:0;z-index:132;pointer-events:none;will-change:transform;--dw:150px;transition:opacity .4s}
+.drone{position:fixed;left:0;top:0;z-index:132;pointer-events:none;will-change:transform;--dw:135px;transition:opacity .4s}
 .drone .dr-body{position:relative;width:var(--dw);animation:drBob 1.6s ease-in-out infinite}
 .drone svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 10px 16px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(240,207,110,.18))}
 .drone .rot{transform-box:fill-box;transform-origin:center;animation:drSpin .09s linear infinite}
@@ -608,7 +608,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
 @keyframes drLed{0%{opacity:1}50%{opacity:.15}}
 @keyframes drSwing{0%,100%{transform:translateX(-50%) rotate(-3deg)}50%{transform:translateX(-50%) rotate(3deg)}}
 @keyframes drRing{0%{transform:scale(.6);opacity:.95}100%{transform:scale(1.35);opacity:0}}
-@media (max-width:760px){.drone{--dw:108px}.drone .dr-ban{padding:7px 11px 8px}.drone .dr-ban b{font-size:12.5px}.drone .dr-ban i{font-size:9.5px}.fr.dr-hint::after{width:62px;height:62px;margin:-31px 0 0 -31px}}
+@media (max-width:760px){.drone{--dw:97px}.drone .dr-ban{padding:7px 11px 8px}.drone .dr-ban b{font-size:12.5px}.drone .dr-ban i{font-size:9.5px}.fr.dr-hint::after{width:62px;height:62px;margin:-31px 0 0 -31px}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1198,7 +1198,8 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
       var pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on');
       if(blocked()){d.style.opacity='0';d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');requestAnimationFrame(frame);return}d.style.visibility='';d.style.opacity='';
       var gx,gy,quiet=false;
-      if(pickOpen){if(mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint')}var pr=pk.getBoundingClientRect();gx=pr.left+pr.width/2-dw/2;gy=pr.top-(dw*.34+46+bh+10);if(gy<70){gy=70}}
+      if(!pickOpen&&mouse.t&&mouse.y<innerHeight/2){if(mode!=='away'){mode='away';tgt&&tgt.classList.remove('dr-hint')}gx=innerWidth+dw+60;gy=-dw*.8;quiet=true}
+      else if(pickOpen){if(mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint')}var pr=pk.getBoundingClientRect();gx=pr.left+pr.width/2-dw/2;gy=pr.top-(dw*.34+46+bh+10);if(gy<70){gy=70}}
       else{if(mode!=='patrol'){mode='patrol';setText(0);arrived=0;showUntil=0;tgt=pickTarget(tgt)}
         if(!tgt||!document.body.contains(tgt)){tgt=pickTarget(null)}
         if(mouse.t&&now-mouse.t<2500&&mouse.y>br.top-230){var near=null,nd=1e9;[].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){var q=f.getBoundingClientRect();if(q.right<0||q.left>innerWidth)return;var dd=Math.abs(q.left+q.width/2-mouse.x);if(dd<nd){nd=dd;near=f}});
