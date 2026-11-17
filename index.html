@@ -845,6 +845,14 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
 
 /* laptop/desktop: smaller section headings (tablet/mobile unchanged) */
 @media (min-width:1181px){main h2{font-size:clamp(40px,3.4vw,54px)}body[data-brand="atelier"] main h2,.teaser h2{font-size:clamp(40px,3.4vw,56px)}html[lang="uk"] main h2{font-size:clamp(32px,2.8vw,44px)}.ab-body h2{font-size:clamp(40px,3.4vw,54px)}.svc h3{font-size:clamp(30px,2.4vw,38px)}body[data-brand="atelier"] .svc h3{font-size:clamp(26px,2vw,32px)}}
+
+/* section titles centred with centred gold rule */
+main .sec-head{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+main .sec-head>div:first-child{display:flex;flex-direction:column;align-items:center}
+main .sec-head .gold-rule{margin-left:auto;margin-right:auto}
+main .sec-head p{max-width:60ch;margin:0 auto}
+main .sec-head .filters{justify-content:center}
+.faq-list{margin-left:auto;margin-right:auto}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -938,7 +946,6 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
     <div class="wrap">
       <div class="sec-head">
         <div><h2>Nabídka služeb</h2><i class="gold-rule"></i></div>
-        <p>Kameramani, fotografové a střihači v jednom týmu. Jedna domluva, jeden termín, hotové soubory pro web, sociální sítě nebo tisk.</p>
       </div>
       <div class="services">
         <div class="svc svc-go" data-go-f="znacky" role="link" tabindex="0"><h3>Značky</h3><p>Produktové fotografie, reklamní spoty a obsah pro sociální sítě včetně krátkých videí na výšku.</p><small>Produkt · kampaň · reels</small></div>
@@ -1097,7 +1104,7 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
 
   <section class="faq" id="faq">
     <div class="wrap">
-      <div class="sec-head"><div><h2>Časté dotazy</h2><i class="gold-rule"></i></div><p>Odpovědi na to, na co se nás klienti ptají nejčastěji. Nenašli jste svou otázku? Napište nám.</p></div>
+      <div class="sec-head"><div><h2>Časté dotazy</h2><i class="gold-rule"></i></div></div>
       <div class="faq-list">
         <details class="faq-i"><summary>Jak si u vás můžeme rezervovat termín?</summary><p>Termín si můžete rezervovat prostřednictvím kontaktního formuláře, e-mailu, telefonicky, nebo skrze rezervační systém reservio.com.</p></details>
         <details class="faq-i"><summary>Co když budeme potřebovat změnit nebo zrušit termín?</summary><p>Pokud potřebujete termín změnit, dejte nám prosím vědět co nejdříve. Rádi se s vámi domluvíme na náhradním termínu. Rezervace je závazná po uhrazení rezervačního poplatku, který v případě nedostavení se na focení bez předchozí změny termínu propadá.</p></details>
