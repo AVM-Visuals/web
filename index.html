@@ -1014,10 +1014,10 @@ body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video
           <button type="button" aria-pressed="false" data-f="sport">Sport</button>
           <button type="button" aria-pressed="false" data-f="firmy">Firmy</button>
           <button type="button" aria-pressed="false" data-f="svatby">Svatby</button>
-          <button type="button" aria-pressed="false" data-f="produkty">Produkty</button>
-          <button type="button" aria-pressed="false" data-f="znacky">Značky</button>
           <button type="button" aria-pressed="false" data-f="eventy">Eventy</button>
           <button type="button" aria-pressed="false" data-f="hudba">Hudba</button>
+          <button type="button" aria-pressed="false" data-f="produkty">Produkty</button>
+          <button type="button" aria-pressed="false" data-f="znacky">Značky</button>
           <button type="button" aria-pressed="false" data-f="gastro">Gastronomie</button>
           <button type="button" aria-pressed="false" data-f="priroda">Příroda</button>
           <button type="button" aria-pressed="false" data-f="moto">Auto &amp; Moto</button>
@@ -1820,9 +1820,9 @@ body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video
     b.addEventListener('click',function(e){e.preventDefault();v.muted=!v.muted;if(!v.muted)rounds=0;sync();if(!v.muted&&vis&&active())play()});
     var sp=document.getElementById('splash');
     // the click itself unlocks audio (needed on iPhone): start and stop at once, the real start comes after the splash
-    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){early=false;clearTimeout(earlyT);earlyT=setTimeout(function(){early=true;upd()},1050);v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
+    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){early=false;clearTimeout(earlyT);earlyT=setTimeout(function(){early=true;upd()},2850);v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
     var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=1){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
-    function active(){var bc=document.body.classList,fading=bc.contains('splash-out')&&(early||sp&&sp.classList.contains('fade'));return document.body.dataset.brand!=='atelier'&&!document.hidden&&(fading||!bc.contains('splash-open')&&!bc.contains('splash-out'))}
+    function active(){var bc=document.body.classList,fading=bc.contains('splash-out')&&early;return document.body.dataset.brand!=='atelier'&&!document.hidden&&(fading||!bc.contains('splash-open')&&!bc.contains('splash-out'))}
     var startT=0;
     function upd(){if(vis&&active()){if(fresh){if(startT)return;startT=setTimeout(function(){startT=0;fresh=false;if(!(vis&&active()))return;try{v.currentTime=0}catch(_){}play()},150);return}play()}else{clearTimeout(startT);startT=0;v.pause()}}
     // safety: never let it play (e.g. after the iPhone audio unlock) while the intro screen is still up
