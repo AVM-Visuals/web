@@ -352,8 +352,8 @@ html[lang="uk"] .hero-mark{--hf:clamp(44px,6vw,96px)}
 /* brand switch: subtle effect + fade-in of the new page */
 .switch-fx{position:fixed;left:0;right:0;top:var(--hdr,76px);bottom:110px;width:100%;height:auto;pointer-events:none;z-index:90;display:none;-webkit-mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent)}
 body[data-brand="atelier"] .switch-fx{bottom:6px;-webkit-mask-image:linear-gradient(transparent,#000 6%);mask-image:linear-gradient(transparent,#000 6%)}
-main.enter{animation:viewIn 2.5s cubic-bezier(.25,.1,.25,1)}
-@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+main.enter{animation:viewIn 1.6s cubic-bezier(.22,.61,.36,1)}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){main.enter{animation:none}}
 
 /* camera cursor + click flash */
@@ -961,6 +961,9 @@ body[data-brand="atelier"] .cs-list{box-shadow:0 18px 40px rgba(60,45,25,.18)}
 body[data-brand="atelier"] .season .xtree{opacity:.38}
 @media (max-width:760px){.season .xtree{right:0;height:130%}}
 @media (min-width:981px) and (max-width:1180px){#view-visuals .services{grid-template-columns:repeat(3,minmax(0,1fr))}body[data-brand="atelier"] .services{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#brand-veil{position:fixed;inset:0;z-index:9000;opacity:0;pointer-events:none;transition:opacity 1.1s cubic-bezier(.4,0,.2,1)}
+#brand-veil.on{opacity:1;transition:opacity .5s cubic-bezier(.4,0,.2,1);pointer-events:auto}
+#switch-fx{opacity:.55}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1495,10 +1498,13 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
   // brand routing: #atelier… = AVM Atelier, anything else = AVM Visuals
   var vV=document.getElementById('view-visuals'),vA=document.getElementById('view-atelier');
   var swV=document.getElementById('sw-v'),swA=document.getElementById('sw-a');
-  var current=null;
+  var current=null,veiling=false,veilDone=false;
   function route(){
     var h=location.hash.slice(1),tgt=h&&document.getElementById(h),shared=tgt&&tgt.closest('footer');
     var at=shared?current==='atelier':h.indexOf('atelier')===0,brand=at?'atelier':'visuals';
+    if(brand!==current&&current!==null&&!veiling&&!veilDone&&!reduce&&(function(){var sp=document.getElementById('splash');return !sp||sp.hidden})()){
+      veiling=true;var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
+      setTimeout(function(){veiling=false;veilDone=true;route();veilDone=false;requestAnimationFrame(function(){vl.classList.remove('on')})},520);return}
     if(brand!==current){
       document.body.dataset.brand=brand;document.documentElement.style.backgroundColor=brand==='atelier'?'#F2ECE3':'#0a0a0a';
       vV.hidden=at;vA.hidden=!at;
@@ -1509,7 +1515,7 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
       var sp=document.getElementById('splash');
       if(current!==null&&(!sp||sp.hidden)){
         var mv=at?vA:vV;mv.classList.remove('enter');void mv.offsetWidth;mv.classList.add('enter');
-        if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&window.splashFxRef)window.splashFxRef(at?'gold':'flash',3400,document.getElementById('switch-fx'),!at);
+        if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&window.splashFxRef)window.splashFxRef('gold',3400,document.getElementById('switch-fx'),!at);
       }
       current=brand;
     }
@@ -2080,5 +2086,6 @@ addEventListener('load',fit);fit();
 window.fitSvc=fit;
 })();
 </script>
+<div id="brand-veil" aria-hidden="true"></div>
 </body>
 </html>
