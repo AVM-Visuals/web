@@ -1814,21 +1814,21 @@ body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video
 
   // showreel: waits until the splash animation is over, then starts from the beginning;
   // after the splash click it starts with sound, after one full round the sound turns off and it keeps looping muted
-  (function(){var f=document.getElementById('showreel');if(!f)return;var v=f.querySelector('video'),b=f.querySelector('.sr-sound'),vis=true,fresh=true;
+  (function(){var f=document.getElementById('showreel');if(!f)return;var v=f.querySelector('video'),b=f.querySelector('.sr-sound'),vis=true,fresh=true,early=false,earlyT;
     function sync(){b.setAttribute('aria-pressed',v.muted?'false':'true')}
     function play(){var p=v.play();if(p&&p.catch)p.catch(function(){if(!v.muted){v.muted=true;sync();v.play().catch(function(){})}})}
     b.addEventListener('click',function(e){e.preventDefault();v.muted=!v.muted;if(!v.muted)rounds=0;sync();if(!v.muted&&vis&&active())play()});
     var sp=document.getElementById('splash');
     // the click itself unlocks audio (needed on iPhone): start and stop at once, the real start comes after the splash
-    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
+    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){early=false;clearTimeout(earlyT);earlyT=setTimeout(function(){early=true;upd()},1050);v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
     var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=1){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
-    function active(){var bc=document.body.classList;return document.body.dataset.brand!=='atelier'&&!document.hidden&&!bc.contains('splash-open')&&!bc.contains('splash-out')}
+    function active(){var bc=document.body.classList,fading=bc.contains('splash-out')&&(early||sp&&sp.classList.contains('fade'));return document.body.dataset.brand!=='atelier'&&!document.hidden&&(fading||!bc.contains('splash-open')&&!bc.contains('splash-out'))}
     var startT=0;
-    function upd(){if(vis&&active()){if(fresh){if(startT)return;startT=setTimeout(function(){startT=0;fresh=false;if(!(vis&&active()))return;try{v.currentTime=0}catch(_){}play()},700);return}play()}else{clearTimeout(startT);startT=0;v.pause()}}
+    function upd(){if(vis&&active()){if(fresh){if(startT)return;startT=setTimeout(function(){startT=0;fresh=false;if(!(vis&&active()))return;try{v.currentTime=0}catch(_){}play()},150);return}play()}else{clearTimeout(startT);startT=0;v.pause()}}
     // safety: never let it play (e.g. after the iPhone audio unlock) while the intro screen is still up
     v.addEventListener('playing',function(){if(!active()||fresh&&!startT&&document.body.classList.contains('splash-out'))v.pause()});
     if(window.IntersectionObserver)new IntersectionObserver(function(en){vis=en[0].intersectionRatio>.2;upd()},{threshold:[0,.2,.6]}).observe(f);
-    document.addEventListener('visibilitychange',upd);new MutationObserver(upd).observe(document.body,{attributes:true,attributeFilter:['data-brand','class']});
+    document.addEventListener('visibilitychange',upd);new MutationObserver(upd).observe(document.body,{attributes:true,attributeFilter:['data-brand','class']});if(sp)new MutationObserver(upd).observe(sp,{attributes:true,attributeFilter:['class']});
     // size: on desktop the whole video fits above the reference bar
     // desktop: the intro block takes the showreel's width; the text is sized to fill exactly two justified lines
     var cp=document.querySelector('#top .hero-copy'),ld=cp&&cp.querySelector('.lead');
