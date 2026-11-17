@@ -1087,6 +1087,22 @@ html.sp-cream{background-color:#F2ECE3!important}
 .bts-go::before{content:"";order:2;width:6px;height:6px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg);margin-left:-12px}
 .bts-opt:hover .bts-go::after{width:34px}
 @media (max-width:700px){.bts-opt{flex-wrap:wrap;gap:12px;padding:16px;align-items:flex-start}.bts-go{width:100%;padding-left:58px}}
+
+.season .bts-opt{flex-wrap:wrap;justify-content:center;text-align:center;padding:34px 32px 36px;gap:14px}
+.season .bts-opt .bts-ic{display:none}
+.season .bts-opt .bts-tx{flex:1 1 100%;align-items:center}
+.season .bts-opt .bts-tx b{font-size:34px}
+.season .bts-opt .bts-tx b::after{content:"";display:block;width:120px;height:2px;margin:14px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.season .bts-opt .bts-tx>span{font-size:16px;max-width:60ch}
+.season .bts-opt .bts-tx .bts-go{align-self:center}
+.season .bts-opt .bts-vids{width:100%;justify-content:center;gap:24px;margin-top:12px;padding:0}
+.season .bts-opt .bv-mini{flex:0 0 min(250px,40%);max-width:none}
+.season .bts-opt .bv-mini .bv-img{aspect-ratio:9/16;border-radius:20px;outline:1px solid var(--gold);outline-offset:6px}
+.season .bts-opt .bv-mini:last-child{margin-top:60px}
+.season .bts-opt .bv-mini .bv-play{width:60px;height:60px;margin:-30px 0 0 -30px}
+.season .bts-opt .bv-mini .bv-play svg{width:25px;height:25px}
+.season .bts-opt .bv-mini .bv-t{display:none}
+@media (max-width:700px){.season .bts-opt{padding:26px 16px 30px}.season .bts-opt .bts-tx b{font-size:28px}.season .bts-opt .bts-vids{gap:16px}.season .bts-opt .bv-mini{flex-basis:44%}.season .bts-opt .bv-mini:last-child{margin-top:40px}.season .bts-opt .bv-mini .bv-play{width:46px;height:46px;margin:-23px 0 0 -23px}.season .bts-opt .bv-mini .bv-img{border-radius:16px;outline-offset:4px}}
 .season .scenes-note{grid-column:1/-1;margin:2px 0 0;text-align:center;max-width:none;font-style:italic;font-family:var(--serif);font-size:17px}
 @media (max-width:900px){.season .scenes{grid-template-columns:1fr}}
 body[data-brand="atelier"] .services{grid-template-columns:repeat(3,minmax(0,1fr))!important}
