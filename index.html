@@ -605,8 +605,8 @@ body.splash-open{overflow:hidden}
 @media (max-width:760px){
   main h2{font-size:30px!important;line-height:1.08!important}
   .strip h2{font-size:34px!important}
-  .svc h3,.step h3,.person h3{font-size:24px!important;line-height:1.15!important}
-  .sec-head p,.svc p,.step p{font-size:15.5px!important;line-height:1.55!important}
+  .svc h3,.step h3,.person h3{font-size:18px!important;line-height:1.2!important}
+  .sec-head p,.svc p,.step p{font-size:14px!important;line-height:1.55!important}
   .svc{padding-top:22px!important;padding-bottom:22px!important}
   .svc small{font-size:11.5px!important}
   nav .navlink[href="#kde-nas-najdete"]{display:none!important}
@@ -808,6 +808,28 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
   header nav .socials a{width:20px!important}header nav .langs button{width:18px!important}
 }
 
+
+/* mobile: unified, more compact body type */
+@media (max-width:760px){
+  .step::before{font-size:30px!important;margin:0!important;grid-row:1/3;line-height:1!important}
+  .step{padding-top:12px!important;display:grid;grid-template-columns:30px 1fr;column-gap:12px;align-items:start}
+  .step h3,.step p{grid-column:2}
+  .steps,.steps.steps5{gap:18px 16px!important}
+  .step p{margin-top:4px!important}
+  #tym .person{padding:11px 10px!important}
+  #tym .person h3{font-size:14px!important}
+  #tym .person .role{font-size:11px!important;margin-top:1px!important}
+  #tym .person .gold-rule{margin:7px 0!important;width:34px!important;height:1px!important}
+  #tym .person a{font-size:10.5px!important;padding:0!important;line-height:1.5}
+  .faq-i summary{font-size:15px!important;padding:14px 2px!important}
+  .faq-i p{font-size:14px!important;padding:0 8px 16px 2px!important}
+  .lead,#top .hero-copy p.lead{font-size:15px!important;line-height:1.55!important}
+  .ab-body p{font-size:14px!important}
+  .ig-more{font-size:13.5px!important}
+  .contact p,.contact li,.contact a,.foot-grid p,.foot-grid a{font-size:14px}
+  .demo-form label{font-size:13px}
+  .sec-head{margin-bottom:22px!important}
+}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
