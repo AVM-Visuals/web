@@ -964,6 +964,11 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
 #brand-veil{position:fixed;inset:0;z-index:9000;opacity:0;pointer-events:none;transition:opacity .7s cubic-bezier(.4,0,.2,1)}
 #brand-veil.on{opacity:.92;transition:opacity .3s cubic-bezier(.4,0,.2,1);pointer-events:auto}
 #switch-fx{opacity:1;z-index:9500!important;top:0!important;bottom:0!important;-webkit-mask-image:none!important;mask-image:none!important}
+/* header shares the page background, separated only by a fine gold line */
+body.pattern-dark{background-attachment:fixed,fixed}
+header{background:var(--tex-dark-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important;border-bottom:0!important}
+body[data-brand="atelier"] header{background:var(--tex-light-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#C9A23E 15%,#E5C66A 50%,#C9A23E 85%,transparent);pointer-events:none}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
