@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="cs" class="sp-cream">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, ">
@@ -969,10 +969,15 @@ body.pattern-dark{background-attachment:fixed,fixed}
 header{background:var(--tex-dark-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important;border-bottom:0!important}
 body[data-brand="atelier"] header{background:var(--tex-light-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important}
 header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#C9A23E 15%,#E5C66A 50%,#C9A23E 85%,transparent);pointer-events:none}
+/* phone browsers tint their top/bottom bars from the colours touching the screen edges: dark on top (Visuals), cream at the bottom (Atelier) */
+.sp-edge{position:fixed;left:0;right:0;height:3px;z-index:3;pointer-events:none}
+.sp-edge-t{top:0;background:#151515}.sp-edge-b{bottom:0;background:#F2ECE3}
+.splash.leaving .sp-edge{opacity:0;transition:opacity .4s}
+html.sp-cream{background-color:#F2ECE3!important}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
-<div class="splash" id="splash" role="dialog" aria-modal="true" aria-label="Vyberte web">
+<div class="splash" id="splash" role="dialog" aria-modal="true" aria-label="Vyberte web"><i class="sp-edge sp-edge-t" aria-hidden="true"></i><i class="sp-edge sp-edge-b" aria-hidden="true"></i>
   <a class="half v" href="#top" data-go="top" aria-label="AVM Visuals">
     <span class="sp-logo"><img src="/a/stack_w.svg" alt=""></span>
   </a>
@@ -1941,7 +1946,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;ba
     if(splash.classList.contains('leaving'))return;
     var go=a.dataset.go;
     if(location.hash==='#'+go)route();else location.hash=go;
-    function done(){splash.hidden=true;setTimeout(function(){if(splash.parentNode)splash.parentNode.removeChild(splash)},50);document.body.classList.remove('splash-open','splash-out');splash.classList.remove('leaving','go-v','go-a','fade');window.scrollTo(0,1);requestAnimationFrame(function(){window.scrollTo(0,0)})}
+    function done(){splash.hidden=true;setTimeout(function(){if(splash.parentNode)splash.parentNode.removeChild(splash)},50);document.documentElement.classList.remove('sp-cream');document.body.classList.remove('splash-open','splash-out');splash.classList.remove('leaving','go-v','go-a','fade');window.scrollTo(0,1);requestAnimationFrame(function(){window.scrollTo(0,0)})}
     if(reduce){done();return}
     splash.classList.add('leaving',go==='top'?'go-v':'go-a');document.body.classList.add('splash-out');
     splashFx(go==='top'?'flash':'gold',go==='top'?3000:3400);
@@ -1952,7 +1957,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;ba
   document.getElementById('reopen').addEventListener('click',function(){
     splash.classList.remove('leaving','go-v','go-a','fade');
     var c=splash.querySelector('.sp-fx');if(c&&c.getContext)c.getContext('2d').clearRect(0,0,c.width,c.height);
-    splash.hidden=false;document.body.classList.add('splash-open');
+    splash.hidden=false;document.body.classList.add('splash-open');document.documentElement.classList.add('sp-cream');
   });
 
 
