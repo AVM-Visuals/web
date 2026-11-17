@@ -900,6 +900,23 @@ body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video
 #nofoto svg{width:26px;height:26px;stroke:#E5C66A;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 #nofoto b{display:block;margin:8px 0 6px;font-size:17px;font-weight:600;line-height:1.3}
 #nofoto span{display:block;font-size:13.5px;line-height:1.5;color:#cfcac0}
+/* phone in landscape: one compact header row, slimmer reference bar, showreel as big as the screen allows */
+@media (orientation:landscape) and (max-height:500px){
+  .bar{flex-wrap:nowrap!important;justify-content:space-between!important;padding-top:5px!important;padding-bottom:5px!important;gap:8px!important;row-gap:0!important}
+  header nav{width:auto!important;flex-wrap:nowrap!important;justify-content:flex-end!important;gap:6px!important}
+  header nav .switch{display:flex!important}header nav .switch a{padding:4px 9px!important;font-size:11px!important}
+  header nav .langs{display:flex!important;gap:2px!important}header nav .langs button{width:20px!important;height:20px!important}header nav .langs svg{width:16px!important;height:11px!important}
+  .logo img{height:20px!important}.logo-at img{height:13px!important}.logo-at i{height:20px!important}.logo-at b{font-size:10.5px!important}
+  header nav .vg .navlink:not([hidden]){padding:3px 6px!important;font-size:11px!important}
+  .reel{height:56px!important}body[data-brand="visuals"]{padding-bottom:56px!important}
+  .iris{width:54px!important;height:54px!important}.film{top:5px!important;bottom:5px!important}.fr .lg-img{transform:scale(.72)}
+  .reel-label i{height:28px!important}.reel-label span{font-size:9px!important}
+  #top.hero{padding-top:10px!important}
+  .showreel{width:min(100%,calc((100svh - var(--hh,44px) - 56px - 20px)*2.353))!important;margin:0 auto!important}
+}
+@media (orientation:landscape) and (max-height:500px) and (max-width:720px){
+  header nav .langs{display:none!important}header nav .vg .navlink:not([hidden]){padding:3px 4px!important;font-size:10.5px!important}
+}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
