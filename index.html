@@ -1031,6 +1031,15 @@ html.sp-cream{background-color:#F2ECE3!important}
 .scene.has-ph{padding-top:0;overflow:hidden}
 .scene .sc-ph{display:block;margin:0 -22px 8px;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;position:relative;transition:transform .5s}
 .scene:hover .sc-ph{transform:scale(1.02)}
+
+.scene.has-ph{overflow:visible}
+.scene .sc-ph{border-radius:6px 6px 0 0;margin-top:-1px}
+.scene:hover .sc-ph{transform:none}
+.scene .sc-go{position:absolute;left:2px;top:-30px;margin:0;padding:0;font-size:12px;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.scene .sc-go::after{content:"";width:22px;height:1px;background:currentColor;position:relative;transition:width .3s}
+.scene .sc-go::before{content:"";order:2;width:6px;height:6px;border-top:1px solid currentColor;border-right:1px solid currentColor;transform:rotate(45deg);margin-left:-12px;transition:margin .3s}
+.scene:hover .sc-go::after{width:34px}.scene:hover .sc-go::before{margin-left:-12px}
+.scenes{row-gap:48px!important;margin-top:44px!important}
 .scene .sc-cnt{position:absolute;right:10px;bottom:10px;background:rgba(20,16,10,.62);color:#fff;font:600 12px/1 var(--sans,inherit);font-style:normal;padding:6px 9px;border-radius:999px;letter-spacing:.04em}
 .scene:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 26px rgba(70,50,25,.09)}
 .scene .sc-n{font:italic 600 13px var(--serif);color:var(--gold);letter-spacing:.08em}
