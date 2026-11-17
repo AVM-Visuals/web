@@ -1021,6 +1021,12 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
 body.pattern-dark{background-attachment:fixed,fixed}
 header{background:var(--tex-dark-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important;border-bottom:0!important}
 body[data-brand="atelier"] header{background:var(--tex-light-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important}
+
+/* iOS: stabilní pozadí lišty a žádné tmavé skryté vrstvy u spodního okraje (tónování lišty Safari) */
+@media (hover:none){header,body[data-brand="atelier"] header{background-attachment:scroll,scroll!important;background-position:36px 36px,0 0!important;-webkit-transform:translateZ(0);transform:translateZ(0)}}
+#brand-veil:not(.on){visibility:hidden;transition:opacity 1s cubic-bezier(.4,0,.2,1),visibility 0s 1s}
+.about:not(.on){visibility:hidden}
+#nofoto:not(.on){visibility:hidden}
 header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#C9A23E 15%,#E5C66A 50%,#C9A23E 85%,transparent);pointer-events:none}
 /* phone browsers tint their top/bottom bars from the colours touching the screen edges: dark on top (Visuals), cream at the bottom (Atelier) */
 .sp-edge{position:fixed;left:0;right:0;height:3px;z-index:3;pointer-events:none}
@@ -1758,6 +1764,8 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
 
   (function(){function mark(im){if(im.classList.contains('fi'))return;if(im.complete&&im.naturalWidth){return}im.classList.add('fi');var d=function(){im.classList.add('ld')};im.addEventListener('load',d,{once:true});im.addEventListener('error',d,{once:true})}
     document.querySelectorAll('img').forEach(function(im){if(!/\/a\/|^a\//.test(im.getAttribute('src')||''))return;im.decoding='async';mark(im)})})();
+
+  (function(){var m=document.querySelector('meta[name=theme-color]');function u(){if(m)m.setAttribute('content',document.body.dataset.brand==='atelier'?'#F2ECE3':'#0b0b0b')}u();new MutationObserver(u).observe(document.body,{attributes:true,attributeFilter:['data-brand']})})();
   function setLang(l){setTimeout(function(){window.fitSvc&&fitSvc()},50);
     LANG=l;document.documentElement.lang=l;
     textNodes.forEach(function(o){
@@ -2051,7 +2059,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
   (function(){
     var tr=document.querySelector('.track'),tip=document.getElementById('client-tip');if(!tr||!tip)return;
     // JS-driven strip: auto-advance, pause on hover, wheel + drag to browse
-    var film=tr.parentNode,W=0,o=0,last=performance.now(),hover=false,drag=null,moved=0,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,SPEED=28;
+    var film=tr.parentNode,W=0,o=0,last=performance.now(),hover=false,drag=null,moved=0,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,SPEED=17;
     function measure(){W=tr.scrollWidth/2}
     measure();addEventListener('resize',measure);if(window.ResizeObserver)new ResizeObserver(measure).observe(tr);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
     function wrap(){if(W>0){o=((o%W)+W)%W}}
