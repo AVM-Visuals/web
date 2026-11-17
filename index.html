@@ -1530,7 +1530,7 @@ body.splash-open .drone{z-index:99!important}
   })();
 
   // showreel: waits until the splash animation is over, then starts from the beginning;
-  // after the splash click it starts with sound, after two full rounds the sound turns off and it keeps looping muted
+  // after the splash click it starts with sound, after one full round the sound turns off and it keeps looping muted
   (function(){var f=document.getElementById('showreel');if(!f)return;var v=f.querySelector('video'),b=f.querySelector('.sr-sound'),vis=true,fresh=true;
     function sync(){b.setAttribute('aria-pressed',v.muted?'false':'true')}
     function play(){var p=v.play();if(p&&p.catch)p.catch(function(){if(!v.muted){v.muted=true;sync();v.play().catch(function(){})}})}
@@ -1538,7 +1538,7 @@ body.splash-open .drone{z-index:99!important}
     var sp=document.getElementById('splash');
     // the click itself unlocks audio (needed on iPhone): start and stop at once, the real start comes after the splash
     if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
-    var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=2){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
+    var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=1){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
     function active(){var bc=document.body.classList;return document.body.dataset.brand!=='atelier'&&!document.hidden&&!bc.contains('splash-open')&&!bc.contains('splash-out')}
     var startT=0;
     function upd(){if(vis&&active()){if(fresh){if(startT)return;startT=setTimeout(function(){startT=0;fresh=false;if(!(vis&&active()))return;try{v.currentTime=0}catch(_){}play()},700);return}play()}else{clearTimeout(startT);startT=0;v.pause()}}
