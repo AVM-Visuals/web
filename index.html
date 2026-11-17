@@ -584,6 +584,28 @@ body.splash-open{overflow:hidden}
   .svc small{font-size:11.5px!important}
   nav .navlink[href="#kde-nas-najdete"]{display:none!important}
 }
+
+/* drone hint */
+.drone{position:fixed;left:0;top:0;z-index:128;pointer-events:none;will-change:transform;--dw:150px}
+.drone .dr-body{position:relative;width:var(--dw);animation:drBob 1.6s ease-in-out infinite}
+.drone svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 10px 16px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(240,207,110,.18))}
+.drone .rot{transform-box:fill-box;transform-origin:center;animation:drSpin .09s linear infinite}
+.drone .led{animation:drLed 1s steps(1) infinite}
+.drone .dr-ropes{position:absolute;left:50%;top:calc(var(--dw)*.34);width:calc(var(--dw)*.5);height:48px;transform:translateX(-50%);transform-origin:50% 0;animation:drSwing 2.4s ease-in-out infinite}
+.drone .dr-ropes::before,.drone .dr-ropes::after{content:"";position:absolute;top:0;width:1px;height:50px;background:linear-gradient(#D8B24A,rgba(216,178,74,.7))}
+.drone .dr-ropes::before{left:6px;transform:rotate(8deg);transform-origin:top}.drone .dr-ropes::after{right:6px;transform:rotate(-8deg);transform-origin:top}
+.drone .dr-ban{position:absolute;top:calc(var(--dw)*.34 + 46px);left:50%;transform:translateX(-50%);pointer-events:auto;cursor:pointer;white-space:nowrap;text-align:center;background:rgba(12,12,12,.94);border:1px solid #D8B24A;border-radius:10px;padding:8px 14px 9px;color:#F4F2ED;box-shadow:0 12px 30px rgba(0,0,0,.55)}
+.drone .dr-ban b{display:block;font:600 13.5px/1.2 var(--body);letter-spacing:.02em}
+.drone .dr-ban i{display:block;font:500 10.5px/1.3 var(--body);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#F0CF6E;margin-top:3px}
+.drone .dr-ban::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;margin-left:-6px;background:rgba(12,12,12,.94);border-right:1px solid #D8B24A;border-bottom:1px solid #D8B24A;transform:rotate(45deg)}
+.drone .dr-ban:hover{background:#D8B24A;color:#111}.drone .dr-ban:hover i{color:#111}.drone .dr-ban:hover::after{background:#D8B24A}
+.fr.dr-hint::after{content:"";position:absolute;left:50%;top:50%;width:78px;height:78px;margin:-39px 0 0 -39px;border-radius:50%;border:2px solid #F0CF6E;animation:drRing 1.4s ease-out infinite;pointer-events:none}
+@keyframes drBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes drSpin{0%{transform:scaleX(1)}50%{transform:scaleX(.25)}100%{transform:scaleX(1)}}
+@keyframes drLed{0%{opacity:1}50%{opacity:.15}}
+@keyframes drSwing{0%,100%{transform:translateX(-50%) rotate(-3deg)}50%{transform:translateX(-50%) rotate(3deg)}}
+@keyframes drRing{0%{transform:scale(.6);opacity:.95}100%{transform:scale(1.35);opacity:0}}
+@media (max-width:760px){.drone{--dw:108px}.drone .dr-ban{padding:7px 11px 8px}.drone .dr-ban b{font-size:12.5px}.drone .dr-ban i{font-size:9.5px}.fr.dr-hint::after{width:62px;height:62px;margin:-31px 0 0 -31px}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1152,6 +1174,35 @@ body.splash-open{overflow:hidden}
     addEventListener('keydown',function(e){if(!g.classList.contains('on'))return;if(e.key==='Escape')close();if(e.key==='ArrowRight')show(c+1);if(e.key==='ArrowLeft')show(c-1)});
     im.addEventListener('pointerdown',function(e){sx=e.clientX});im.addEventListener('pointerup',function(e){if(sx==null)return;var d=e.clientX-sx;sx=null;if(Math.abs(d)>40)show(c+(d<0?1:-1))});
     document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('#sheet-v a[data-gallery]');if(!a)return;var gb=e.target.closest('.gb');if(gb&&gb.dataset.act==='reel'){e.preventDefault();try{var w=window.open(a.getAttribute('href'),'_blank');if(w)w.opener=null}catch(_){}return}e.preventDefault();window.openGallery(GAL[a.dataset.gallery].p,0,a.getAttribute('href'),a.dataset.title)});
+  })();
+
+  // drone hint: flies in, hangs a banner over a reference logo
+  (function(){var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function seen(){try{return sessionStorage.getItem('avmDrone')==='1'}catch(_){return false}}
+    function mark(){try{sessionStorage.setItem('avmDrone','1')}catch(_){}}
+    var used=false;document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.reel .fr'))used=true},true);
+    var TX={cs:['Klikněte na logo','a pusťte si ukázku'],en:['Click a logo','to watch our work'],de:['Klicken Sie aufs Logo','und sehen Sie Beispiele'],uk:['Натисніть на логотип','і перегляньте приклади']};
+    function pickTarget(){var fr=[].slice.call(document.querySelectorAll('.reel .fr[data-reels]')),best=null,bd=1e9,goal=innerWidth*(innerWidth<700?.62:.6);
+      fr.forEach(function(f){var r=f.getBoundingClientRect();if(r.left<innerWidth*.28||r.right>innerWidth-30)return;var d=Math.abs(r.left+r.width/2-goal);if(d<bd){bd=d;best=f}});return best}
+    function run(){if(seen()||used||document.body.classList.contains('splash-open')||document.body.dataset.brand==='atelier'||document.hidden)return false;
+      var reel=document.getElementById('reel');if(!reel||!reel.getBoundingClientRect().height)return false;var tgt=pickTarget();if(!tgt)return false;mark();
+      var lang=document.documentElement.lang,t=TX[lang]||TX.cs;var d=document.createElement('div');d.className='drone';
+      d.innerHTML='<div class="dr-body"><svg viewBox="0 0 120 52" aria-hidden="true"><defs><linearGradient id="drg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient></defs><rect x="5" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="73" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="22" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><rect x="93.6" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><ellipse class="rot" cx="24" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><ellipse class="rot" cx="96" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><path d="M37 13h46l-7 14H44z" fill="url(#drg)" stroke="#D8B24A" stroke-width="1.2"/><rect x="43" y="10.5" width="34" height="6.5" rx="3.2" fill="#F4F5F7" stroke="#D8B24A" stroke-width=".8"/><circle class="led" cx="79" cy="16" r="1.7" fill="#ff3b30"/><circle cx="41" cy="16" r="1.4" fill="#36d36a"/><rect x="55" y="27" width="10" height="5" rx="1.5" fill="#D9DCE0"/><circle cx="60" cy="36.5" r="6" fill="#1a1a1a" stroke="#D8B24A" stroke-width="1.2"/><circle cx="60" cy="36.5" r="2.6" fill="#4d6b8f"/><path d="M41 27l-6 12M79 27l6 12" stroke="#E2E4E8" stroke-width="2.6" stroke-linecap="round"/></svg><div class="dr-ropes"></div><div class="dr-ban" role="button" tabindex="0"><b>'+t[0]+' ↓</b><i>'+t[1]+'</i></div></div>';
+      document.body.appendChild(d);var dw=d.querySelector('.dr-body').offsetWidth;tgt.classList.add('dr-hint');
+      function aim(){var r=tgt.getBoundingClientRect(),br=reel.getBoundingClientRect();var bh=d.querySelector('.dr-ban').getBoundingClientRect();var hgt=d.offsetHeight||(dw*.45+33+(bh.height||46));return {x:r.left+r.width/2-dw/2,y:br.top-(dw*.34+46+(bh.height||46)+14)}}
+      var p0={x:innerWidth+40,y:innerHeight*.22},st=performance.now(),phase=reduce?1:0,DUR=2300,HOLD=7500,OUT=1700,pend=null,raf;
+      function ease(k){return k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2}
+      function frame(now){var a=aim(),x,y,el=now-st;
+        if(phase===0){var k=Math.min(1,el/DUR),e=ease(k),c={x:(p0.x+a.x)/2+60,y:Math.min(p0.y,a.y)-120};x=(1-e)*(1-e)*p0.x+2*(1-e)*e*c.x+e*e*a.x;y=(1-e)*(1-e)*p0.y+2*(1-e)*e*c.y+e*e*a.y;d.style.transform='translate('+x+'px,'+y+'px) rotate('+((1-k)*-10)+'deg)';if(k>=1){phase=1;st=now}}
+        else if(phase===1){d.style.transform='translate('+a.x+'px,'+a.y+'px)';if(reduce)d.style.opacity=Math.min(1,el/400);if(el>HOLD||used){phase=2;st=now;pend=a;tgt.classList.remove('dr-hint')}}
+        else{var k2=Math.min(1,el/OUT),e2=k2*k2;x=pend.x-e2*(pend.x+dw+80);y=pend.y-e2*(innerHeight*.5);d.style.transform='translate('+x+'px,'+y+'px) rotate('+(e2*-14)+'deg)';if(reduce)d.style.opacity=1-k2;if(k2>=1){d.remove();return}}
+        raf=requestAnimationFrame(frame)}
+      raf=requestAnimationFrame(frame);
+      function open(e){e.preventDefault();e.stopPropagation();used=true;setTimeout(function(){var r=tgt.getBoundingClientRect();tgt.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}))},0)}
+      var ban=d.querySelector('.dr-ban');ban.addEventListener('click',open);ban.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open(e)});
+      return true}
+    var tries=0,lastSplash=Date.now();function wait(){if(document.body.classList.contains('splash-open')||document.body.dataset.brand==='atelier')lastSplash=Date.now();if(Date.now()-lastSplash>3500&&run())return;if(++tries>160)return;setTimeout(wait,1000)}
+    setTimeout(wait,2000);
   })();
   // inline video tiles (own files) open in a modal player
   (function(){var m=document.createElement('div');m.className='vmodal';m.innerHTML='<video controls playsinline></video><button type="button" aria-label="Zavřít">×</button>';document.body.appendChild(m);var v=m.querySelector('video');
