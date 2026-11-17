@@ -1001,7 +1001,8 @@ body[data-brand="atelier"] .step::before{display:flex!important;align-items:cent
 @media (max-width:760px){body[data-brand="atelier"] .step::before{width:42px;height:42px;font-size:19px!important;margin:0!important}body[data-brand="atelier"] .step{grid-template-columns:42px minmax(0,1fr)!important;column-gap:14px!important;align-items:start}}
 .sheet-empty{margin:28px 0 8px;text-align:center;font-family:var(--display);font-size:clamp(26px,3vw,38px);letter-spacing:.02em;color:var(--gold)}
 /* Atelier: footer on the page background, tighter section spacing, plain step numbers */
-body[data-brand="atelier"] footer{background:transparent!important;padding-top:clamp(32px,4vw,52px)}
+body[data-brand="atelier"] footer{background:transparent!important;border-top:0!important;padding-top:clamp(32px,4vw,52px)}
+body[data-brand="atelier"] .foot-grid>div{background:var(--tile);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:6px;padding:clamp(20px,2.6vw,32px);box-shadow:0 10px 28px rgba(70,50,25,.07);min-width:0}
 body[data-brand="atelier"] main#view-atelier>section{padding-top:clamp(36px,4.5vw,64px);padding-bottom:clamp(36px,4.5vw,64px)}
 body[data-brand="atelier"] main#view-atelier>section.tight{padding-top:0}
 body[data-brand="atelier"] .step::before{content:counter(s)!important;display:block!important;width:auto!important;height:auto!important;border:0!important;border-radius:0!important;padding:0!important;font:400 64px/.9 var(--script)!important;font-style:normal!important;letter-spacing:0;color:var(--gold);margin:0 0 10px!important}
@@ -1440,8 +1441,8 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
           <a href="tel:+420734557403"><b>Telefon</b><span>+420 734 557 403</span></a>
           <div><b>Adresa</b><span>Dělnická 15, 2. patro<br>434 01 Most – Velebudice</span></div>
           <a href="https://www.instagram.com/_avm.atelier"><b>Instagram</b><span>@_avm.atelier</span></a>
+          <a href="https://www.facebook.com/p/AVM-Ateli%C3%A9r-61594624262757/" target="_blank" rel="noopener"><b>Facebook</b><span>AVM Ateliér</span></a>
           <a href="https://www.youtube.com/@AVMVisuals" target="_blank" rel="noopener"><b>YouTube</b><span>@AVMVisuals</span></a>
-          <div><b>Ceník</b><span><em class="todo">doplnit</em></span></div>
         </div>
       </div>
       <form class="demo-form" name="rezervace-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="rezervace-atelier"><p hidden><label>Nevyplňujte <input name="bot-field"></label></p>
@@ -1839,8 +1840,15 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function wrap(){if(W>0){o=((o%W)+W)%W}}
     var aligned=false;
     function align(){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0)return;o=W-f.offsetLeft+8;aligned=true}
-    function step(now){var dt=Math.min((now-last)/1000,.1);last=now;if(!aligned)align();
-      if(!hover&&!drag&&!reduce)o+=SPEED*dt;
+    var wantD=false,glide=null;
+    function alignD(){wantD=true}
+    function doD(now){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0||!f.offsetWidth)return;wantD=false;aligned=true;o=W-f.offsetLeft-f.offsetWidth+26;wrap();var dist=f.offsetWidth-26+10,T=5.4,v0=Math.max(SPEED,2*dist/T-SPEED);glide=reduce?null:{t0:now,o0:o,v0:v0,T:T}}
+    window.reelAlignD=alignD;
+    (function(){var b=document.body,wasOut=b.classList.contains('splash-out'),br=b.dataset.brand;new MutationObserver(function(){var out=b.classList.contains('splash-out'),nb=b.dataset.brand;if(nb==='visuals'&&((out&&!wasOut)||(br!=='visuals')))alignD();wasOut=out;br=nb}).observe(b,{attributes:true,attributeFilter:['class','data-brand']})})();
+    function step(now){var dt=Math.min((now-last)/1000,.1);last=now;if(wantD){measure();doD(now)}if(!aligned)align();
+      if(glide&&(hover||drag))glide=null;
+      if(glide){var t=(now-glide.t0)/1000;if(t>=glide.T){glide=null;o+=SPEED*dt}else{o=glide.o0+glide.v0*t+(SPEED-glide.v0)*t*t/(2*glide.T)}}
+      else if(!hover&&!drag&&!reduce)o+=SPEED*dt;
       wrap();tr.style.transform='translateX('+(o-W)+'px)';requestAnimationFrame(step)}
     requestAnimationFrame(step);
     film.addEventListener('mouseenter',function(){hover=true});
