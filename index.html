@@ -2030,7 +2030,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
       var VMAX=overBar||mode==='pick'?260:(innerWidth<700?120:170),AMAX=overBar||mode==='pick'?340:(innerWidth<700?95:125);
       var ex=gx-pos.x,brake=Math.sqrt(2*AMAX*.55*Math.abs(ex))*(ex<0?-1:1),vdes=cl(Math.abs(brake)<Math.abs(ex*2.6)?brake:ex*2.6,VMAX)+tvx,ax=reduce?0:cl((vdes-v.x)*7,AMAX*1.6);
       if(reduce){pos.x=gx;v.x=tvx}else{v.x+=ax*dt;pos.x+=v.x*dt}
-      var ey=gy-pos.y,vdy=cl(ey*(mode==='pick'?4:1.2),mode==='pick'?900:190),ay=cl((vdy-v.y)*(mode==='pick'?8:2),mode==='pick'?2600:220);if(reduce){pos.y=gy;v.y=0}else{v.y+=ay*dt;pos.y+=v.y*dt}if(mode==='pick'&&(hookPh===2||hookPh===4)){pos.y=gy;v.y=0;pos.x+=(gx-pos.x)*Math.min(1,dt*10)}
+      var ey=gy-pos.y,remA=window.droneArriveAt?(window.droneArriveAt-now)/1000:0,vdy=(mode!=='pick'&&remA>0.4)?cl(ey/remA,190):cl(ey*(mode==='pick'?4:1.2),mode==='pick'?900:190),ay=cl((vdy-v.y)*(mode==='pick'?8:2),mode==='pick'?2600:220);if(reduce){pos.y=gy;v.y=0}else{v.y+=ay*dt;pos.y+=v.y*dt}if(mode==='pick'&&(hookPh===2||hookPh===4)){pos.y=gy;v.y=0;pos.x+=(gx-pos.x)*Math.min(1,dt*10)}
       if(travel&&Math.abs(ex)<14&&Math.abs(v.x-tvx)<45&&Math.abs(gy-pos.y)<18){travel=false;arrT=now}
       var arrived=!travel&&mode==='patrol';if(tgt)tgt.classList.toggle('dr-hint',arrived);
       // body tilt follows relative velocity + acceleration (like a real quadcopter)
@@ -2068,7 +2068,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function align(){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0)return;o=W-f.offsetLeft+8;aligned=true}
     var wantD=false,glide=null;
     function alignD(){wantD=true}
-    function doD(now){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0||!f.offsetWidth)return;wantD=false;aligned=true;o=W-f.offsetLeft-f.offsetWidth+26;wrap();glide=null;var dist=f.offsetWidth-26+10;window.droneHoldUntil=reduce?0:now+Math.max(0,dist/SPEED-5.5)*1000}
+    function doD(now){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0||!f.offsetWidth)return;wantD=false;aligned=true;o=W-f.offsetLeft-f.offsetWidth+26;wrap();glide=null;var dist=f.offsetWidth-26+10;window.droneHoldUntil=reduce?0:now+350;window.droneArriveAt=reduce?0:now+dist/SPEED*1000-600}
     window.reelAlignD=alignD;
     (function(){var b=document.body,wasOut=b.classList.contains('splash-out'),br=b.dataset.brand;new MutationObserver(function(){var out=b.classList.contains('splash-out'),nb=b.dataset.brand;if(nb==='visuals'&&((out&&!wasOut)||(br!=='visuals')))alignD();wasOut=out;br=nb}).observe(b,{attributes:true,attributeFilter:['class','data-brand']})})();
     function step(now){var dt=Math.min((now-last)/1000,.1);last=now;if(wantD){measure();doD(now)}if(!aligned)align();
