@@ -2011,6 +2011,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function cl(x,a){return Math.max(-a,Math.min(a,x))}
     var wasBlk=false,quietUntil=0;
     function frame(now){var dt=Math.min((now-last)/1000,.04);last=now;
+      if(window.droneHoldUntil&&now<window.droneHoldUntil){d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');pgx=null;wasBlk=true;requestAnimationFrame(frame);return}
       if(blocked()){d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');pgx=null;wasBlk=true;requestAnimationFrame(frame);return}d.style.visibility='';
       if(wasBlk){wasBlk=false;hov=false;var ct0=document.getElementById('client-tip');ct0&&ct0.classList.remove('on');d.classList.add('quiet');pos={x:pos.x,y:-body.offsetWidth-40};v={x:0,y:80};travel=true;arrT=0;quietUntil=now+400}
       var dw=body.offsetWidth,bh=ban.offsetHeight||46,br=reelEl().getBoundingClientRect(),pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on'),B=bounds();
@@ -2059,7 +2060,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
   (function(){
     var tr=document.querySelector('.track'),tip=document.getElementById('client-tip');if(!tr||!tip)return;
     // JS-driven strip: auto-advance, pause on hover, wheel + drag to browse
-    var film=tr.parentNode,W=0,o=0,last=performance.now(),hover=false,drag=null,moved=0,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,SPEED=17;
+    var film=tr.parentNode,W=0,o=0,last=performance.now(),hover=false,drag=null,moved=0,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,SPEED=18;
     function measure(){W=tr.scrollWidth/2}
     measure();addEventListener('resize',measure);if(window.ResizeObserver)new ResizeObserver(measure).observe(tr);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
     function wrap(){if(W>0){o=((o%W)+W)%W}}
@@ -2067,7 +2068,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function align(){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0)return;o=W-f.offsetLeft+8;aligned=true}
     var wantD=false,glide=null;
     function alignD(){wantD=true}
-    function doD(now){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0||!f.offsetWidth)return;wantD=false;aligned=true;o=W-f.offsetLeft-f.offsetWidth+26;wrap();var dist=f.offsetWidth-26+10,T=5.4,v0=Math.max(SPEED,2*dist/T-SPEED);glide=reduce?null:{t0:now,o0:o,v0:v0,T:T}}
+    function doD(now){var f=tr.querySelector('.fr[aria-label="UNIWELD Czech s.r.o."]');if(!f||W<=0||!f.offsetWidth)return;wantD=false;aligned=true;o=W-f.offsetLeft-f.offsetWidth+26;wrap();glide=null;var dist=f.offsetWidth-26+10;window.droneHoldUntil=reduce?0:now+Math.max(0,dist/SPEED-5.5)*1000}
     window.reelAlignD=alignD;
     (function(){var b=document.body,wasOut=b.classList.contains('splash-out'),br=b.dataset.brand;new MutationObserver(function(){var out=b.classList.contains('splash-out'),nb=b.dataset.brand;if(nb==='visuals'&&((out&&!wasOut)||(br!=='visuals')))alignD();wasOut=out;br=nb}).observe(b,{attributes:true,attributeFilter:['class','data-brand']})})();
     function step(now){var dt=Math.min((now-last)/1000,.1);last=now;if(wantD){measure();doD(now)}if(!aligned)align();
