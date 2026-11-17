@@ -1498,21 +1498,16 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
   // brand routing: #atelier… = AVM Atelier, anything else = AVM Visuals
   var vV=document.getElementById('view-visuals'),vA=document.getElementById('view-atelier');
   var swV=document.getElementById('sw-v'),swA=document.getElementById('sw-a');
-  var current=null;
+  var current=null,veiling=false,veilDone=false;
   function route(){
     var h=location.hash.slice(1),tgt=h&&document.getElementById(h),shared=tgt&&tgt.closest('footer');
     var at=shared?current==='atelier':h.indexOf('atelier')===0,brand=at?'atelier':'visuals';
-    var xf=null;
-    if(brand!==current&&current!==null&&!reduce&&(function(){var sp=document.getElementById('splash');return !sp||sp.hidden})()){
-      // cross-fade: freeze the outgoing page on top and let it dissolve into the new one
-      var ov=at?vV:vA,y=window.scrollY;
-      ov.style.cssText+=';position:fixed;left:0;right:0;top:'+(-y)+'px;z-index:60;pointer-events:none;background:'+(at?'#0a0a0a':'#F2ECE3');
-      xf=ov;
-    }
+    if(brand!==current&&current!==null&&!veiling&&!veilDone&&!reduce&&(function(){var sp=document.getElementById('splash');return !sp||sp.hidden})()){
+      veiling=true;var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
+      setTimeout(function(){veiling=false;veilDone=true;route();veilDone=false;requestAnimationFrame(function(){vl.classList.remove('on')})},520);return}
     if(brand!==current){
       document.body.dataset.brand=brand;document.documentElement.style.backgroundColor=brand==='atelier'?'#F2ECE3':'#0a0a0a';
       vV.hidden=at;vA.hidden=!at;
-      if(xf){xf.hidden=false;var an=xf.animate([{opacity:1},{opacity:0}],{duration:1500,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});an.onfinish=function(){xf.hidden=true;xf.style.position=xf.style.left=xf.style.right=xf.style.top=xf.style.zIndex=xf.style.pointerEvents=xf.style.background='';an.cancel()}}
       document.querySelectorAll('[data-for]').forEach(function(el){el.hidden=el.dataset.for!==brand});
       swV.toggleAttribute('aria-current',!at);swA.toggleAttribute('aria-current',at);
       if(!at)swV.setAttribute('aria-current','page');else swA.setAttribute('aria-current','page');
