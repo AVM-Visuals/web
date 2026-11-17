@@ -1073,7 +1073,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
 
   // opening effects: camera flashes (Visuals) / golden rain (Atelier)
   function splashFx(kind,dur,cv,soft){
-    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv){var hd0=document.querySelector('header');if(hd0)cv.style.setProperty('--hdr',Math.round(hd0.getBoundingClientRect().bottom)+'px');cv.style.display='block';}
+    var c=cv||splash.querySelector('.sp-fx');if(!c||!c.getContext)return;if(cv){var hd0=document.querySelector('header');if(hd0)cv.style.setProperty('--hdr',Math.round(hd0.getBoundingClientRect().bottom)+'px');cv.style.display='block';var csx=getComputedStyle(cv);cv.style.height=Math.max(200,innerHeight-(parseFloat(csx.top)||0)-(parseFloat(csx.bottom)||0))+'px';}
     var d=(kind==='gold'?1:.5),W=c.width=(c.clientWidth||innerWidth)*d,H=c.height=(c.clientHeight||innerHeight)*d,x=c.getContext('2d');
     var t0=performance.now(),last=t0,R=Math.random;
     var parts=[],flashes=[];
