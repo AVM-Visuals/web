@@ -609,6 +609,11 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
 @keyframes drSwing{0%,100%{transform:translateX(-50%) rotate(-3deg)}50%{transform:translateX(-50%) rotate(3deg)}}
 @keyframes drRing{0%{transform:scale(.6);opacity:.95}100%{transform:scale(1.35);opacity:0}}
 @media (max-width:760px){.drone{--dw:97px}.drone .dr-ban{padding:7px 11px 8px}.drone .dr-ban b{font-size:12.5px}.drone .dr-ban i{font-size:9.5px}.fr.dr-hint::after{width:62px;height:62px;margin:-31px 0 0 -31px}}
+
+.drone .dr-ropes{display:none!important}
+.drone .dr-ban{top:auto!important;bottom:calc(100% + 6px)}
+.drone.quiet .dr-ban{opacity:0;transform:translateX(-50%) translateY(8px) scale(.92);pointer-events:none}
+.drone .dr-body svg{pointer-events:auto;cursor:pointer}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1186,37 +1191,38 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
   // drone hint: appears when the visitor nears the bottom, patrols the reference bar, follows the picker
   (function(){var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var TX={cs:[['Klikněte na logo ↓','a pusťte si ukázku'],['← Listujte →','klikněte na video nebo fotky']],en:[['Click a logo ↓','to watch our work'],['← Swipe →','pick a video or photos']],de:[['Klicken Sie aufs Logo ↓','und sehen Sie Beispiele'],['← Blättern →','Video oder Fotos wählen']],uk:[['Натисніть на логотип ↓','і перегляньте приклади'],['← Гортайте →','оберіть відео або фото']]};
-    var awayO={x:0,y:0},entering=true,d=null,ban=null,body=null,started=false,tgt=null,pos={x:0,y:0},vx=0,mode='patrol',arrived=0,lastPick=0,showUntil=0,last=performance.now(),hidden=true;
+    var hov=false,hovT=0,awayO={x:0,y:0},entering=true,d=null,ban=null,body=null,started=false,tgt=null,pos={x:0,y:0},vx=0,mode='patrol',arrived=0,lastPick=0,showUntil=0,last=performance.now(),hidden=true;
     function blocked(){return document.body.classList.contains('splash-open')||document.body.dataset.brand==='atelier'}
     function reelEl(){return document.getElementById('reel')}
     function pickTarget(prev){var fr=[].slice.call(document.querySelectorAll('.reel .fr[data-reels]')),goal=innerWidth*(.32+Math.random()*.48),best=null,bd=1e9;
       fr.forEach(function(f){if(f===prev)return;var r=f.getBoundingClientRect();if(r.left<innerWidth*.24||r.right>innerWidth-24)return;var dd=Math.abs(r.left+r.width/2-goal);if(dd<bd){bd=dd;best=f}});return best||prev}
     function setText(k){var lang=document.documentElement.lang,t=(TX[lang]||TX.cs)[k];ban.innerHTML='<b>'+t[0]+'</b><i>'+t[1]+'</i>'}
     function build(){d=document.createElement('div');d.className='drone';d.innerHTML='<div class="dr-body"><svg viewBox="0 0 120 52" aria-hidden="true"><defs><linearGradient id="drg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient></defs><rect x="5" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="73" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="22" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><rect x="93.6" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><ellipse class="rot" cx="24" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><ellipse class="rot" cx="96" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><path d="M37 13h46l-7 14H44z" fill="url(#drg)" stroke="#D8B24A" stroke-width="1.2"/><rect x="43" y="10.5" width="34" height="6.5" rx="3.2" fill="#F4F5F7" stroke="#D8B24A" stroke-width=".8"/><circle class="led" cx="79" cy="16" r="1.7" fill="#ff3b30"/><circle cx="41" cy="16" r="1.4" fill="#36d36a"/><rect x="55" y="27" width="10" height="5" rx="1.5" fill="#D9DCE0"/><circle cx="60" cy="36.5" r="6" fill="#1a1a1a" stroke="#D8B24A" stroke-width="1.2"/><circle cx="60" cy="36.5" r="2.6" fill="#4d6b8f"/><path d="M41 27l-6 12M79 27l6 12" stroke="#E2E4E8" stroke-width="2.6" stroke-linecap="round"/></svg><div class="dr-ropes"></div><div class="dr-ban" role="button" tabindex="0"></div></div>';document.body.appendChild(d);ban=d.querySelector('.dr-ban');body=d.querySelector('.dr-body');setText(0);
-      ban.addEventListener('click',open);ban.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open(e)})}
-    function open(e){e.preventDefault();e.stopPropagation();if(mode==='pick'||!tgt)return;var f=tgt;setTimeout(function(){var r=f.getBoundingClientRect();f.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}))},0)}
+      ban.addEventListener('click',open);var hb=d.querySelector('.dr-body');hb.addEventListener('mouseenter',function(){clearTimeout(hovT);hov=true});hb.addEventListener('mouseleave',function(){clearTimeout(hovT);hovT=setTimeout(function(){hov=false},450)});hb.querySelector('svg').addEventListener('click',function(e){hov=true;clearTimeout(hovT);hovT=setTimeout(function(){hov=false},3000);open(e)});ban.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open(e)})}
+    function open(e){e.preventDefault();e.stopPropagation();if(!tgt)return;if(mode==='pick'){var pk=document.getElementById('reel-pick');if(pk&&pk.classList.contains('on'))return}var f=tgt;setTimeout(function(){var r=f.getBoundingClientRect();f.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}))},0)}
     function start(){if(started||blocked())return;var r=reelEl();if(!r||!r.getBoundingClientRect().height)return;started=true;build();pos={x:innerWidth+60,y:innerHeight*.25};tgt=pickTarget(null);arrived=0;showUntil=0;requestAnimationFrame(frame)}
     function frame(now){var dt=Math.min((now-last)/1000,.05);last=now;var dw=body.offsetWidth,bh=ban.offsetHeight||46,reel=reelEl(),br=reel.getBoundingClientRect();
       var pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on');
       if(blocked()){d.style.opacity='0';d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');requestAnimationFrame(frame);return}d.style.visibility='';d.style.opacity='';
       var gx,gy,quiet=false;
-      if(!pickOpen&&mouse.t&&mouse.y<innerHeight/2){if(mode!=='away'){mode='away';tgt&&tgt.classList.remove('dr-hint');awayO={x:pos.x+dw/2,y:pos.y+dw*.2}}var cx=awayO.x,dx=mouse.x-cx,dy=mouse.y-awayO.y,L=Math.max(1,Math.hypot(dx,dy)),far=Math.max(innerWidth,innerHeight)*1.05;gx=cx+dx/L*far-dw/2;gy=awayO.y+dy/L*far-dw*.2;quiet=true}
-      else if(pickOpen){if(mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint')}var pr=pk.getBoundingClientRect();gx=pr.left+pr.width/2-dw/2;gy=pr.top-(dw*.34+46+bh+10);if(gy<70){gy=70}}
+      if(!pickOpen&&!hov&&mouse.t&&mouse.y<innerHeight/2){if(mode!=='away'){mode='away';tgt&&tgt.classList.remove('dr-hint');awayO={x:pos.x+dw/2,y:pos.y+dw*.2}}var cx=awayO.x,dx=mouse.x-cx,dy=mouse.y-awayO.y,L=Math.max(1,Math.hypot(dx,dy)),far=Math.max(innerWidth,innerHeight)*1.05;gx=cx+dx/L*far-dw/2;gy=awayO.y+dy/L*far-dw*.2;quiet=true}
+      else if(pickOpen){if(mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint')}var pr=pk.getBoundingClientRect();gx=pr.left+pr.width/2-dw/2;gy=pr.top-dw*.4-8;if(gy<70){gy=70}quiet=!hov}
       else{if(mode!=='patrol'){mode='patrol';setText(0);arrived=0;showUntil=0;tgt=pickTarget(tgt)}
         if(!tgt||!document.body.contains(tgt)){tgt=pickTarget(null)}
-        if(mouse.t&&now-mouse.t<2500&&mouse.y>br.top-230){var near=null,nd=1e9;[].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){var q=f.getBoundingClientRect();if(q.right<0||q.left>innerWidth)return;var dd=Math.abs(q.left+q.width/2-mouse.x);if(dd<nd){nd=dd;near=f}});
+        if(!hov&&mouse.t&&now-mouse.t<2500&&mouse.y>br.top-230){var near=null,nd=1e9;[].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){var q=f.getBoundingClientRect();if(q.right<0||q.left>innerWidth)return;var dd=Math.abs(q.left+q.width/2-mouse.x);if(dd<nd){nd=dd;near=f}});
           if(near&&near!==tgt){tgt.classList.remove('dr-hint');tgt=near;arrived=0}if(arrived)showUntil=Math.max(showUntil,now+2500);lastPick=now}
         var r=tgt.getBoundingClientRect();
-        if(r.right<0||r.left>innerWidth||now-lastPick>15000&&arrived&&now>showUntil+6000){tgt.classList.remove('dr-hint');tgt=pickTarget(tgt);arrived=0;lastPick=now;r=tgt.getBoundingClientRect()}
+        if(!hov&&(r.right<0||r.left>innerWidth||now-lastPick>15000&&arrived)){tgt.classList.remove('dr-hint');tgt=pickTarget(tgt);arrived=0;lastPick=now;r=tgt.getBoundingClientRect()}
         gx=r.left+r.width/2-dw/2;var dist=Math.abs(gx-pos.x);
-        if(!arrived&&dist<(mouse.t&&now-mouse.t<2500?40:14)){arrived=now;lastPick=now;showUntil=now+6500;tgt.classList.add('dr-hint')}
-        quiet=!(arrived&&now<showUntil);if(quiet)tgt.classList.remove('dr-hint');
-        gy=quiet?br.top-dw*.4-6:br.top-(dw*.34+46+bh+14)}
-      d.classList.toggle('quiet',quiet);document.body.classList.toggle('dr-on',!quiet&&mode==='patrol');
+        if(!arrived&&dist<(mouse.t&&now-mouse.t<2500?40:14)){arrived=now;lastPick=now;tgt.classList.add('dr-hint')}
+        if(arrived)tgt.classList.add('dr-hint');quiet=!hov;
+        gy=br.top-dw*.4-6;if(hov){gx=pos.x;gy=pos.y}}
+      d.classList.toggle('quiet',quiet);document.body.classList.toggle('dr-on',!quiet);
       if(mode==='away')entering=true;else if(entering&&Math.abs(gx-pos.x)<30&&Math.abs(gy-pos.y)<30)entering=false;var k=reduce?1:Math.min(1,dt*(mode==='pick'?4:mode==='away'?.6:entering?1.05:2.4));var nx=pos.x+(gx-pos.x)*k,ny=pos.y+(gy-pos.y)*k;vx=(nx-pos.x)/(dt||.016);pos.x=nx;pos.y=ny;
       var tilt=Math.max(-14,Math.min(14,vx*.03));d.style.transform='translate('+pos.x.toFixed(1)+'px,'+pos.y.toFixed(1)+'px) rotate('+tilt.toFixed(1)+'deg)';
       requestAnimationFrame(frame)}
     var mouse={x:0,y:0,t:0};addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.t=performance.now()},{passive:true});
+    (function boot(){if(!started){if(!blocked()&&!document.hidden)setTimeout(start,1800);else setTimeout(boot,700)}})();
     function near(){var de=document.documentElement;return (scrollY+innerHeight)/Math.max(1,de.scrollHeight)>.62}
     addEventListener('scroll',function(){if(!started&&near())start()},{passive:true});
     addEventListener('mousemove',function(e){if(!started&&e.clientY>innerHeight-240)start()},{passive:true});
