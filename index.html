@@ -1941,10 +1941,16 @@ document.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clien
 document.addEventListener('touchend',function(){clearTimeout(lp)},{passive:true});
 function shotKey(e){var k=(e.key||'').toLowerCase();
  if(k==='printscreen'||e.keyCode===44)return true;
- if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(k==='s'||k==='3'||k==='4'||k==='5'||e.code==='KeyS'||e.code==='Digit3'||e.code==='Digit4'||e.code==='Digit5'))return true;
+ if((e.metaKey||e.ctrlKey)&&(e.shiftKey||(e.metaKey&&e.ctrlKey))&&(k==='s'||k==='3'||k==='4'||k==='5'||e.code==='KeyS'||e.code==='Digit3'||e.code==='Digit4'||e.code==='Digit5'))return true;
  return false}
 function onShot(e){if(shotKey(e)){show(true);try{navigator.clipboard&&navigator.clipboard.writeText('')}catch(_){}}}
 addEventListener('keydown',onShot,true);addEventListener('keyup',onShot,true);
+var pre,armed=false;
+function modCombo(e){return e.metaKey&&(e.shiftKey||e.ctrlKey)}
+addEventListener('keydown',function(e){if(modCombo(e)&&/^(Meta|Shift|Control|OS)$/.test(e.key)){armed=true;document.body.classList.add('nf-blur');clearTimeout(pre)}
+ var c=e.code||'';if(e.metaKey&&(e.shiftKey||e.ctrlKey)&&/Digit[3456]/.test(c))show(true)},true);
+addEventListener('keyup',function(e){if(armed&&!modCombo(e)){armed=false;clearTimeout(pre);pre=setTimeout(function(){if(!el.classList.contains('on'))document.body.classList.remove('nf-blur')},700)}},true);
+addEventListener('blur',function(){if(armed)show(true)});
 })();
 </script>
 </body>
