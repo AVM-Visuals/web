@@ -1196,9 +1196,11 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
     function eligible(f,B){var r=lgRect(f);return r.left>=B.L&&r.right<=B.R}
     function pickTarget(prev,goalX){var B=bounds(),goal=goalX!=null?goalX:B.L+(B.R-B.L)*(.25+Math.random()*.6),best=null,bd=1e9;
       [].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){if(f===prev&&goalX==null)return;if(!eligible(f,B))return;var r=lgRect(f),dd=Math.abs(r.left+r.width/2-goal);if(dd<bd){bd=dd;best=f}});return best||prev}
-    function neighbour(B){var c=tgt?lgRect(tgt):{left:pos.x,width:0},cx=c.left+c.width/2,best=null,bd=1e9;
-      for(var tries=0;tries<2&&!best;tries++){[].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){if(f===tgt||!eligible(f,B))return;var r=lgRect(f),x=r.left+r.width/2,dd=(x-cx)*dir;if(dd>8&&dd<bd){bd=dd;best=f}});if(!best)dir=-dir}
-      return best||pickTarget(tgt)}
+    function neighbour(B){var c=tgt?lgRect(tgt):{left:pos.x,width:0},cx=c.left+c.width/2;dir=-dir;
+      var all=[].filter.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){return f!==tgt&&eligible(f,B)});
+      function side(sg){return all.filter(function(f){var r=lgRect(f);return (r.left+r.width/2-cx)*sg>8}).sort(function(p,q){var a=lgRect(p),b=lgRect(q);return Math.abs(a.left+a.width/2-cx)-Math.abs(b.left+b.width/2-cx)})}
+      var L=side(dir);if(!L.length){dir=-dir;L=side(dir)}if(!L.length)return pickTarget(tgt);
+      return L[Math.min(L.length-1,(Math.random()*Math.min(2,L.length))|0)]}
     function setText(k){var lang=document.documentElement.lang,t=(TX[lang]||TX.cs)[k];ban.innerHTML='<b>'+t[0]+'</b><i>'+t[1]+'</i>'}
     function open(e){e.preventDefault();e.stopPropagation();var pk=document.getElementById('reel-pick');if(!tgt||(pk&&pk.classList.contains('on')))return;var f=tgt;setTimeout(function(){var r=f.getBoundingClientRect();f.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}))},0)}
     function setHov(v){clearTimeout(hovT);if(v)hov=true;else hovT=setTimeout(function(){hov=false},500)}
@@ -1208,7 +1210,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
     function ease(k){return k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2}
     function goTo(f,now,slow,fast){arrT=0;if(tgt&&tgt!==f)tgt.classList.remove('dr-hint');tgt=f;var dx=Math.abs(goalX()-pos.x);tw={fx:pos.x,t0:now,dur:reduce?1:fast?Math.max(700,Math.min(1300,dx*2)):Math.max(slow?3000:1500,Math.min(3800,dx*4.2))};lastPick=now}
     function goalX(){var dw=body.offsetWidth;if(mode==='pick'){var pr=document.getElementById('reel-pick').getBoundingClientRect();return pr.left+pr.width/2-dw/2}if(!tgt)return pos.x;var r=lgRect(tgt);return r.left+r.width/2-dw/2}
-    function start(){if(started||blocked())return;var r=reelEl();if(!r||!r.getBoundingClientRect().height)return;started=true;build();pos={x:innerWidth+80,y:innerHeight*.3};ys=pos.y;tgt=pickTarget(null);goTo(tgt,performance.now(),true);requestAnimationFrame(frame)}
+    function start(){if(started||blocked())return;var r=reelEl();if(!r||!r.getBoundingClientRect().height)return;started=true;build();pos={x:innerWidth+80,y:innerHeight*.3};ys=pos.y;var B0=bounds(),uw=[].filter.call(document.querySelectorAll('.reel .fr[aria-label^="UNIWELD"]'),function(f){return eligible(f,B0)})[0];tgt=uw||pickTarget(null);goTo(tgt,performance.now(),true);requestAnimationFrame(frame)}
     function frame(now){var dt=Math.min((now-last)/1000,.05);last=now;
       if(blocked()){d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');requestAnimationFrame(frame);return}d.style.visibility='';
       var dw=body.offsetWidth,bh=ban.offsetHeight||46,br=reelEl().getBoundingClientRect(),pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on'),B=bounds();
@@ -1219,7 +1221,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
         var overBar=mouse.t&&now-mouse.t<2500&&mouse.y>br.top-6&&mouse.y<br.bottom;
         if(!hov&&overBar){var n=pickTarget(null,mouse.x);if(n&&n!==tgt)goTo(n,now,false,true)}
         else if(!hov&&tgt&&!eligible(tgt,B))goTo(neighbour(B),now);
-        else if(!hov&&!tw&&arrT&&now-arrT>1000)goTo(neighbour(B),now)}
+        else if(!hov&&!tw&&arrT&&now-arrT>2000)goTo(neighbour(B),now)}
       var gx=goalX();
       if(tw){var k=Math.min(1,(now-tw.t0)/tw.dur),e=ease(k);pos.x=tw.fx+(gx-tw.fx)*e;if(k>=1){tw=null;arrT=now}}else pos.x=gx;
       var arrived=!tw&&mode==='patrol';if(tgt)tgt.classList.toggle('dr-hint',arrived);
