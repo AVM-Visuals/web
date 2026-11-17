@@ -329,7 +329,7 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 .at-dots button{width:38px;height:14px;padding:5px 0;border:0;background:none;cursor:pointer}
 .at-dots i{display:block;height:3px;border-radius:2px;background:rgba(0,0,0,.16);overflow:hidden;position:relative}
 .at-dots i::after{content:"";position:absolute;inset:0;width:0;background:var(--gold)}
-.at-dots button.on i::after{animation:atFill var(--atd,6s) linear forwards}
+.at-dots button.on i::after{animation:atFill var(--atd,6s) linear forwards}.at-hero:not(.live) .at-dots button.on i::after{animation:none}
 .at-dots button.done i::after{width:100%}
 .at-hero.paused .at-dots button.on i::after{animation:none;width:100%}
 @keyframes atFill{to{width:100%}}
@@ -1625,9 +1625,10 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
   })();
 
   (function(){var hero=document.querySelector('.at-hero');if(!hero)return;var sl=hero.querySelector('.at-slider'),tr=hero.querySelector('.at-track'),sd=[].slice.call(hero.querySelectorAll('.at-slide')),dots=sd.map(function(_,q){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label',(document.documentElement.lang==='cs'?'Fotka ':'Photo ')+(q+1));b.innerHTML='<i></i>';hero.querySelector('.at-dots').appendChild(b);return b}),n=sd.length,i=0,tm=null,D=6000,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function show(k){i=(k+n)%n;tr.style.transform='translateX('+(-i*100)+'%)';sd.forEach(function(e,q){e.classList.toggle('on',q===i)});dots.forEach(function(b,q){b.classList.remove('on','done');if(q<i)b.classList.add('done')});void hero.offsetWidth;if(dots[i])dots[i].classList.add('on');arm()}
-    function active(){return document.body.dataset.brand==='atelier'&&!document.hidden}
-    function arm(){clearTimeout(tm);if(reduce){hero.classList.add('paused');return}tm=setTimeout(function(){if(active())show(i+1);else arm()},D)}
+    function show(k){i=(k+n)%n;hero.classList.toggle('live',active());tr.style.transform='translateX('+(-i*100)+'%)';sd.forEach(function(e,q){e.classList.toggle('on',q===i)});dots.forEach(function(b,q){b.classList.remove('on','done');if(q<i)b.classList.add('done')});void hero.offsetWidth;if(dots[i])dots[i].classList.add('on');arm()}
+    function active(){var bc=document.body.classList;return document.body.dataset.brand==='atelier'&&!document.hidden&&!bc.contains('splash-open')&&!bc.contains('splash-out')}
+    var FIRST=10000;function dur(){return i===0?FIRST:D}
+    function arm(){clearTimeout(tm);if(reduce){hero.classList.add('paused');return}hero.style.setProperty('--atd',dur()/1000+'s');tm=setTimeout(function(){if(active())show(i+1);else show(0)},dur())}
     hero.querySelector('.at-prev').addEventListener('click',function(){show(i-1)});hero.querySelector('.at-next').addEventListener('click',function(){show(i+1)});
     dots.forEach(function(b,q){b.addEventListener('click',function(){show(q)})});
     var x0=null,dx=0,w=1;sl.addEventListener('pointerdown',function(e){if(e.target.closest('button'))return;x0=e.clientX;dx=0;w=sl.clientWidth;sl.classList.add('drag');clearTimeout(tm);try{sl.setPointerCapture(e.pointerId)}catch(_){}});
@@ -1635,7 +1636,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function up(){if(x0==null)return;sl.classList.remove('drag');x0=null;if(Math.abs(dx)>w*.12)show(dx<0?i+1:i-1);else show(i)}
     sl.addEventListener('pointerup',up);sl.addEventListener('pointercancel',up);
     document.addEventListener('visibilitychange',function(){if(!document.hidden&&active())show(i)});
-    new MutationObserver(function(){if(active())show(0)}).observe(document.body,{attributes:true,attributeFilter:['data-brand']});
+    var wasA=false;new MutationObserver(function(){var a=active();if(a&&!wasA)show(0);wasA=a}).observe(document.body,{attributes:true,attributeFilter:['data-brand','class']});
     show(0)})();
   function setLang(l){setTimeout(function(){window.fitSvc&&fitSvc()},50);
     LANG=l;document.documentElement.lang=l;
