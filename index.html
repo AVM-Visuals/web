@@ -1623,7 +1623,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     function frame(now){
       var el=now-t0,dt=Math.min((now-last)/1000,.05);last=now;
       x.clearRect(0,0,W,H);
-      var FO=cv&&kind==='gold'?1800:900,fadeOut=el>dur-FO?Math.max(0,(dur-el)/FO):1;
+      var FO=cv&&kind==='gold'?2500:900,fadeOut=el>dur-FO?Math.max(0,(dur-el)/FO):1;
       if(kind==='gold'){
         x.globalCompositeOperation='source-over';
         parts.forEach(function(p){
