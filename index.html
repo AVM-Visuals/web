@@ -1631,9 +1631,13 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
   })();
 
   (function(){var hero=document.querySelector('.at-hero');if(!hero)return;var sl=hero.querySelector('.at-slider'),tr=hero.querySelector('.at-track'),sd=[].slice.call(hero.querySelectorAll('.at-slide')),dots=sd.map(function(_,q){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label',(document.documentElement.lang==='cs'?'Fotka ':'Photo ')+(q+1));b.innerHTML='<i></i>';hero.querySelector('.at-dots').appendChild(b);return b}),n=sd.length,i=0,tm=null,D=5000,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function show(k){i=(k+n)%n;hero.classList.toggle('live',active());tr.style.transform='translateX('+(-i*100)+'%)';sd.forEach(function(e,q){e.classList.toggle('on',q===i)});dots.forEach(function(b,q){b.classList.remove('on','done');if(q<i)b.classList.add('done')});void hero.offsetWidth;if(dots[i])dots[i].classList.add('on');arm()}
+    var cl=sd[0].cloneNode(true);cl.setAttribute('aria-hidden','true');tr.appendChild(cl);
+    function jump(pos){tr.style.transition='none';tr.style.transform='translateX('+(-pos*100)+'%)';void tr.offsetWidth;tr.style.transition=''}
+    function show(k){var to=k;if(k===n&&i===n-1){to=n}else if(k===-1&&i===0){jump(n);to=n-1}else to=(k+n)%n;i=(k+n)%n;hero.classList.toggle('live',active());tr.style.transform='translateX('+(-to*100)+'%)';
+      if(to===n){cl.classList.add('on');setTimeout(function(){if(i===0){jump(0)}},1850)}else cl.classList.remove('on');
+      sd.forEach(function(e,q){e.classList.toggle('on',q===i)});dots.forEach(function(b,q){b.classList.remove('on','done');if(q<i)b.classList.add('done')});void hero.offsetWidth;if(dots[i])dots[i].classList.add('on');arm()}
     function active(){var bc=document.body.classList;return document.body.dataset.brand==='atelier'&&!document.hidden&&!bc.contains('splash-open')&&!bc.contains('splash-out')}
-    var FIRST=8000;function dur(){return i===0?FIRST:D}
+    var FIRST=7000;function dur(){return i===0?FIRST:D}
     function arm(){clearTimeout(tm);if(reduce){hero.classList.add('paused');return}hero.style.setProperty('--atd',dur()/1000+'s');tm=setTimeout(function(){if(active())show(i+1);else show(0)},dur())}
     hero.querySelector('.at-prev').addEventListener('click',function(){show(i-1)});hero.querySelector('.at-next').addEventListener('click',function(){show(i+1)});
     dots.forEach(function(b,q){b.addEventListener('click',function(){show(q)})});
