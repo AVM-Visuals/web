@@ -615,6 +615,11 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
 .drone .dr-hang{position:absolute;left:0;top:0;width:100%;height:0;transform-origin:50% calc(var(--dw)*.34)}
 .drone .dr-ropes{animation:none!important}
 .drone .dr-body svg{transform-origin:50% 40%}
+
+.drone .dr-ropes{display:none!important}
+.drone .dr-lines{position:absolute;left:0;top:0;width:100%;height:1px;overflow:visible;pointer-events:none;transition:opacity .45s}
+.drone .dr-lines path{fill:none;stroke:#D8B24A;stroke-width:1.3;stroke-linecap:round;opacity:.9}
+.drone.quiet .dr-lines{opacity:0}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1192,7 +1197,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
   // drone hint: physics-based flight between logos, pendulum banner on ropes, banner on hover / logo tooltip
   (function(){var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var TX={cs:[['Klikněte na logo ↓','a pusťte si ukázku'],['← Listujte →','klikněte na video nebo fotky']],en:[['Click a logo ↓','to watch our work'],['← Swipe →','pick a video or photos']],de:[['Klicken Sie aufs Logo ↓','und sehen Sie Beispiele'],['← Blättern →','Video oder Fotos wählen']],uk:[['Натисніть на логотип ↓','і перегляньте приклади'],['← Гортайте →','оберіть відео або фото']]};
-    var d,ban,body,svgEl,hang,started=false,tgt=null,mode='patrol',pos={x:0,y:0},v={x:0,y:0},travel=false,arrT=0,dir=-1,last=performance.now(),hov=false,hovT=0,mouse={x:0,y:0,t:0},pgx=null,tilt=0,th=0,thv=0,t0=performance.now();
+    var dwell=2000,lines,d,ban,body,svgEl,hang,started=false,tgt=null,mode='patrol',pos={x:0,y:0},v={x:0,y:0},travel=false,arrT=0,dir=-1,last=performance.now(),hov=false,hovT=0,mouse={x:0,y:0,t:0},pgx=null,tilt=0,th=0,thv=0,t0=performance.now();
     function blocked(){return document.body.classList.contains('splash-open')||document.body.dataset.brand==='atelier'}
     function reelEl(){return document.getElementById('reel')}
     function bounds(){var r=reelEl(),lb=r.querySelector('.reel-label'),ir=r.querySelector('.iris');return {L:lb?lb.getBoundingClientRect().right+14:innerWidth*.2,R:ir?ir.getBoundingClientRect().left-14:innerWidth-110}}
@@ -1200,14 +1205,18 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
     function eligible(f,B){var r=lgRect(f);return r.left>=B.L&&r.right<=B.R}
     function pickTarget(prev,goalX){var B=bounds(),goal=goalX!=null?goalX:B.L+(B.R-B.L)*(.25+Math.random()*.6),best=null,bd=1e9;
       [].forEach.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){if(f===prev&&goalX==null)return;if(!eligible(f,B))return;var r=lgRect(f),dd=Math.abs(r.left+r.width/2-goal);if(dd<bd){bd=dd;best=f}});return best||prev}
-    function neighbour(B){var c=tgt?lgRect(tgt):{left:pos.x,width:0},cx=c.left+c.width/2;dir=-dir;
+    function neighbour(B){var c=tgt?lgRect(tgt):{left:pos.x,width:0},cx=c.left+c.width/2,span=Math.max(1,B.R-B.L),rel=(cx-B.L)/span;
+      // zig-zag: from the right part jump back left, from the left part go right, in the middle pick a random side
+      dir=rel>.62?-1:rel<.38?1:(Math.random()<.5?-1:1);
       var all=[].filter.call(document.querySelectorAll('.reel .fr[data-reels]'),function(f){return f!==tgt&&eligible(f,B)});
-      function side(sg){return all.filter(function(f){var r=lgRect(f);return (r.left+r.width/2-cx)*sg>8}).sort(function(p,q){var a=lgRect(p),b=lgRect(q);return Math.abs(a.left+a.width/2-cx)-Math.abs(b.left+b.width/2-cx)})}
-      var L=side(dir);if(!L.length){dir=-dir;L=side(dir)}if(!L.length)return pickTarget(tgt);return L[Math.min(L.length-1,(Math.random()*Math.min(2,L.length))|0)]}
+      var side=all.filter(function(f){var r=lgRect(f);return (r.left+r.width/2-cx)*dir>20});if(!side.length)side=all;if(!side.length)return pickTarget(tgt);
+      // prefer a longer jump sometimes so the path is not predictable
+      side.sort(function(p,q){var a=lgRect(p),b=lgRect(q);return Math.abs(b.left+b.width/2-cx)-Math.abs(a.left+a.width/2-cx)});
+      var r=Math.random(),i=r<.45?0:(r<.75?((side.length/2)|0):((Math.random()*side.length)|0));return side[Math.min(side.length-1,i)]}
     function setText(k){var lang=document.documentElement.lang,t=(TX[lang]||TX.cs)[k];ban.innerHTML='<b>'+t[0]+'</b><i>'+t[1]+'</i>'}
     function open(e){e.preventDefault();e.stopPropagation();var pk=document.getElementById('reel-pick');if(!tgt||(pk&&pk.classList.contains('on')))return;var f=tgt;setTimeout(function(){var r=f.getBoundingClientRect();f.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:r.left+r.width/2,clientY:r.top+r.height/2}))},0)}
     function setHov(on){clearTimeout(hovT);if(on)hov=true;else hovT=setTimeout(function(){hov=false},500)}
-    function build(){d=document.createElement('div');d.className='drone quiet';d.innerHTML='<div class="dr-body"><svg viewBox="0 0 120 52" aria-hidden="true"><defs><linearGradient id="drg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient></defs><rect x="5" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="73" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="22" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><rect x="93.6" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><ellipse class="rot" cx="24" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><ellipse class="rot" cx="96" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><path d="M37 13h46l-7 14H44z" fill="url(#drg)" stroke="#D8B24A" stroke-width="1.2"/><rect x="43" y="10.5" width="34" height="6.5" rx="3.2" fill="#F4F5F7" stroke="#D8B24A" stroke-width=".8"/><circle class="led" cx="79" cy="16" r="1.7" fill="#ff3b30"/><circle cx="41" cy="16" r="1.4" fill="#36d36a"/><rect x="55" y="27" width="10" height="5" rx="1.5" fill="#D9DCE0"/><circle cx="60" cy="36.5" r="6" fill="#1a1a1a" stroke="#D8B24A" stroke-width="1.2"/><circle cx="60" cy="36.5" r="2.6" fill="#4d6b8f"/><path d="M41 27l-6 12M79 27l6 12" stroke="#E2E4E8" stroke-width="2.6" stroke-linecap="round"/></svg><div class="dr-hang"><div class="dr-ropes"></div><div class="dr-ban" role="button" tabindex="0"></div></div></div>';document.body.appendChild(d);ban=d.querySelector('.dr-ban');body=d.querySelector('.dr-body');svgEl=body.querySelector('svg');hang=d.querySelector('.dr-hang');setText(0);
+    function build(){d=document.createElement('div');d.className='drone quiet';d.innerHTML='<div class="dr-body"><svg viewBox="0 0 120 52" aria-hidden="true"><defs><linearGradient id="drg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient></defs><rect x="5" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="73" y="12" width="42" height="3.4" rx="1.7" fill="#D9DCE0"/><rect x="22" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><rect x="93.6" y="6" width="4.4" height="9" rx="1.6" fill="#E8E9EB"/><ellipse class="rot" cx="24" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><ellipse class="rot" cx="96" cy="5" rx="21" ry="2.6" fill="rgba(255,255,255,.75)"/><path d="M37 13h46l-7 14H44z" fill="url(#drg)" stroke="#D8B24A" stroke-width="1.2"/><rect x="43" y="10.5" width="34" height="6.5" rx="3.2" fill="#F4F5F7" stroke="#D8B24A" stroke-width=".8"/><circle class="led" cx="79" cy="16" r="1.7" fill="#ff3b30"/><circle cx="41" cy="16" r="1.4" fill="#36d36a"/><rect x="55" y="27" width="10" height="5" rx="1.5" fill="#D9DCE0"/><circle cx="60" cy="36.5" r="6" fill="#1a1a1a" stroke="#D8B24A" stroke-width="1.2"/><circle cx="60" cy="36.5" r="2.6" fill="#4d6b8f"/><path d="M41 27l-6 12M79 27l6 12" stroke="#E2E4E8" stroke-width="2.6" stroke-linecap="round"/></svg><svg class="dr-lines" aria-hidden="true"><path/><path/></svg><div class="dr-hang"><div class="dr-ban" role="button" tabindex="0"></div></div></div>';document.body.appendChild(d);ban=d.querySelector('.dr-ban');body=d.querySelector('.dr-body');svgEl=body.querySelector('svg');hang=d.querySelector('.dr-hang');lines=d.querySelectorAll('.dr-lines path');setText(0);
       svgEl.addEventListener('mouseenter',function(){setHov(true)});svgEl.addEventListener('mouseleave',function(){setHov(false)});ban.addEventListener('mouseenter',function(){setHov(true)});ban.addEventListener('mouseleave',function(){setHov(false)});
       svgEl.addEventListener('click',function(e){setHov(true);setHov(false);open(e)});ban.addEventListener('click',open);ban.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open(e)})}
     function goTo(f){if(tgt&&tgt!==f)tgt.classList.remove('dr-hint');tgt=f;travel=true;arrT=0}
@@ -1225,24 +1234,31 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
         var overBar=mouse.t&&now-mouse.t<2500&&mouse.y>br.top-6&&mouse.y<br.bottom;
         if(!hov&&overBar){var n=pickTarget(null,mouse.x);if(n&&n!==tgt){goTo(n);pgx=null}}
         else if(!hov&&tgt&&!eligible(tgt,B)){goTo(neighbour(B));pgx=null}
-        else if(!hov&&!travel&&arrT&&now-arrT>2000){goTo(neighbour(B));pgx=null}}
+        else if(!hov&&!travel&&arrT&&now-arrT>dwell){goTo(neighbour(B));pgx=null;dwell=1400+Math.random()*1800}}
       var gx=goalX(dw),tvx=pgx==null?0:(gx-pgx)/(dt||.016);pgx=gx;
       var ct=document.getElementById('client-tip'),tipOn=mode==='patrol'&&ct&&ct.classList.contains('on'),showBan=hov||tipOn;
       d.classList.toggle('quiet',!showBan);document.body.classList.toggle('dr-on',hov&&!tipOn);
       var gy;if(mode==='pick'){var pr=pk.getBoundingClientRect();gy=showBan?pr.top-(dw*.34+46+bh+10):pr.top-dw*.4-8;if(gy<70)gy=70}else{var base=tipOn?ct.getBoundingClientRect().top-4:br.top;gy=showBan?base-(dw*.34+46+bh+14):base-dw*.4-6}
-      var VMAX=overBar||mode==='pick'?240:(innerWidth<700?85:120),AMAX=overBar||mode==='pick'?320:(innerWidth<700?60:80);
-      var ex=gx-pos.x,vdes=cl(ex*.9,VMAX)+tvx,ax=reduce?0:cl((vdes-v.x)*1.6,AMAX);
+      var VMAX=overBar||mode==='pick'?260:(innerWidth<700?120:170),AMAX=overBar||mode==='pick'?340:(innerWidth<700?95:125);
+      var ex=gx-pos.x,brake=Math.sqrt(2*AMAX*.55*Math.abs(ex))*(ex<0?-1:1),vdes=cl(Math.abs(brake)<Math.abs(ex*2.6)?brake:ex*2.6,VMAX)+tvx,ax=reduce?0:cl((vdes-v.x)*7,AMAX*1.6);
       if(reduce){pos.x=gx;v.x=tvx}else{v.x+=ax*dt;pos.x+=v.x*dt}
       var ey=gy-pos.y,vdy=cl(ey*1.2,190),ay=cl((vdy-v.y)*2,220);if(reduce){pos.y=gy;v.y=0}else{v.y+=ay*dt;pos.y+=v.y*dt}
-      if(travel&&Math.abs(ex)<2.5&&Math.abs(v.x-tvx)<5){travel=false;arrT=now}
+      if(travel&&Math.abs(ex)<14&&Math.abs(v.x-tvx)<45){travel=false;arrT=now}
       var arrived=!travel&&mode==='patrol';if(tgt)tgt.classList.toggle('dr-hint',arrived);
       // body tilt follows relative velocity + acceleration (like a real quadcopter)
       var tt=cl((v.x-tvx)*.07+ax*.04,13);tilt+=(tt-tilt)*Math.min(1,dt*3);
       // pendulum banner: driven by acceleration + soft wind
       var tm=(now-t0)/1000,wind=Math.sin(tm*.55)*1.1+Math.sin(tm*1.27+1.3)*.6+Math.sin(tm*2.9+.4)*.25;
-      var tha=-4.2*th-1.1*thv-ax*.11+wind*1.6;thv+=tha*dt;th+=thv*dt;th=cl(th,22);
+      var tha=-3.6*th-.5*thv+ax*.2+wind*2.6;thv+=tha*dt;th+=thv*dt;th=cl(th,30);
       if(reduce){th=0;tilt=0}
-      d.style.transform='translate3d('+pos.x.toFixed(2)+'px,'+pos.y.toFixed(2)+'px,0)';svgEl.style.transform='rotate('+tilt.toFixed(2)+'deg)';hang.style.transform='rotate('+(th-tilt*.15).toFixed(2)+'deg)';
+      d.style.transform='translate3d('+pos.x.toFixed(2)+'px,'+pos.y.toFixed(2)+'px,0)';svgEl.style.transform='rotate('+tilt.toFixed(2)+'deg)';hang.style.transform='rotate('+th.toFixed(2)+'deg)';
+      // ropes: from the drone's feet (tilted with the body) to the banner corners (swinging), with sag
+      if(!d.classList.contains('quiet')||true){var H=dw*52/120,ox=dw*.5,oy=H*.4,tr=tilt*Math.PI/180,ct2=Math.cos(tr),st2=Math.sin(tr);
+        function rotP(x,y,cx,cy,c,s_){var dx=x-cx,dy=y-cy;return [cx+dx*c-dy*s_,cy+dx*s_+dy*c]}
+        var f1=rotP(dw*35/120,dw*39/120,ox,oy,ct2,st2),f2=rotP(dw*85/120,dw*39/120,ox,oy,ct2,st2);
+        var px0=dw/2,py0=dw*.34,y0=py0+46,bw=ban.offsetWidth||150,tr2=th*Math.PI/180,c3=Math.cos(tr2),s3=Math.sin(tr2);
+        var a1=rotP(px0-bw*.32,y0,px0,py0,c3,s3),a2=rotP(px0+bw*.32,y0,px0,py0,c3,s3);
+        [[f1,a1],[f2,a2]].forEach(function(pq,i){var p=pq[0],q=pq[1],mx=(p[0]+q[0])/2-thv*.35,my=(p[1]+q[1])/2+5+Math.abs(th)*.18;lines[i].setAttribute('d','M'+p[0].toFixed(1)+' '+p[1].toFixed(1)+' Q'+mx.toFixed(1)+' '+my.toFixed(1)+' '+q[0].toFixed(1)+' '+q[1].toFixed(1))})}
       requestAnimationFrame(frame)}
     addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.t=performance.now()},{passive:true});
     (function boot(){if(started)return;if(!blocked()&&!document.hidden)setTimeout(start,1000);else setTimeout(boot,150)})();
