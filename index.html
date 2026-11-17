@@ -313,10 +313,10 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 .at-hero{position:relative;padding:0;min-height:clamp(520px,78svh,780px);display:flex;align-items:center;overflow:hidden}
 .at-slider{position:absolute;top:0;right:0;bottom:0;width:64%;overflow:hidden;touch-action:pan-y;cursor:grab}
 .at-slider.drag{cursor:grabbing}
-.at-track{display:flex;height:100%;transition:transform .9s cubic-bezier(.65,0,.25,1)}
+.at-track{display:flex;height:100%;transition:transform 1.8s cubic-bezier(.45,0,.2,1)}
 .at-slider.drag .at-track{transition:none}
 .at-slide{flex:0 0 100%;height:100%;overflow:hidden}
-.at-slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);transition:transform 4s ease-out;pointer-events:none;user-select:none}
+.at-slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.07);transition:transform 7.5s ease-out;pointer-events:none;user-select:none}
 .at-slide.on img{transform:scale(1)}
 .at-fade{display:none}.at-slider{-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 18%,#000 48%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 18%,#000 48%)}
 .at-nav{position:absolute;right:clamp(16px,3vw,40px);bottom:clamp(16px,3vw,32px);display:flex;gap:8px;z-index:3}
@@ -329,7 +329,7 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 .at-dots button{width:38px;height:14px;padding:5px 0;border:0;background:none;cursor:pointer}
 .at-dots i{display:block;height:3px;border-radius:2px;background:rgba(0,0,0,.16);overflow:hidden;position:relative}
 .at-dots i::after{content:"";position:absolute;inset:0;width:0;background:var(--gold)}
-.at-dots button.on i::after{animation:atFill var(--atd,3s) linear forwards}
+.at-dots button.on i::after{animation:atFill var(--atd,6s) linear forwards}
 .at-dots button.done i::after{width:100%}
 .at-hero.paused .at-dots button.on i::after{animation:none;width:100%}
 @keyframes atFill{to{width:100%}}
@@ -1401,7 +1401,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
         <a class="btn primary" href="#atelier-kontakt">Rezervovat termín</a>
         <a class="btn ghost" href="#atelier-galerie">Prohlédnout scény</a>
       </div>
-      <div class="at-dots" role="tablist" aria-label="Výběr fotky"><button type="button" aria-label="Fotka 1"><i></i></button><button type="button" aria-label="Fotka 2"><i></i></button><button type="button" aria-label="Fotka 3"><i></i></button></div>
+      <div class="at-dots" role="tablist" aria-label="Výběr fotky"></div>
     </div>
   </div>
 
@@ -1619,7 +1619,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     new MutationObserver(function(){setTimeout(fit,60)}).observe(document.body,{attributes:true,attributeFilter:['data-brand']});
   })();
 
-  (function(){var hero=document.querySelector('.at-hero');if(!hero)return;var sl=hero.querySelector('.at-slider'),tr=hero.querySelector('.at-track'),sd=[].slice.call(hero.querySelectorAll('.at-slide')),dots=[].slice.call(hero.querySelectorAll('.at-dots button')),n=sd.length,i=0,tm=null,D=3000,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  (function(){var hero=document.querySelector('.at-hero');if(!hero)return;var sl=hero.querySelector('.at-slider'),tr=hero.querySelector('.at-track'),sd=[].slice.call(hero.querySelectorAll('.at-slide')),dots=sd.map(function(_,q){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label',(document.documentElement.lang==='cs'?'Fotka ':'Photo ')+(q+1));b.innerHTML='<i></i>';hero.querySelector('.at-dots').appendChild(b);return b}),n=sd.length,i=0,tm=null,D=6000,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
     function show(k){i=(k+n)%n;tr.style.transform='translateX('+(-i*100)+'%)';sd.forEach(function(e,q){e.classList.toggle('on',q===i)});dots.forEach(function(b,q){b.classList.remove('on','done');if(q<i)b.classList.add('done')});void hero.offsetWidth;if(dots[i])dots[i].classList.add('on');arm()}
     function active(){return document.body.dataset.brand==='atelier'&&!document.hidden}
     function arm(){clearTimeout(tm);if(reduce){hero.classList.add('paused');return}tm=setTimeout(function(){if(active())show(i+1);else arm()},D)}
