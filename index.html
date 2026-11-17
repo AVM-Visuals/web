@@ -1184,7 +1184,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
   // drone hint: appears when the visitor nears the bottom, patrols the reference bar, follows the picker
   (function(){var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var TX={cs:[['Klikněte na logo ↓','a pusťte si ukázku'],['← Listujte →','klikněte na video nebo fotky']],en:[['Click a logo ↓','to watch our work'],['← Swipe →','pick a video or photos']],de:[['Klicken Sie aufs Logo ↓','und sehen Sie Beispiele'],['← Blättern →','Video oder Fotos wählen']],uk:[['Натисніть на логотип ↓','і перегляньте приклади'],['← Гортайте →','оберіть відео або фото']]};
-    var entering=true,d=null,ban=null,body=null,started=false,tgt=null,pos={x:0,y:0},vx=0,mode='patrol',arrived=0,lastPick=0,showUntil=0,last=performance.now(),hidden=true;
+    var awayO={x:0,y:0},entering=true,d=null,ban=null,body=null,started=false,tgt=null,pos={x:0,y:0},vx=0,mode='patrol',arrived=0,lastPick=0,showUntil=0,last=performance.now(),hidden=true;
     function blocked(){return document.body.classList.contains('splash-open')||document.body.dataset.brand==='atelier'}
     function reelEl(){return document.getElementById('reel')}
     function pickTarget(prev){var fr=[].slice.call(document.querySelectorAll('.reel .fr[data-reels]')),goal=innerWidth*(.32+Math.random()*.48),best=null,bd=1e9;
@@ -1198,7 +1198,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
       var pk=document.getElementById('reel-pick'),pickOpen=pk&&pk.classList.contains('on');
       if(blocked()){d.style.opacity='0';d.style.visibility='hidden';tgt&&tgt.classList.remove('dr-hint');requestAnimationFrame(frame);return}d.style.visibility='';d.style.opacity='';
       var gx,gy,quiet=false;
-      if(!pickOpen&&mouse.t&&mouse.y<innerHeight/2){if(mode!=='away'){mode='away';tgt&&tgt.classList.remove('dr-hint')}gx=innerWidth+dw+60;gy=-dw*.8;quiet=true}
+      if(!pickOpen&&mouse.t&&mouse.y<innerHeight/2){if(mode!=='away'){mode='away';tgt&&tgt.classList.remove('dr-hint');awayO={x:pos.x+dw/2,y:pos.y+dw*.2}}var cx=awayO.x,dx=mouse.x-cx,dy=mouse.y-awayO.y,L=Math.max(1,Math.hypot(dx,dy)),far=Math.max(innerWidth,innerHeight)*1.05;gx=cx+dx/L*far-dw/2;gy=awayO.y+dy/L*far-dw*.2;quiet=true}
       else if(pickOpen){if(mode!=='pick'){mode='pick';setText(1);tgt&&tgt.classList.remove('dr-hint')}var pr=pk.getBoundingClientRect();gx=pr.left+pr.width/2-dw/2;gy=pr.top-(dw*.34+46+bh+10);if(gy<70){gy=70}}
       else{if(mode!=='patrol'){mode='patrol';setText(0);arrived=0;showUntil=0;tgt=pickTarget(tgt)}
         if(!tgt||!document.body.contains(tgt)){tgt=pickTarget(null)}
@@ -1211,7 +1211,7 @@ body.dr-on #client-tip{opacity:0!important;visibility:hidden!important}
         quiet=!(arrived&&now<showUntil);if(quiet)tgt.classList.remove('dr-hint');
         gy=quiet?br.top-dw*.4-6:br.top-(dw*.34+46+bh+14)}
       d.classList.toggle('quiet',quiet);document.body.classList.toggle('dr-on',!quiet&&mode==='patrol');
-      if(mode==='away')entering=true;else if(entering&&Math.abs(gx-pos.x)<30&&Math.abs(gy-pos.y)<30)entering=false;var k=reduce?1:Math.min(1,dt*(mode==='pick'?4:mode==='away'?.9:entering?1.05:2.4));var nx=pos.x+(gx-pos.x)*k,ny=pos.y+(gy-pos.y)*k;vx=(nx-pos.x)/(dt||.016);pos.x=nx;pos.y=ny;
+      if(mode==='away')entering=true;else if(entering&&Math.abs(gx-pos.x)<30&&Math.abs(gy-pos.y)<30)entering=false;var k=reduce?1:Math.min(1,dt*(mode==='pick'?4:mode==='away'?.6:entering?1.05:2.4));var nx=pos.x+(gx-pos.x)*k,ny=pos.y+(gy-pos.y)*k;vx=(nx-pos.x)/(dt||.016);pos.x=nx;pos.y=ny;
       var tilt=Math.max(-14,Math.min(14,vx*.03));d.style.transform='translate('+pos.x.toFixed(1)+'px,'+pos.y.toFixed(1)+'px) rotate('+tilt.toFixed(1)+'deg)';
       requestAnimationFrame(frame)}
     var mouse={x:0,y:0,t:0};addEventListener('mousemove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;mouse.t=performance.now()},{passive:true});
