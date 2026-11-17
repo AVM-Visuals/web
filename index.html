@@ -864,6 +864,16 @@ body[data-brand="atelier"] .services .svc{padding-left:24px!important;padding-ri
   #top .hero-copy p.lead{text-align:center!important}
   #top .hero-copy .ctas{justify-self:center!important;justify-content:center}
 }
+
+/* mobile/tablet portrait: centred atelier hero */
+@media (max-width:900px){
+  #atelier .hero-grid>div:first-child{text-align:center;display:flex;flex-direction:column;align-items:center}
+  #atelier h1,#atelier h1 span{text-align:center}
+  #atelier .gold-rule{margin-left:auto!important;margin-right:auto!important}
+  #atelier .lead{margin-left:auto;margin-right:auto;text-align:center}
+  #atelier .ctas{justify-content:center}
+}
+@media (max-width:600px){#atelier .ctas{flex-wrap:nowrap;gap:8px;width:100%}#atelier .ctas .btn{padding:11px 14px;font-size:13.5px;white-space:nowrap;flex:1 1 auto;text-align:center}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
