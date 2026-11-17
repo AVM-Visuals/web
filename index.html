@@ -653,6 +653,7 @@ body.splash-open .drone{z-index:99!important}
 /* showreel hero */
 .hero-v{grid-template-columns:1fr!important;gap:clamp(26px,3vw,44px)}
 #top.hero{padding-top:clamp(28px,3.6vw,48px)}
+@media (max-width:600px){#top .hero-copy .ctas{flex-wrap:nowrap;gap:8px}#top .hero-copy .ctas .btn{padding:11px 14px;font-size:13.5px;white-space:nowrap;flex:1 1 auto;justify-content:center;text-align:center}}
 @media (max-width:900px){.showreel{width:100%;order:-1}#top.hero{padding-top:14px}.hero-v{gap:26px}}
 .hero-copy{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:clamp(28px,3.6vw,56px);align-items:stretch}
 .hero-copy .hero-mark{grid-row:1/3;grid-column:1;align-self:end}
@@ -1512,7 +1513,10 @@ body.splash-open .drone{z-index:99!important}
     if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
     var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=2){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
     function active(){var bc=document.body.classList;return document.body.dataset.brand!=='atelier'&&!document.hidden&&!bc.contains('splash-open')&&!bc.contains('splash-out')}
-    function upd(){if(vis&&active()){if(fresh){fresh=false;try{v.currentTime=0}catch(_){}}play()}else v.pause()}
+    var startT=0;
+    function upd(){if(vis&&active()){if(fresh){if(startT)return;startT=setTimeout(function(){startT=0;fresh=false;if(!(vis&&active()))return;try{v.currentTime=0}catch(_){}play()},700);return}play()}else{clearTimeout(startT);startT=0;v.pause()}}
+    // safety: never let it play (e.g. after the iPhone audio unlock) while the intro screen is still up
+    v.addEventListener('playing',function(){if(!active()||fresh&&!startT&&document.body.classList.contains('splash-out'))v.pause()});
     if(window.IntersectionObserver)new IntersectionObserver(function(en){vis=en[0].intersectionRatio>.2;upd()},{threshold:[0,.2,.6]}).observe(f);
     document.addEventListener('visibilitychange',upd);new MutationObserver(upd).observe(document.body,{attributes:true,attributeFilter:['data-brand','class']});
     // size: on desktop the whole video fits above the reference bar
