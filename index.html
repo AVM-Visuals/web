@@ -1591,7 +1591,7 @@ body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video
         var sa=A.reduce(function(x,e){return x+arf(e)},0),h1=(W-G*(A.length-1))/sa,o=0;
         A.concat(U,R).forEach(function(e){e.style.order=o++;e.classList.remove('narrow')});
         A.forEach(function(e){e.style.width=(Math.floor(arf(e)*h1*100)/100)+'px';e.style.height=h1.toFixed(2)+'px'});
-        U.forEach(function(e){var w=Math.floor(arf(e)*h1*100)/100;e.style.width=w+'px';e.style.height=h1.toFixed(2)+'px';e.style.marginLeft=((W-w)/2).toFixed(2)+'px';e.style.marginRight=((W-w)/2-1).toFixed(2)+'px'});
+        U.forEach(function(e){e.style.width=W+'px';e.style.height=(W/arf(e)).toFixed(2)+'px'});
         return}
       t.forEach(function(e){e.style.marginRight=''});
       var ar=t.map(function(e){return parseFloat(e.style.getPropertyValue('--ar'))||.5625}),curF=(document.querySelector('#prace .filters button[aria-pressed="true"]')||{dataset:{}}).dataset.f,big=t.map(function(e){return !!e.dataset.big||(!!e.dataset.bigIn&&e.dataset.bigIn===curF)}),anyBig=big.some(Boolean),S=ar.reduce(function(a,b){return a+b},0);
