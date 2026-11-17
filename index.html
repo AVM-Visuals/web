@@ -1614,10 +1614,10 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
       var pal=['#E8C45A','#D8B24A','#C49A2A','#A9811C','#F3DC8C','#8F6B12'];
       for(var i=0,N=soft?110:260;i<N;i++)parts.push({x:R()*W,y:cv?-R()*H*.7:(soft?-R()*H*.9+H*.1:-R()*H*1.6+H*.15),vy:cv?H*(.13+R()*.1):(150+R()*260)*d,sw:R()*6.28,amp:(10+R()*26)*d,s:(2.2+R()*4)*d,r:R()*6.28,vr:(R()-.5)*4,k:R()<.2?'star':(R()<.7?'fleck':'dot'),c:pal[(R()*pal.length)|0],ph:R()*6.28});
     }else{
-      var times=soft==='sw'?[60,420,800,1180,1600,2000,2450,2900,3400,3950]:soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
-      times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(soft==='sw'?(.03+Math.pow(R(),1.8)*.32):(.04+R()*.92))*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
+      var times=soft==='sw'?(function(){var t=[];for(var j=0;j<25;j++)t.push(Math.round(60+j*178+(R()-.5)*120));return t})():soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
+      times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(soft==='sw'?(.03+Math.pow(R(),1.5)*.55):(.04+R()*.92))*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
       if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});}
-      else if(soft==='sw')flashes.forEach(function(f){f.k*=.5;f.len*=.16;f.rays=4;f.thin=1});else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
+      else if(soft==='sw')flashes.forEach(function(f){f.k*=.75;f.len*=.2;f.rays=4;f.thin=1});else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
     }
     function star(px,py,s,rot){x.save();x.translate(px,py);x.rotate(rot);x.beginPath();for(var q=0;q<8;q++){var rr=q%2?s*.35:s*1.8,a=q*Math.PI/4;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill();x.restore()}
     function frame(now){
@@ -1655,7 +1655,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
           if(a>900)return;
           // fast attack, exponential decay like a real speedlight
           var A2=(a<35?a/35:Math.exp(-(a-35)/170))*f.k;
-          var RR=M*(soft==='sw'?.05:soft?.14:.75);var g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,RR);
+          var RR=M*(soft==='sw'?.065:soft?.14:.75);var g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,RR);
           g.addColorStop(0,'rgba(255,255,255,'+(A2*.9)+')');g.addColorStop(.08,'rgba(245,248,255,'+(A2*.55)+')');g.addColorStop(.4,'rgba(225,233,255,'+(A2*.18)+')');g.addColorStop(1,'rgba(210,220,255,0)');
           var R0=RR;x.globalAlpha=1;x.fillStyle=g;x.fillRect(f.x-R0,f.y-R0,R0*2,R0*2);
           // soft tapered light rays flying out in every direction
