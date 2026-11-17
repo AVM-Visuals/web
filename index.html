@@ -336,6 +336,10 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 @media (max-width:900px){#atelier .at-head{display:flex;flex-direction:column;align-items:center;max-width:none;text-align:center}#atelier .at-head .gold-rule{margin:16px auto 0}.at-copy{text-align:center}.at-copy .lead{margin-left:auto;margin-right:auto}.at-copy .ctas{justify-content:center}.at-dots{justify-content:center}}
 @media (max-width:900px){.at-hero{display:block;min-height:0}.at-slider{position:relative;width:100%;height:58svh;min-height:340px}.at-slider{-webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 28%);mask-image:linear-gradient(0deg,transparent 0%,#000 28%)}.at-copy .at-head{max-width:none}.at-copy{padding-top:8px}.at-nav{bottom:auto;top:14px}}
 @media (prefers-reduced-motion:reduce){.at-track{transition:none}.at-slide img{transform:none;transition:none}}
+
+/* plynulé zobrazení fotek a mobilní výkon */
+img.fi{opacity:0;transition:opacity .45s ease}img.fi.ld{opacity:1}
+@media (hover:none),(max-width:900px){body,body *,header{background-attachment:scroll!important}}
 #atelier{overflow-x:clip}#atelier .at-head{margin-bottom:26px}#atelier .at-head .gold-rule{margin:16px 0 0}#atelier .hero-grid>div{min-width:0}
 body[data-brand="atelier"] .hero h1{font-size:clamp(46px,5.9vw,88px);position:relative;display:inline-block;white-space:nowrap;text-shadow:0 0 18px rgba(216,178,74,.28)}
 @media (min-width:701px) and (max-width:900px){body[data-brand="atelier"] .hero h1{font-size:clamp(56px,8vw,68px)}}
@@ -369,6 +373,10 @@ body[data-brand="atelier"] .facts{background:var(--tile);border:1px solid var(--
 body[data-brand="atelier"] .facts>:last-child{border-bottom:0}
 #sheet-a .shot figcaption{justify-content:space-between;align-items:flex-end}#sheet-a .shot figcaption b{min-width:0;font-size:12.5px;line-height:1.25}#sheet-a .shot figcaption span{flex:none}#sheet-a .shot.narrow figcaption b~span{display:inline}#sheet-a .shot.narrow figcaption{padding:30px 9px 9px;gap:6px}#sheet-a .shot.narrow figcaption b{font-size:11.5px}#sheet-a .shot.narrow figcaption span{font-size:10.5px}
 #atelier-galerie .at-filters{margin:0 0 clamp(22px,2.8vw,36px);gap:8px}@media (min-width:1100px){#atelier-galerie .at-filters button{padding:8px 13px;font-size:13.5px}}
+.at-col{display:flex;flex-direction:column;min-width:0}
+.at-colh{text-align:center;margin-bottom:clamp(20px,2.4vw,30px)}
+.at-colh h2{margin:0;font-size:clamp(40px,4.2vw,60px)!important;white-space:nowrap}.at-colh .gold-rule{margin:16px auto 0}
+.at-col .at-ctile,.at-col form{flex:1}
 body[data-brand="atelier"] .at-ctile{background:var(--surface);padding:clamp(20px,3vw,36px);border-radius:6px;border:1px solid var(--line);box-shadow:0 10px 28px rgba(70,50,25,.07);align-self:start}
 .at-ctile .form-h{font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(26px,2.2vw,32px);line-height:1.1;margin:0 0 6px}
 body[data-brand="atelier"] .at-ctile .facts{background:none;border:0;box-shadow:none;padding:0;margin-top:0;border-radius:0}
@@ -1592,8 +1600,9 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
 
   <section class="contact" id="atelier-kontakt">
     <div class="wrap contact-grid">
-      <div class="at-ctile">
-        <h3 class="form-h">Kontaktujte nás</h3>
+      <div class="at-col">
+        <div class="at-colh"><h2>Kontaktujte nás</h2><i class="gold-rule"></i></div>
+        <div class="at-ctile">
         <div class="facts">
           <div><b>Kontaktní osoba</b><span>Ing. Jana Koudelková</span></div>
           <a href="mailto:atelier@avm-visuals.cz"><b>E-mail</b><span>atelier@avm-visuals.cz</span></a>
@@ -1603,9 +1612,11 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
           <a href="https://www.facebook.com/p/AVM-Ateli%C3%A9r-61594624262757/" target="_blank" rel="noopener"><b>Facebook</b><span>AVM Ateliér</span></a>
           <a href="https://www.youtube.com/@AVMVisuals" target="_blank" rel="noopener"><b>YouTube</b><span>@AVMVisuals</span></a>
         </div>
+        </div>
       </div>
+      <div class="at-col">
+      <div class="at-colh"><h2>Rezervační formulář</h2><i class="gold-rule"></i></div>
       <form class="demo-form" name="rezervace-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="rezervace-atelier"><p hidden><label>Nevyplňujte <input name="bot-field"></label></p>
-        <h3 class="form-h">Rezervační formulář</h3>
         <div class="row">
           <label for="a-name">Jméno<input id="a-name" name="name" autocomplete="given-name"></label>
           <label for="a-surname">Příjmení<input id="a-surname" name="surname" autocomplete="family-name"></label>
@@ -1629,6 +1640,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
         <button class="btn primary" type="submit">Poslat rezervaci</button>
         <p class="msg" role="status" data-to="atelier@avm-visuals.cz"></p>
       </form>
+      </div>
     </div>
   </section>
 </main>
@@ -1741,6 +1753,9 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
 
   (function(){document.querySelectorAll('.bv-wrap').forEach(function(w){var st=w.querySelector('.bv-strip'),pv=w.querySelector('.bv-prev'),nx=w.querySelector('.bv-next');function upd(){pv.disabled=st.scrollLeft<4;nx.disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-4}function step(d){var c=st.querySelector('.bv-card');st.scrollBy({left:d*((c?c.offsetWidth:240)+18),behavior:'smooth'})}pv.addEventListener('click',function(){step(-1)});nx.addEventListener('click',function(){step(1)});st.addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);setTimeout(upd,300);
     var x0=null,s0=0,mv=0;st.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;x0=e.clientX;s0=st.scrollLeft;mv=0;st.style.scrollSnapType='none';st.style.scrollBehavior='auto'});addEventListener('pointermove',function(e){if(x0==null)return;mv=Math.max(mv,Math.abs(e.clientX-x0));st.scrollLeft=s0-(e.clientX-x0)});addEventListener('pointerup',function(){if(x0==null)return;x0=null;st.style.scrollSnapType='';st.style.scrollBehavior=''});st.addEventListener('click',function(e){if(mv>5){e.preventDefault();mv=0}},true)})})();
+
+  (function(){function mark(im){if(im.classList.contains('fi'))return;if(im.complete&&im.naturalWidth){return}im.classList.add('fi');var d=function(){im.classList.add('ld')};im.addEventListener('load',d,{once:true});im.addEventListener('error',d,{once:true})}
+    document.querySelectorAll('img').forEach(function(im){if(!/\/a\/|^a\//.test(im.getAttribute('src')||''))return;im.decoding='async';mark(im)})})();
   function setLang(l){setTimeout(function(){window.fitSvc&&fitSvc()},50);
     LANG=l;document.documentElement.lang=l;
     textNodes.forEach(function(o){
