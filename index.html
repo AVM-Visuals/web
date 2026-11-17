@@ -890,6 +890,14 @@ body[data-brand="atelier"] .demo-form .form-h{font-family:var(--serif);font-styl
   footer .kv{text-align:left;max-width:420px;margin-left:auto;margin-right:auto}
 }
 .shot figcaption:not(:has(b)){justify-content:flex-end}
+img,video{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
+.shot img,.gal img,.vmodal video{-webkit-user-select:none;user-select:none}
+body.nf-blur img:not(.logo img):not(#splash img):not(.vg img),body.nf-blur video{filter:blur(22px) brightness(.6);transition:filter .15s}
+#nofoto{position:fixed;z-index:9999;left:50%;top:50%;transform:translate(-50%,-50%) scale(.94);width:min(340px,86vw);background:#171716;border:1px solid #E5C66A;border-radius:14px;padding:20px 18px 18px;text-align:center;color:#fff;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 18px 50px rgba(0,0,0,.55);font-family:inherit}
+#nofoto.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#nofoto svg{width:26px;height:26px;stroke:#E5C66A;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#nofoto b{display:block;margin:8px 0 6px;font-size:17px;font-weight:600;line-height:1.3}
+#nofoto span{display:block;font-size:13.5px;line-height:1.5;color:#cfcac0}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -1661,7 +1669,7 @@ body[data-brand="atelier"] .demo-form .form-h{font-family:var(--serif);font-styl
     document.addEventListener('click',function(e){if(!started&&e.target.closest&&e.target.closest('.reel .fr'))setTimeout(start,30)},true);
   })();
   // inline video tiles (own files) open in a modal player
-  (function(){var m=document.createElement('div');m.className='vmodal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.innerHTML='<div class="vm-box"><video controls playsinline webkit-playsinline preload="auto"></video><div class="vm-cap"></div></div><button type="button" aria-label="Zavřít">×</button>';document.body.appendChild(m);var v=m.querySelector('video'),cap=m.querySelector('.vm-cap');
+  (function(){var m=document.createElement('div');m.className='vmodal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.innerHTML='<div class="vm-box"><video controls controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture oncontextmenu="return false" playsinline webkit-playsinline preload="auto"></video><div class="vm-cap"></div></div><button type="button" aria-label="Zavřít">×</button>';document.body.appendChild(m);var v=m.querySelector('video'),cap=m.querySelector('.vm-cap');
     function close(){m.classList.remove('on');try{v.pause()}catch(_){}setTimeout(function(){if(!m.classList.contains('on')){v.removeAttribute('src');v.load()}},400)}
     function open(a){var im=a.querySelector('img');v.poster=im?im.currentSrc||im.src:'';v.src=a.dataset.src;var b=a.querySelector('figcaption b');cap.textContent=b?b.textContent:'';m.classList.add('on');var p=v.play();if(p&&p.catch)p.catch(function(){})}
     document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-video]');if(a){e.preventDefault();e.stopPropagation();open(a)}else if(e.target===m||e.target.closest&&e.target.closest('.vmodal > button'))close()},true);
@@ -1911,6 +1919,32 @@ body[data-brand="atelier"] .demo-form .form-h{font-family:var(--serif);font-styl
         .then(function(){btn.disabled=false});
     });
   });
+})();
+</script>
+<script>
+(function(){
+var T={cs:['Neblázni a nefoť si nás, nejsme v zoo! 🙈😂','Zavolej nám a fotky ti klidně pošleme. 📞😊'],
+en:["Come on, don't snap us, we're not a zoo! 🙈😂","Give us a call and we'll happily send you the photos. 📞😊"],
+de:['Komm schon, fotografier uns nicht ab, wir sind kein Zoo! 🙈😂','Ruf uns an, wir schicken dir die Fotos gern. 📞😊'],
+uk:['Не жартуй і не фоткай нас, ми не в зоопарку! 🙈😂','Зателефонуй нам, і ми з радістю надішлемо тобі фото. 📞😊']};
+var el=document.createElement('div');el.id='nofoto';el.setAttribute('role','alert');
+el.innerHTML='<svg viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M7 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14M21 17V9a2 2 0 0 0-2-2h-3l-2-3h-4l-1 1.5"/><path d="M9.9 10.1A3 3 0 0 0 14 14.1"/></svg><b></b><span></span>';
+document.body.appendChild(el);var tm;
+function show(blur){var l=(typeof LANG!=='undefined'&&T[LANG])?LANG:'cs';el.querySelector('b').textContent=T[l][0];el.querySelector('span').textContent=T[l][1];
+ el.classList.add('on');if(blur)document.body.classList.add('nf-blur');clearTimeout(tm);tm=setTimeout(function(){el.classList.remove('on');document.body.classList.remove('nf-blur')},2600)}
+function media(t){return t&&t.closest&&t.closest('img,video,.shot,.gal,.vmodal,.reel,picture,figure')}
+document.addEventListener('contextmenu',function(e){if(media(e.target)){e.preventDefault();show(true)}},true);
+document.addEventListener('dragstart',function(e){if(media(e.target)){e.preventDefault();show(true)}},true);
+var lp,sx,sy;
+document.addEventListener('touchstart',function(e){if(!media(e.target)||e.touches.length>1)return;sx=e.touches[0].clientX;sy=e.touches[0].clientY;clearTimeout(lp);lp=setTimeout(function(){show(true)},650)},{passive:true});
+document.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10)clearTimeout(lp)},{passive:true});
+document.addEventListener('touchend',function(){clearTimeout(lp)},{passive:true});
+function shotKey(e){var k=(e.key||'').toLowerCase();
+ if(k==='printscreen'||e.keyCode===44)return true;
+ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&(k==='s'||k==='3'||k==='4'||k==='5'||e.code==='KeyS'||e.code==='Digit3'||e.code==='Digit4'||e.code==='Digit5'))return true;
+ return false}
+function onShot(e){if(shotKey(e)){show(true);try{navigator.clipboard&&navigator.clipboard.writeText('')}catch(_){}}}
+addEventListener('keydown',onShot,true);addEventListener('keyup',onShot,true);
 })();
 </script>
 </body>
