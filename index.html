@@ -731,6 +731,15 @@ body.about-open{overflow:hidden}
 .faq-i[open] p{animation:faqIn .35s ease}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .ab-card:not(.has-photo){width:min(860px,100%)}
+
+/* menu variant C: soft capsules */
+header nav .navlink:not([hidden]){font-weight:500;letter-spacing:.03em;color:#ddd7ca;border-radius:999px;transition:background .25s,color .25s,box-shadow .25s}
+header nav .navlink:not([hidden]):hover,header nav .navlink:not([hidden]):focus-visible{background:rgba(201,169,110,.16);color:#f3dc8c;box-shadow:inset 0 0 0 1px rgba(201,169,110,.5);outline:none}
+@media (min-width:1181px){header nav .navlink:not([hidden]){font-size:13px;padding:8px 13px}header nav{column-gap:2px}}
+@media (max-width:1180px){header nav .navlink:not([hidden]){padding:2px 5px!important;margin:0 -5px;letter-spacing:0}}
+@media (max-width:420px){header nav .navlink:not([hidden]){font-size:11.5px!important;margin:0 -6px}}
+body[data-brand="atelier"] header nav .navlink:not([hidden]){color:inherit}
+body[data-brand="atelier"] header nav .navlink:not([hidden]):hover{background:rgba(160,120,60,.12);color:#7a5a24;box-shadow:inset 0 0 0 1px rgba(160,120,60,.45)}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -751,10 +760,10 @@ body.about-open{overflow:hidden}
     <a class="logo" href="#top" data-for="visuals" aria-label="AVM Visuals, úvod"><img src="/a/h_w.svg" alt="AVM Visuals"></a>
     <a class="logo logo-at" href="#atelier" data-for="atelier" aria-label="AVM Atelier, úvod" hidden><img src="/a/mark_k.svg" alt=""><i></i><b>ATELIER</b></a>
     <nav aria-label="Hlavní navigace">
+      <a class="navlink" data-for="visuals" href="#o-nas" data-about>O nás</a>
       <a class="navlink" data-for="visuals" href="#sluzby">Nabídka služeb</a>
       <a class="navlink" data-for="visuals" href="#prace">Projekty</a>
       <a class="navlink" data-for="visuals" href="#tym">Tým</a>
-      <a class="navlink" data-for="visuals" href="#o-nas" data-about>O nás</a>
       <a class="navlink" data-for="visuals" href="#faq">FAQ</a>
       <a class="navlink" data-for="visuals" href="#kontakt">Kontakty</a>
       <a class="navlink" data-for="atelier" href="#atelier-nabidka" hidden>Nabídka</a>
