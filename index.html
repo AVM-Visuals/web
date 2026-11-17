@@ -1389,13 +1389,13 @@ body.about-open{overflow:hidden}
 
   // justified layout for project tiles: every row filled edge to edge, similar heights
   (function(){var box=document.getElementById('sheet-v');if(!box)return;box.classList.add('js');
-    function lay(){var W=box.clientWidth,G=10,h0=W<700?230:330,maxH=W<700?420:560;var t=[].filter.call(box.children,function(e){return e.classList.contains('shot')&&!e.classList.contains('hide')});if(!t.length)return;
+    function lay(){var W=box.clientWidth,G=10,h0=W<700?230:330,maxH=W<700?Math.round(W*1.25):560;var t=[].filter.call(box.children,function(e){return e.classList.contains('shot')&&!e.classList.contains('hide')});if(!t.length)return;
       var ar=t.map(function(e){return parseFloat(e.style.getPropertyValue('--ar'))||.5625}),S=ar.reduce(function(a,b){return a+b},0);
       var n=t.length;
       function part(h0){var best=[0],from=[0];for(var j=1;j<=n;j++){best[j]=1e18;var sa=0;for(var i=j-1;i>=0;i--){sa+=ar[i];var cnt=j-i,h=(W-G*(cnt-1))/sa;if(h<h0*.45)break;var c=Math.pow(h-h0,2)+(h>maxH?1e7+(h-maxH)*1e4:0);if(best[i]+c<best[j]){best[j]=best[i]+c;from[j]=i}}}
         var rows=[],j2=n,H=0;while(j2>0){var i2=from[j2],r=[],sa=0;for(var q=i2;q<j2;q++){r.push(q);sa+=ar[q]}H+=Math.min(maxH,(W-G*(r.length-1))/sa)+G;rows.unshift(r);j2=i2}return {rows:rows,H:H-G}}
       // every topic should take roughly the same space: pick the row split whose total height is closest to the target
-      var tgtH=W<700?480:620,bestP=null;for(var hh=Math.round(h0*.5);hh<=maxH;hh+=8){var pp=part(hh),sc=Math.abs(pp.H-tgtH)+(pp.rows.some(function(r){var sa=r.reduce(function(a,i){return a+ar[i]},0);return (W-G*(r.length-1))/sa>maxH})?400:0);if(!bestP||sc<bestP.sc){pp.sc=sc;bestP=pp}}
+      var tgtH=W<700?480:620,bestP=null;if(W<700){bestP=part(Math.round(W*.82))}else for(var hh=Math.round(h0*.5);hh<=maxH;hh+=8){var pp=part(hh),sc=Math.abs(pp.H-tgtH)+(pp.rows.some(function(r){var sa=r.reduce(function(a,i){return a+ar[i]},0);return (W-G*(r.length-1))/sa>maxH})?400:0);if(!bestP||sc<bestP.sc){pp.sc=sc;bestP=pp}}
       var rows=bestP.rows;
       rows.forEach(function(r){var sa=r.reduce(function(a,i){return a+ar[i]},0),h=(W-G*(r.length-1))/sa;if(h>maxH)h=maxH;r.forEach(function(i){t[i].style.width=(ar[i]*h).toFixed(2)+'px';t[i].style.height=h.toFixed(2)+'px'})})}
     window.layProjects=lay;addEventListener('resize',lay);if(window.ResizeObserver)new ResizeObserver(lay).observe(box);
