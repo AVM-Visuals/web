@@ -142,7 +142,7 @@ section.tight{padding-top:0}
 .svc+.svc{padding-left:24px;border-left:1px solid var(--line)}
 @media (max-width:980px){.svc:nth-child(3){border-left:0;padding-left:0}}
 @media (max-width:520px){.svc+.svc{border-left:0;padding-left:0}}
-.svc h3{font-family:var(--display);font-size:40px;font-weight:500;line-height:1;margin-bottom:12px}
+.svc h3{font-family:var(--display);font-size:clamp(42px,3.6vw,52px);overflow-wrap:anywhere;font-weight:500;line-height:1;margin-bottom:12px}
 .svc p{color:var(--text2);font-size:15px}
 .svc{display:flex;flex-direction:column}
 .svc small{display:block;margin-top:auto;padding-top:16px;color:var(--gold);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
@@ -312,7 +312,7 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 body[data-brand="atelier"] .hero h1{font-size:clamp(68px,8.6vw,132px)}
 body[data-brand="atelier"] .hero h1 span{font-family:var(--serif);font-style:italic;font-weight:500;font-size:.32em;letter-spacing:.08em;line-height:1.3;margin-top:.35em;color:var(--muted)}
 body[data-brand="atelier"] h2,.teaser h2{font-size:clamp(46px,5vw,72px)}
-body[data-brand="atelier"] .svc h3{font-family:var(--serif);font-style:italic;font-size:34px;font-weight:600}
+body[data-brand="atelier"] .svc h3{font-family:var(--serif);font-style:italic;font-size:clamp(34px,2.8vw,40px);font-weight:600}
 body[data-brand="atelier"] .season .big{font-family:var(--script);font-weight:400;font-size:clamp(54px,5.6vw,80px);line-height:1.05}
 body[data-brand="atelier"] .season .big small{font-family:var(--serif);font-style:italic;font-weight:600;font-size:.34em;letter-spacing:.06em;margin-bottom:4px}
 body[data-brand="atelier"] .step::before{font-family:var(--serif);font-style:italic;font-weight:500;font-size:60px}
@@ -605,7 +605,8 @@ body.splash-open{overflow:hidden}
 @media (max-width:760px){
   main h2{font-size:30px!important;line-height:1.08!important}
   .strip h2{font-size:34px!important}
-  .svc h3,.step h3,.person h3{font-size:18px!important;line-height:1.2!important}
+  .step h3,.person h3{font-size:18px!important;line-height:1.2!important}
+  .svc h3{font-size:32px!important;line-height:1!important}
   .sec-head p,.svc p,.step p{font-size:14px!important;line-height:1.55!important}
   .svc{padding-top:22px!important;padding-bottom:22px!important}
   .svc small{font-size:11.5px!important}
@@ -830,6 +831,15 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
   .demo-form label{font-size:13px}
   .sec-head{margin-bottom:22px!important}
 }
+
+/* service tiles link to their projects */
+.svc-go{cursor:pointer;position:relative;transition:background .25s}
+.svc-go h3{transition:color .25s}
+.svc-go small::after{content:" →";display:inline-block;transition:transform .25s}
+.svc-go:hover h3,.svc-go:focus-visible h3{color:var(--gold)}
+.svc-go:hover small::after{transform:translateX(5px)}
+.svc-go:hover{background:rgba(201,169,110,.05)}
+.svc-go:focus-visible{outline:1px solid var(--gold);outline-offset:-1px}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -926,13 +936,13 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
         <p>Kameramani, fotografové a střihači v jednom týmu. Jedna domluva, jeden termín, hotové soubory pro web, sociální sítě nebo tisk.</p>
       </div>
       <div class="services">
-        <div class="svc"><h3>Značky</h3><p>Produktové fotografie, reklamní spoty a obsah pro sociální sítě včetně krátkých videí na výšku.</p><small>Produkt · kampaň · reels</small></div>
-        <div class="svc"><h3>Firmy</h3><p>Firemní a náborová videa, portréty týmu, fotky z výroby. Postaráme se také o firemní branding.</p><small>Video · portréty · branding</small></div>
-        <div class="svc"><h3>Eventy</h3><p>Reportáže z konferencí, večírků nebo otevření provozoven. Aftermovie dodáme do pár dnů po akci.</p><small>Konference · večírky · aftermovie</small></div>
-        <div class="svc"><h3>Sport</h3><p>Zápasy, dění v šatně, zákulisí a portréty hráčů. Spolupracujeme s hokejovým klubem HC Verva Litvínov.</p><small>Zápasy · zákulisí · média klubu</small></div>
-        <div class="svc"><h3>Svatby</h3><p>Svatbu nafotíme, natočíme a připravíme celý den na klíč, od výzdoby prostor po jednotný vizuál.</p><small>Foto · video · výzdoba</small></div>
+        <div class="svc svc-go" data-go-f="znacky" role="link" tabindex="0"><h3>Značky</h3><p>Produktové fotografie, reklamní spoty a obsah pro sociální sítě včetně krátkých videí na výšku.</p><small>Produkt · kampaň · reels</small></div>
+        <div class="svc svc-go" data-go-f="firmy" role="link" tabindex="0"><h3>Firmy</h3><p>Firemní a náborová videa, portréty týmu, fotky z výroby. Postaráme se také o firemní branding.</p><small>Video · portréty · branding</small></div>
+        <div class="svc svc-go" data-go-f="eventy" role="link" tabindex="0"><h3>Eventy</h3><p>Reportáže z konferencí, večírků nebo otevření provozoven. Aftermovie dodáme do pár dnů po akci.</p><small>Konference · večírky · aftermovie</small></div>
+        <div class="svc svc-go" data-go-f="sport" role="link" tabindex="0"><h3>Sport</h3><p>Zápasy, dění v šatně, zákulisí a portréty hráčů. Spolupracujeme s hokejovým klubem HC Verva Litvínov.</p><small>Zápasy · zákulisí · média klubu</small></div>
+        <div class="svc svc-go" data-go-f="svatby" role="link" tabindex="0"><h3>Svatby</h3><p>Svatbu nafotíme, natočíme a připravíme celý den na klíč, od výzdoby prostor po jednotný vizuál.</p><small>Foto · video · výzdoba</small></div>
         <div class="svc"><h3>Plesy</h3><p>Reportáž z celého večera, portréty hostů, sestřih pro sociální sítě hotový hned druhý den.</p><small>Reportáž · portréty · sestřih</small></div>
-        <div class="svc"><h3>Videoklipy</h3><p>Klipy pro kapely či interprety. Nápad, scénář, natáčení, střih s color gradingem.</p><small>Námět · natáčení · střih</small></div>
+        <div class="svc svc-go" data-go-f="hudba" role="link" tabindex="0"><h3>Videoklipy</h3><p>Klipy pro kapely či interprety. Nápad, scénář, natáčení, střih s color gradingem.</p><small>Námět · natáčení · střih</small></div>
         <div class="svc"><h3>Nemovitosti</h3><p>Fotografie a videa nemovitostí pro realitní kanceláře, developery nebo majitele, včetně záběrů z dronu.</p><small>Interiéry · exteriéry · dron</small></div>
       </div>
     </div>
@@ -1178,10 +1188,10 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
         <p>Fotí náš tým AVM Visuals. Fotky vybíráme společně, dostanete je upravené pro tisk nebo sociální sítě.</p>
       </div>
       <div class="services">
-        <div class="svc"><h3>Portréty</h3><p>Osobní portréty, fotky na profil, do životopisu nebo na web.</p><small>Portrét · profil · business</small></div>
-        <div class="svc"><h3>Rodiny a páry</h3><p>Společné fotky rodiny, párů, sourozenců i s domácími mazlíčky.</p><small>Rodina · pár · děti</small></div>
-        <div class="svc"><h3>Sezónní focení</h3><p>Vánoce, Velikonoce, jaro. Scény připravujeme vždy na danou sezónu.</p><small>Vánoce · Velikonoce · jaro</small></div>
-        <div class="svc"><h3>Firmy v ateliéru</h3><p>Portréty zaměstnanců, rozhovory a produktové fotky v klidném studiu.</p><small>Portréty týmu · rozhovory · produkty</small></div>
+        <div class="svc svc-go" data-go-sec="atelier-galerie" role="link" tabindex="0"><h3>Portréty</h3><p>Osobní portréty, fotky na profil, do životopisu nebo na web.</p><small>Portrét · profil · business</small></div>
+        <div class="svc svc-go" data-go-sec="atelier-galerie" role="link" tabindex="0"><h3>Rodiny a páry</h3><p>Společné fotky rodiny, párů, sourozenců i s domácími mazlíčky.</p><small>Rodina · pár · děti</small></div>
+        <div class="svc svc-go" data-go-sec="atelier-galerie" role="link" tabindex="0"><h3>Sezónní focení</h3><p>Vánoce, Velikonoce, jaro. Scény připravujeme vždy na danou sezónu.</p><small>Vánoce · Velikonoce · jaro</small></div>
+        <div class="svc svc-go" data-go-sec="atelier-galerie" role="link" tabindex="0"><h3>Firmy v ateliéru</h3><p>Portréty zaměstnanců, rozhovory a produktové fotky v klidném studiu.</p><small>Portréty týmu · rozhovory · produkty</small></div>
       </div>
     </div>
   </section>
@@ -1476,6 +1486,11 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
       if(m.hidden)return;if(e.target===m||e.target.closest('.ab-x')){e.preventDefault();close()}else if(e.target.closest('.ab-cta')){e.preventDefault();e.stopPropagation();close('kontakt')}},true);
     addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
     if(location.hash==='#o-nas')setTimeout(open,50)})();
+
+  // service tiles: jump to the matching project filter
+  (function(){function go(t){var f=t.dataset.goF,sec=t.dataset.goSec;if(f){var b=document.querySelector('#prace .filters button[data-f="'+f+'"]');if(b)b.click();var el=document.getElementById('prace');if(el)(window.secTo?secTo(el):el.scrollIntoView())}else if(sec){var e2=document.getElementById(sec);if(e2)(window.secTo?secTo(e2):e2.scrollIntoView())}}
+    document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.svc-go');if(t)go(t)});
+    document.addEventListener('keydown',function(e){var t=e.target.closest&&e.target.closest('.svc-go');if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go(t)}})})();
   // in-page section links: land the section heading right under the sticky header
   window.secTo=function(el,instant){var hd=document.querySelector('header'),t=(el.matches('h1,h2')?el:(el.querySelector('h2,h1')||el));
     var y=t.getBoundingClientRect().top+window.scrollY-(hd?hd.getBoundingClientRect().height:0)-14;window.scrollTo({top:Math.max(0,y),behavior:instant?'auto':'smooth'})};
