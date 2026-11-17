@@ -996,6 +996,9 @@ html.sp-cream{background-color:#F2ECE3!important}
 body[data-brand="atelier"] .services{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 @media (max-width:900px){body[data-brand="atelier"] .services{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media (max-width:520px){body[data-brand="atelier"] .services{grid-template-columns:minmax(0,1fr)!important}}
+/* Atelier booking steps: equal-size numbers in gold rings, neatly aligned */
+body[data-brand="atelier"] .step::before{display:flex!important;align-items:center;justify-content:center;width:52px;height:52px;border:1.5px solid var(--gold);border-radius:50%;font:500 24px/1 var(--serif)!important;font-style:normal!important;font-variant-numeric:lining-nums tabular-nums;color:var(--gold);margin:0 0 16px!important;padding-top:1px;box-sizing:border-box}
+@media (max-width:760px){body[data-brand="atelier"] .step::before{width:42px;height:42px;font-size:19px!important;margin:0!important}body[data-brand="atelier"] .step{grid-template-columns:42px minmax(0,1fr)!important;column-gap:14px!important;align-items:start}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
