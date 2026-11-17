@@ -335,6 +335,7 @@ body[data-brand="atelier"] .sec-head p{background:var(--tile);padding:14px 18px;
 /* Visuals hero: FOTO | VIDEO with a vertical gold line, subline justified to the headline width */
 .hero-mark{--hf:clamp(56px,7.6vw,122px);}
 @media (min-width:901px){#top .hero-mark{--hf:clamp(56px,min(7.6vw,11.5vh),122px)}}
+@media (min-width:901px) and (max-width:1240px){#top .hero-mark{--hf:clamp(52px,6.6vw,84px)}#top .hero-copy .ctas .btn{padding:7px 14px;font-size:12px}#top .hero-copy{column-gap:28px}#top .hero-copy p.lead{line-height:1.5}#top .hero-copy .ctas{margin-top:8px}}
 .hero-mark{display:inline-grid;max-width:100%}
 .hero h1.hero-a{display:flex;align-items:baseline;gap:.15em;white-space:nowrap;font-size:var(--hf);font-weight:500;line-height:.9}
 .hero h1.hero-a span{display:inline;color:var(--text);font-weight:500}
@@ -751,6 +752,7 @@ header nav .vg .navlink:not([hidden]){position:relative;margin:0!important;white
 header nav .vg .navlink:not([hidden])~.navlink:not([hidden])::before{content:"";position:absolute;left:0;top:30%;bottom:30%;width:1px;background:rgba(201,169,110,.38);transition:opacity .2s}
 header nav .vg .navlink:hover::before,header nav .vg .navlink:hover+.navlink::before,header nav .vg .navlink:focus-visible::before{opacity:0}
 @media (min-width:1181px){header nav .vg{margin-right:6px}header nav .vg .navlink:not([hidden]){font-size:12.5px;padding:8px 13px}}
+@media (min-width:1181px) and (max-width:1340px){header nav .vg .navlink:not([hidden]){font-size:12px;padding:7px 9px}header nav .socials{display:none!important}.bar{gap:20px!important}}
 @media (max-width:1180px){header nav .vg{order:6;padding:3px;max-width:100%}header nav .vg .navlink:not([hidden]){padding:5px 9px!important;margin:0!important}}
 @media (max-width:420px){header nav .vg .navlink:not([hidden]){padding:5px 6px!important;font-size:11px!important}}
 @media (orientation:landscape) and (max-width:1180px){header nav .vg{order:0!important}header nav .vg .navlink:not([hidden]){padding:5px 9px!important}}
@@ -1703,11 +1705,11 @@ body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([h
     // desktop: the intro block takes the showreel's width; the text is sized to fill exactly two justified lines
     var cp=document.querySelector('#top .hero-copy'),ld=cp&&cp.querySelector('.lead');
     function fitLead(){if(!ld||!cp)return;var mk=cp.querySelector('.hero-mark'),ct=cp.querySelector('.ctas');ld.style.fontSize='';var H=mk.getBoundingClientRect().height,fs=parseFloat(getComputedStyle(ld).fontSize);
-      for(var k=0;k<14&&fs>12.4;k++){var lh=ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12;if(lh<=H+2)break;fs-=0.25;ld.style.fontSize=fs+'px'}
-      var over=ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12-H;if(over>2&&cp.style.width){var W=cp.parentNode.clientWidth;cp.style.width=W+'px';ld.style.fontSize='';fitLead2()}}
-    function fitLead2(){var mk=cp.querySelector('.hero-mark'),ct=cp.querySelector('.ctas'),H=mk.getBoundingClientRect().height,fs=parseFloat(getComputedStyle(ld).fontSize);for(var k=0;k<14&&fs>12.4;k++){if(ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12<=H+2)break;fs-=0.25;ld.style.fontSize=fs+'px'}}
+      for(var k=0;k<20&&fs>11.4;k++){var lh=ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12;if(lh<=H+2)break;fs-=0.25;ld.style.fontSize=fs+'px'}
+      var over=ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12-H;if(over>2&&cp.style.width){var PS2=getComputedStyle(cp.parentNode),W=cp.parentNode.clientWidth-parseFloat(PS2.paddingLeft)-parseFloat(PS2.paddingRight);cp.style.width=W+'px';ld.style.fontSize='';fitLead2()}}
+    function fitLead2(){var mk=cp.querySelector('.hero-mark'),ct=cp.querySelector('.ctas'),H=mk.getBoundingClientRect().height,fs=parseFloat(getComputedStyle(ld).fontSize);for(var k=0;k<20&&fs>11.4;k++){if(ld.getBoundingClientRect().height+ct.getBoundingClientRect().height+12<=H+2)break;fs-=0.25;ld.style.fontSize=fs+'px'}}
     function lead2(){fitLead();return;if(!ld)return;var lo=12,hi=21;ld.style.textAlignLast='left';for(var k=0;k<12;k++){var m=(lo+hi)/2;ld.style.fontSize=m+'px';var lh=m*1.6;if(ld.getBoundingClientRect().height<=lh*2+2)lo=m;else hi=m}ld.style.fontSize=(Math.floor(lo*0.985*10)/10)+'px';ld.style.textAlignLast=''}
-    function fit(){var VW=document.documentElement.clientWidth||innerWidth;if(VW<=900||(innerHeight<=500&&innerWidth>innerHeight)){f.style.width='';if(cp)cp.style.width='';if(ld)ld.style.fontSize='';return}var W=f.parentNode.clientWidth,w=W;
+    function fit(){var VW=document.documentElement.clientWidth||innerWidth;if(VW<=900||(innerHeight<=500&&innerWidth>innerHeight)){f.style.width='';if(cp)cp.style.width='';if(ld)ld.style.fontSize='';return}var PS=getComputedStyle(f.parentNode),W=f.parentNode.clientWidth-parseFloat(PS.paddingLeft)-parseFloat(PS.paddingRight),w=W;
       var mk=cp&&cp.querySelector('.hero-mark'),ct=cp&&cp.querySelector('.ctas'),need=cp?Math.ceil(mk.getBoundingClientRect().width+parseFloat(getComputedStyle(cp).columnGap)+400):0;
       for(var i=0;i<3;i++){w=Math.max(w,Math.min(W,need));f.style.width=w+'px';if(cp)cp.style.width=w+'px';lead2();var top=f.getBoundingClientRect().top+scrollY,h=innerHeight-top-104;w=Math.round(Math.min(W,Math.max(560,h*2.353)))}
       w=Math.max(w,Math.min(W,need));
