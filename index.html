@@ -135,8 +135,8 @@ section.tight{padding-top:0}
 .sec-head .gold-rule{margin-top:18px}
 
 /* columns of offer */
-.services{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
-@media (max-width:980px){.services{grid-template-columns:repeat(2,1fr)}}
+.services{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+@media (max-width:980px){.services{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.services{grid-template-columns:1fr}}
 .svc{padding:28px 24px 32px 0;border-bottom:1px solid var(--line)}
 .svc+.svc{padding-left:24px;border-left:1px solid var(--line)}
@@ -491,6 +491,23 @@ html{background:#0a0a0a}body[data-brand="visuals"] .reel{box-shadow:0 -10px 30px
 @media (max-width:1180px){
   header{background:var(--bg)}
 }
+/* phones and tablets turned sideways: one slim header row */
+@media (orientation:landscape) and (max-width:1180px){
+  .bar{flex-direction:row;flex-wrap:nowrap;justify-content:space-between;align-items:center;height:auto;padding-top:7px;padding-bottom:7px;gap:16px}
+  nav{width:auto;flex-wrap:nowrap;justify-content:flex-end;align-items:center;gap:6px 12px}
+  .nbr{display:none!important}
+  nav .navlink{order:1;font-size:12.5px;padding:0;white-space:nowrap}
+  nav .navlink[href="#kde-nas-najdete"]{display:none!important}
+  nav .switch{order:2}nav .socials{order:3}nav .langs{order:4}
+  nav .switch a{padding:5px 11px;font-size:12px}
+  .logo img{height:24px}.logo-at img{height:15px}.logo-at i{height:24px}.logo-at b{font-size:12px}
+  .socials{gap:2px}.socials a{width:28px;height:28px}.socials svg{width:17px;height:17px}
+  .langs{gap:3px}.langs button{width:24px;height:24px}.langs svg{width:18px;height:12px}
+}
+@media (orientation:landscape) and (max-width:900px){
+  nav .socials{display:none!important}
+  .bar{gap:10px}nav{gap:6px 10px}
+}
 @media (max-width:760px){
   .bar{padding-top:8px;padding-bottom:8px;row-gap:6px}
   .logo img{height:26px}.logo-at img{height:16px}.logo-at i{height:26px}.logo-at b{font-size:12px}
@@ -654,7 +671,9 @@ body.splash-open .drone{z-index:99!important}
 .hero-v{grid-template-columns:1fr!important;gap:clamp(26px,3vw,44px)}
 #top.hero{padding-top:clamp(28px,3.6vw,48px)}
 @media (max-width:600px){#top .hero-copy .ctas{flex-wrap:nowrap;gap:8px}#top .hero-copy .ctas .btn{padding:11px 14px;font-size:13.5px;white-space:nowrap;flex:1 1 auto;justify-content:center;text-align:center}}
-@media (max-width:900px){.showreel{width:100%;order:-1}#top.hero{padding-top:14px}.hero-v{gap:26px}}
+@media (max-width:900px){.showreel{width:100%!important;order:-1}}
+@media (max-width:900px) and (orientation:landscape){.showreel{width:min(100%,calc((100svh - 150px)*2.353))!important;margin:0 auto}}
+@media (max-width:900px){#top.hero{padding-top:14px}.hero-v{gap:26px}}
 .hero-copy{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:clamp(28px,3.6vw,56px);align-items:stretch}
 .hero-copy .hero-mark{grid-row:1/3;grid-column:1;align-self:end}
 .hero-copy{margin:0 auto;width:100%}
@@ -662,6 +681,11 @@ body.splash-open .drone{z-index:99!important}
 #top .hero-copy p.lead{grid-column:2;grid-row:1;align-self:end;margin:0;padding-left:22px;border-left:1px solid rgba(201,169,110,.55);max-width:none;font-size:14.5px;line-height:1.6;text-align:justify;hyphens:none}
 .hero-copy .ctas{grid-column:2;grid-row:2;align-self:end;justify-self:start;padding:0 0 0 23px;margin:14px 0 0;display:flex;flex-direction:row;flex-wrap:wrap;gap:10px}.hero-copy .ctas .btn{padding-left:20px;padding-right:20px;white-space:nowrap;text-align:center}
 @media (max-width:900px){.hero-copy{grid-template-columns:1fr}.hero-copy .hero-mark{grid-row:auto}.hero-copy .gold-rule{display:block}#top .hero-copy p.lead{max-width:none;border:0;padding:0;grid-column:auto;grid-row:auto;display:block;text-align:left;text-align-last:auto;font-size:17px!important;margin:0}.hero-copy{width:100%!important}.hero-copy .ctas{grid-column:auto;grid-row:auto;flex-direction:row;justify-self:start;padding:0;margin-top:26px}}
+@media (orientation:landscape) and (max-height:500px){.showreel{width:100%!important;order:-1}}
+@media (orientation:landscape) and (max-height:500px){.showreel{width:min(100%,calc((100svh - 150px)*2.353))!important;margin:0 auto}}
+@media (orientation:landscape) and (max-height:500px){#top.hero{padding-top:14px}.hero-v{gap:26px}}
+@media (orientation:landscape) and (max-height:500px){.hero-copy{grid-template-columns:1fr}.hero-copy .hero-mark{grid-row:auto}.hero-copy .gold-rule{display:block}#top .hero-copy p.lead{max-width:none;border:0;padding:0;grid-column:auto;grid-row:auto;display:block;text-align:left;text-align-last:auto;font-size:17px!important;margin:0}.hero-copy{width:100%!important}.hero-copy .ctas{grid-column:auto;grid-row:auto;flex-direction:row;justify-self:start;padding:0;margin-top:26px}}
+@media (orientation:landscape) and (max-height:500px){.hero-grid{grid-template-columns:1fr}nav .socials{display:none!important}}
 .showreel{position:relative;margin:0 auto;width:100%;aspect-ratio:1600/680;border-radius:6px;overflow:hidden;background:#000;border:1px solid rgba(201,169,110,.32);box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 0 6px rgba(255,255,255,.025)}
 .showreel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .showreel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.55));}
@@ -1526,13 +1550,14 @@ body.splash-open .drone{z-index:99!important}
     // desktop: the intro block takes the showreel's width; the text is sized to fill exactly two justified lines
     var cp=document.querySelector('#top .hero-copy'),ld=cp&&cp.querySelector('.lead');
     function lead2(){return;if(!ld)return;var lo=12,hi=21;ld.style.textAlignLast='left';for(var k=0;k<12;k++){var m=(lo+hi)/2;ld.style.fontSize=m+'px';var lh=m*1.6;if(ld.getBoundingClientRect().height<=lh*2+2)lo=m;else hi=m}ld.style.fontSize=(Math.floor(lo*0.985*10)/10)+'px';ld.style.textAlignLast=''}
-    function fit(){if(innerWidth<=900){f.style.width='';if(cp)cp.style.width='';return}var W=f.parentNode.clientWidth,w=W;
+    function fit(){var VW=document.documentElement.clientWidth||innerWidth;if(VW<=900||(innerHeight<=500&&innerWidth>innerHeight)){f.style.width='';if(cp)cp.style.width='';return}var W=f.parentNode.clientWidth,w=W;
       var mk=cp&&cp.querySelector('.hero-mark'),ct=cp&&cp.querySelector('.ctas'),need=cp?Math.ceil(mk.getBoundingClientRect().width+parseFloat(getComputedStyle(cp).columnGap)+400):0;
       for(var i=0;i<3;i++){w=Math.max(w,Math.min(W,need));f.style.width=w+'px';if(cp)cp.style.width=w+'px';lead2();var top=f.getBoundingClientRect().top+scrollY,h=innerHeight-top-104;w=Math.round(Math.min(W,Math.max(560,h*2.353)))}
       w=Math.max(w,Math.min(W,need));
       f.style.width=w+'px';if(cp)cp.style.width=w+'px';lead2()}
     window.__srFit=fit;
-    addEventListener('resize',fit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);document.querySelectorAll('.langs button').forEach(function(x){x.addEventListener('click',function(){setTimeout(fit,30)})});fit();
+    function refit(){fit();setTimeout(fit,250);setTimeout(fit,700)}
+    addEventListener('resize',refit);addEventListener('orientationchange',refit);if(window.visualViewport)visualViewport.addEventListener('resize',refit);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);document.querySelectorAll('.langs button').forEach(function(x){x.addEventListener('click',function(){setTimeout(fit,30)})});fit();
     sync();upd()})();
   // splash chooser: shown on every load / refresh
   var splash=document.getElementById('splash');
@@ -1559,7 +1584,7 @@ body.splash-open .drone{z-index:99!important}
   // fit the hero subline exactly to the headline width (like VISUALS under AVM)
   function fitSub(){
     var h=document.querySelector('.hero-a'),s=document.querySelector('.hero-sub');
-    if(!h||!s||!h.offsetWidth)return;
+    if(!h||!s)return;s.style.width='';s.style.marginRight='';if(!h.offsetWidth)return;
     // gold divider: measure real cap glyphs and overshoot equally top & bottom
     var hl=h.querySelector('.hl'),sp=h.querySelector('span');
     if(hl&&sp){var cs=getComputedStyle(sp),cv=fitSub.c||(fitSub.c=document.createElement('canvas')),cx=cv.getContext('2d');
@@ -1574,7 +1599,7 @@ body.splash-open .drone{z-index:99!important}
   }
   fitSub();
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSub);
-  addEventListener('resize',fitSub);
+  addEventListener('resize',function(){fitSub();setTimeout(fitSub,250);setTimeout(fitSub,700)});addEventListener('orientationchange',function(){setTimeout(fitSub,250);setTimeout(fitSub,700)});
   document.querySelectorAll('.langs button').forEach(function(b){b.addEventListener('click',function(){setTimeout(fitSub,0)})});
   var tc=document.getElementById('tc'),t0=performance.now();
   function tick(now){if(!tc)return;
