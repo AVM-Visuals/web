@@ -961,8 +961,8 @@ body[data-brand="atelier"] .cs-list{box-shadow:0 18px 40px rgba(60,45,25,.18)}
 body[data-brand="atelier"] .season .xtree{opacity:.38}
 @media (max-width:760px){.season .xtree{right:0;height:130%}}
 @media (min-width:981px) and (max-width:1180px){#view-visuals .services{grid-template-columns:repeat(3,minmax(0,1fr))}body[data-brand="atelier"] .services{grid-template-columns:repeat(2,minmax(0,1fr))}}
-#brand-veil{position:fixed;inset:0;z-index:9000;opacity:0;pointer-events:none;transition:opacity .7s cubic-bezier(.4,0,.2,1)}
-#brand-veil.on{opacity:.92;transition:opacity .3s cubic-bezier(.4,0,.2,1);pointer-events:auto}
+#brand-veil{position:fixed;inset:0;z-index:9000;opacity:0;pointer-events:none;transition:opacity 1s cubic-bezier(.4,0,.2,1)}
+#brand-veil.on{opacity:.92;transition:opacity .5s cubic-bezier(.4,0,.2,1);pointer-events:auto}
 #switch-fx{opacity:1;z-index:9500!important;top:0!important;bottom:0!important;-webkit-mask-image:none!important;mask-image:none!important}
 /* header shares the page background, separated only by a fine gold line */
 body.pattern-dark{background-attachment:fixed,fixed}
@@ -1513,8 +1513,8 @@ html.sp-cream{background-color:#F2ECE3!important}
     var h=location.hash.slice(1),tgt=h&&document.getElementById(h),shared=tgt&&tgt.closest('footer');
     var at=shared?current==='atelier':h.indexOf('atelier')===0,brand=at?'atelier':'visuals';
     if(brand!==current&&current!==null&&!veiling&&!veilDone&&!reduce&&(function(){var sp=document.getElementById('splash');return !sp||sp.hidden})()){
-      veiling=true;if(window.splashFxRef)window.splashFxRef(at?'gold':'flash',at?3200:2600,document.getElementById('switch-fx'),at?true:'sw');var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
-      setTimeout(function(){veiling=false;veilDone=true;route();veilDone=false;requestAnimationFrame(function(){vl.classList.remove('on')})},320);return}
+      veiling=true;if(window.splashFxRef)window.splashFxRef(at?'gold':'flash',at?4200:2700,document.getElementById('switch-fx'),at?true:'sw');var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
+      setTimeout(function(){veiling=false;veilDone=true;route();veilDone=false;requestAnimationFrame(function(){vl.classList.remove('on')})},520);return}
     if(brand!==current){
       document.body.dataset.brand=brand;document.documentElement.style.backgroundColor=brand==='atelier'?'#F2ECE3':'#0a0a0a';
       vV.hidden=at;vA.hidden=!at;
@@ -1543,12 +1543,12 @@ html.sp-cream{background-color:#F2ECE3!important}
     var parts=[],flashes=[];
     if(kind==='gold'){
       var pal=['#E8C45A','#D8B24A','#C49A2A','#A9811C','#F3DC8C','#8F6B12'];
-      for(var i=0,N=soft?110:260;i<N;i++)parts.push({x:R()*W,y:cv?-R()*H*.55:(soft?-R()*H*.9+H*.1:-R()*H*1.6+H*.15),vy:(150+R()*260)*d,sw:R()*6.28,amp:(10+R()*26)*d,s:(2.2+R()*4)*d,r:R()*6.28,vr:(R()-.5)*4,k:R()<.2?'star':(R()<.7?'fleck':'dot'),c:pal[(R()*pal.length)|0],ph:R()*6.28});
+      for(var i=0,N=soft?110:260;i<N;i++)parts.push({x:R()*W,y:cv?-R()*H*.5:(soft?-R()*H*.9+H*.1:-R()*H*1.6+H*.15),vy:(cv?(45+R()*75):(150+R()*260))*d,sw:R()*6.28,amp:(10+R()*26)*d,s:(2.2+R()*4)*d,r:R()*6.28,vr:(R()-.5)*4,k:R()<.2?'star':(R()<.7?'fleck':'dot'),c:pal[(R()*pal.length)|0],ph:R()*6.28});
     }else{
-      var times=soft==='sw'?[40,180,320,470,620,760,900,1050,1200,1360,1520,1680,1850,2050]:soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
-      times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(soft==='sw'?(.04+Math.pow(R(),1.6)*.6):(.04+R()*.92))*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
+      var times=soft==='sw'?[30,110,200,280,370,450,540,630,720,800,900,990,1080,1170,1270,1360,1460,1560,1670,1780,1900,2020]:soft?[60,380,720,1050,1400,1750,2100,2450]:[120,340,560,780,1000,1220,1440];
+      times.forEach(function(tt,j){flashes.push({t:tt,x:(.04+R()*.92)*W,y:(soft==='sw'?(.03+Math.pow(R(),1.8)*.32):(.04+R()*.92))*H,k:.4+R()*.5,rot:R()*6.28,len:(.16+R()*.2),rays:4+((R()*3)|0)*2})});
       if(!soft){flashes.forEach(function(f){f.k*=.55;f.len*=.75});}
-      else if(soft==='sw')flashes.forEach(function(f){f.k*=.62;f.len*=.85});else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
+      else if(soft==='sw')flashes.forEach(function(f){f.k*=.75;f.len*=.32});else flashes.forEach(function(f){f.k*=.38;f.len*=.6});
     }
     function star(px,py,s,rot){x.save();x.translate(px,py);x.rotate(rot);x.beginPath();for(var q=0;q<8;q++){var rr=q%2?s*.35:s*1.8,a=q*Math.PI/4;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.closePath();x.fill();x.restore()}
     function frame(now){
@@ -1586,7 +1586,7 @@ html.sp-cream{background-color:#F2ECE3!important}
           if(a>900)return;
           // fast attack, exponential decay like a real speedlight
           var A2=(a<35?a/35:Math.exp(-(a-35)/170))*f.k;
-          var RR=M*(soft==='sw'?.22:soft?.14:.75);var g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,RR);
+          var RR=M*(soft==='sw'?.075:soft?.14:.75);var g=x.createRadialGradient(f.x,f.y,0,f.x,f.y,RR);
           g.addColorStop(0,'rgba(255,255,255,'+(A2*.9)+')');g.addColorStop(.08,'rgba(245,248,255,'+(A2*.55)+')');g.addColorStop(.4,'rgba(225,233,255,'+(A2*.18)+')');g.addColorStop(1,'rgba(210,220,255,0)');
           var R0=RR;x.globalAlpha=1;x.fillStyle=g;x.fillRect(f.x-R0,f.y-R0,R0*2,R0*2);
           // soft tapered light rays flying out in every direction
@@ -1600,9 +1600,9 @@ html.sp-cream{background-color:#F2ECE3!important}
           }
           x.restore();
           x.save();x.translate(f.x,f.y);x.scale(1,.02);
-          var s=x.createRadialGradient(0,0,0,0,0,M*.45);
-          s.addColorStop(0,'rgba(200,220,255,'+(A2*.45)+')');s.addColorStop(1,'rgba(160,190,255,0)');
-          x.fillStyle=s;x.beginPath();x.arc(0,0,M*.45,0,6.28);x.fill();x.restore();
+          var SR=M*(soft==='sw'?.1:.45);var s=x.createRadialGradient(0,0,0,0,0,SR);
+          s.addColorStop(0,'rgba(200,220,255,'+(A2*(soft==='sw'?.3:.45))+')');s.addColorStop(1,'rgba(160,190,255,0)');
+          x.fillStyle=s;x.beginPath();x.arc(0,0,SR,0,6.28);x.fill();x.restore();
         });
         x.globalAlpha=1;x.globalCompositeOperation='source-over';
       }
