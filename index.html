@@ -740,6 +740,20 @@ header nav .navlink:not([hidden]):hover,header nav .navlink:not([hidden]):focus-
 @media (max-width:420px){header nav .navlink:not([hidden]){font-size:11.5px!important;margin:0 -6px}}
 body[data-brand="atelier"] header nav .navlink:not([hidden]){color:inherit}
 body[data-brand="atelier"] header nav .navlink:not([hidden]):hover{background:rgba(160,120,60,.12);color:#7a5a24;box-shadow:inset 0 0 0 1px rgba(160,120,60,.45)}
+
+/* menu variant E: one rounded bar with gold dividers */
+header nav .vg{display:flex;align-items:center;padding:4px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);background:rgba(255,255,255,.02)}
+header nav .vg .navlink:not([hidden]){position:relative;margin:0!important;white-space:nowrap}
+header nav .vg .navlink:not([hidden])~.navlink:not([hidden])::before{content:"";position:absolute;left:0;top:30%;bottom:30%;width:1px;background:rgba(201,169,110,.38);transition:opacity .2s}
+header nav .vg .navlink:hover::before,header nav .vg .navlink:hover+.navlink::before,header nav .vg .navlink:focus-visible::before{opacity:0}
+@media (min-width:1181px){header nav .vg{margin-right:6px}header nav .vg .navlink:not([hidden]){font-size:12.5px;padding:8px 13px}}
+@media (max-width:1180px){header nav .vg{order:6;padding:3px;max-width:100%}header nav .vg .navlink:not([hidden]){padding:5px 9px!important;margin:0!important}}
+@media (max-width:420px){header nav .vg .navlink:not([hidden]){padding:5px 6px!important;font-size:11px!important}}
+@media (orientation:landscape) and (max-width:1180px){header nav .vg{order:0!important}header nav .vg .navlink:not([hidden]){padding:5px 9px!important}}
+@media (orientation:landscape) and (max-width:760px){.bar{flex-wrap:wrap!important;justify-content:center!important;row-gap:4px!important}header nav{width:100%;justify-content:center!important}header nav .switch{display:none!important}}
+@media (orientation:landscape) and (max-width:900px){header nav .langs{display:none!important}header nav .vg .navlink:not([hidden]){padding:4px 7px!important;font-size:11.5px!important}.bar{gap:8px!important}}
+body[data-brand="atelier"] header nav .vg{box-shadow:inset 0 0 0 1px rgba(60,45,25,.18);background:rgba(255,255,255,.35)}
+body[data-brand="atelier"] header nav .vg .navlink:not([hidden])~.navlink:not([hidden])::before{background:rgba(160,120,60,.45)}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -760,6 +774,7 @@ body[data-brand="atelier"] header nav .navlink:not([hidden]):hover{background:rg
     <a class="logo" href="#top" data-for="visuals" aria-label="AVM Visuals, úvod"><img src="/a/h_w.svg" alt="AVM Visuals"></a>
     <a class="logo logo-at" href="#atelier" data-for="atelier" aria-label="AVM Atelier, úvod" hidden><img src="/a/mark_k.svg" alt=""><i></i><b>ATELIER</b></a>
     <nav aria-label="Hlavní navigace">
+      <div class="vg">
       <a class="navlink" data-for="visuals" href="#o-nas" data-about>O nás</a>
       <a class="navlink" data-for="visuals" href="#sluzby">Nabídka služeb</a>
       <a class="navlink" data-for="visuals" href="#prace">Projekty</a>
@@ -770,7 +785,7 @@ body[data-brand="atelier"] header nav .navlink:not([hidden]):hover{background:rg
       <a class="navlink" data-for="atelier" href="#atelier-galerie" hidden>Galerie</a>
       <a class="navlink" data-for="atelier" href="#atelier-rezervace" hidden>Rezervace</a>
       <a class="navlink" data-for="atelier" href="#atelier-kontakt" hidden>Kontakty</a>
-      <a class="navlink" href="#kde-nas-najdete">Kde nás najdete</a>
+      </div>
       <i class="nbr" aria-hidden="true"></i>
       <div class="switch" role="group" aria-label="Přepnout web">
         <a href="#top" id="sw-v" aria-current="page">AVM Visuals</a>
