@@ -1016,7 +1016,7 @@ body[data-brand="atelier"] .season .xtree{opacity:.38}
 @media (min-width:981px) and (max-width:1180px){#view-visuals .services{grid-template-columns:repeat(3,minmax(0,1fr))}#view-visuals .services .svc:nth-child(4n+1){border-left:1px solid var(--line);padding-left:24px}#view-visuals .services .svc:nth-child(3n+1){border-left:0;padding-left:0}body[data-brand="atelier"] .services{grid-template-columns:repeat(2,minmax(0,1fr))}}
 #brand-veil{position:fixed;inset:0;z-index:9000;opacity:0;pointer-events:none;transition:opacity 1s cubic-bezier(.4,0,.2,1)}
 #brand-veil.on{opacity:1;transition:opacity .5s cubic-bezier(.4,0,.2,1);pointer-events:auto}
-#switch-fx{opacity:1;z-index:9500!important;top:0!important;bottom:0!important;-webkit-mask-image:none!important;mask-image:none!important}
+#switch-fx{opacity:1;z-index:9500!important;top:3px!important;bottom:3px!important;-webkit-mask-image:none!important;mask-image:none!important}
 /* header shares the page background, separated only by a fine gold line */
 body.pattern-dark{background-attachment:fixed,fixed}
 header{background:var(--tex-dark-site)!important;background-color:var(--bg)!important;background-attachment:fixed,fixed!important;border-bottom:0!important}
@@ -1793,7 +1793,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     var h=location.hash.slice(1),tgt=h&&document.getElementById(h),shared=tgt&&tgt.closest('footer');
     var at=shared?current==='atelier':h.indexOf('atelier')===0,brand=at?'atelier':'visuals';
     if(brand!==current&&current!==null&&!veiling&&!veilDone&&!reduce&&(function(){var sp=document.getElementById('splash');return !sp||sp.hidden})()){
-      veiling=true;if(window.splashFxRef)window.splashFxRef(at?'gold':'flash',at?5000:5000,document.getElementById('switch-fx'),at?true:'sw');var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
+      veiling=true;(function(){var c=at?'#F2ECE3':'#0a0a0a',m=document.querySelector('meta[name=theme-color]');document.documentElement.style.backgroundColor=c;if(m)m.setAttribute('content',at?'#F2ECE3':'#0b0b0b')})();if(window.splashFxRef)window.splashFxRef(at?'gold':'flash',at?5000:5000,document.getElementById('switch-fx'),at?true:'sw');var vl=document.getElementById('brand-veil');vl.style.background=brand==='atelier'?'#F2ECE3':'#0a0a0a';vl.classList.add('on');
       setTimeout(function(){veiling=false;veilDone=true;route();veilDone=false;requestAnimationFrame(function(){vl.classList.remove('on')})},520);return}
     if(brand!==current){
       document.body.dataset.brand=brand;document.documentElement.style.backgroundColor=brand==='atelier'?'#F2ECE3':'#0a0a0a';
