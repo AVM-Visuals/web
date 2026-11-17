@@ -1000,6 +1000,12 @@ body[data-brand="atelier"] .services{grid-template-columns:repeat(3,minmax(0,1fr
 body[data-brand="atelier"] .step::before{display:flex!important;align-items:center;justify-content:center;width:52px;height:52px;border:1.5px solid var(--gold);border-radius:50%;font:500 24px/1 var(--serif)!important;font-style:normal!important;font-variant-numeric:lining-nums tabular-nums;color:var(--gold);margin:0 0 16px!important;padding-top:1px;box-sizing:border-box}
 @media (max-width:760px){body[data-brand="atelier"] .step::before{width:42px;height:42px;font-size:19px!important;margin:0!important}body[data-brand="atelier"] .step{grid-template-columns:42px minmax(0,1fr)!important;column-gap:14px!important;align-items:start}}
 .sheet-empty{margin:28px 0 8px;text-align:center;font-family:var(--display);font-size:clamp(26px,3vw,38px);letter-spacing:.02em;color:var(--gold)}
+/* Atelier: footer on the page background, tighter section spacing, plain step numbers */
+body[data-brand="atelier"] footer{background:transparent!important;padding-top:clamp(32px,4vw,52px)}
+body[data-brand="atelier"] main#view-atelier>section{padding-top:clamp(36px,4.5vw,64px);padding-bottom:clamp(36px,4.5vw,64px)}
+body[data-brand="atelier"] main#view-atelier>section.tight{padding-top:0}
+body[data-brand="atelier"] .step::before{content:counter(s,decimal-leading-zero)!important;display:block!important;width:auto!important;height:auto!important;border:0!important;border-radius:0!important;padding:0!important;font:500 44px/1 var(--serif)!important;font-style:normal!important;font-variant-numeric:lining-nums tabular-nums;letter-spacing:.02em;color:var(--gold);margin:0 0 14px!important}
+@media (max-width:760px){body[data-brand="atelier"] .step::before{font-size:28px!important;margin:2px 0 0!important}body[data-brand="atelier"] .step{grid-template-columns:44px minmax(0,1fr)!important}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
