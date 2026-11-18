@@ -2320,9 +2320,9 @@ de:'Aaah, erwischt! Nicht herunterladen – schreib uns lieber wegen der Fotos o
 uk:'Ааа, попався! Не завантажуй, краще напиши нам щодо фото чи відео. Гарного тобі дня! 😉📸✨'};
 var el=document.createElement('div');el.id='nofoto';el.setAttribute('role','alert');
 el.innerHTML='<div class="nf-hand" aria-hidden="true">🫵</div><div class="nf-busted">Busted!</div><div class="nf-txt"></div>';
-document.body.appendChild(el);var tm;el.addEventListener('click',function(){clearTimeout(tm);el.classList.remove('on');document.body.classList.remove('nf-blur')});el.addEventListener('contextmenu',function(e){e.preventDefault()});
+document.body.appendChild(el);var tm;el.addEventListener('contextmenu',function(e){e.preventDefault()});
 function show(blur){var l=(typeof LANG!=='undefined'&&T[LANG])?LANG:'cs';el.querySelector('.nf-txt').textContent=T[l];el.classList.remove('on');void el.offsetWidth;
- el.classList.add('on');if(blur)document.body.classList.add('nf-blur');clearTimeout(tm);tm=setTimeout(function(){el.classList.remove('on');document.body.classList.remove('nf-blur')},4600)}
+ el.classList.add('on');if(blur)document.body.classList.add('nf-blur');clearTimeout(tm);tm=setTimeout(function(){el.classList.remove('on');document.body.classList.remove('nf-blur')},6000)}
 function media(t){return t&&t.closest&&t.closest('img,video,.shot,.gal,.vmodal,.reel,picture,figure')}
 document.addEventListener('contextmenu',function(e){if(media(e.target)){e.preventDefault();show(true)}},true);
 document.addEventListener('dragstart',function(e){if(media(e.target)){e.preventDefault();show(true)}},true);
