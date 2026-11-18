@@ -2243,7 +2243,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     if(location.hash==='#'+go)route();else location.hash=go;
     function done(){splash.hidden=true;setTimeout(function(){if(splash.parentNode)splash.parentNode.removeChild(splash)},50);document.documentElement.classList.remove('sp-cream');document.body.classList.remove('splash-open','splash-out');splash.classList.remove('leaving','go-v','go-a','fade');window.scrollTo(0,1);requestAnimationFrame(function(){window.scrollTo(0,0)})}
     if(reduce){done();return}
-    splash.classList.add('leaving',go==='top'?'go-v':'go-a');document.body.classList.add('splash-out');
+    splash.classList.add('leaving',go==='top'?'go-v':'go-a');document.body.classList.add('splash-out');(function(){var v=go==='top',m=document.querySelector('meta[name=theme-color]');document.documentElement.classList.remove('sp-cream');document.documentElement.style.backgroundColor=v?'#0a0a0a':'#F2ECE3';if(m)m.setAttribute('content',v?'#0b0b0b':'#F2ECE3');splash.querySelectorAll('.sp-edge').forEach(function(e){e.style.display='none'})})();
     splashFx(go==='top'?'flash':'gold',go==='top'?3000:3400);
     setTimeout(function(){splash.classList.add('fade')},1900);
     setTimeout(done,3300);
@@ -2252,7 +2252,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
   document.getElementById('reopen').addEventListener('click',function(){
     splash.classList.remove('leaving','go-v','go-a','fade');
     var c=splash.querySelector('.sp-fx');if(c&&c.getContext)c.getContext('2d').clearRect(0,0,c.width,c.height);
-    splash.hidden=false;document.body.classList.add('splash-open');document.documentElement.classList.add('sp-cream');
+    splash.hidden=false;document.body.classList.add('splash-open');document.documentElement.classList.add('sp-cream');document.documentElement.style.backgroundColor='';splash.querySelectorAll('.sp-edge').forEach(function(e){e.style.display=''});
   });
 
 
