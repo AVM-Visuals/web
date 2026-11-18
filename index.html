@@ -1184,6 +1184,21 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
 /* Vánoční focení: na velké obrazovce stromeček hned vedle „2026“, na mobilu tlačítka pod textem */
 @media (min-width:761px){body[data-brand="atelier"] .season .big{justify-self:start;padding-right:0}body[data-brand="atelier"] .season .xtree{right:auto;left:calc(100% + 14px);height:130%;top:42%}}
 @media (max-width:760px){body[data-brand="atelier"] .season{grid-template-columns:minmax(0,1fr)}.season-btns{flex-direction:row;flex-wrap:wrap}.season-btns .btn{flex:1 1 140px;white-space:nowrap;padding-left:14px;padding-right:14px}}
+
+/* okénko po odeslání formuláře */
+.okm{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(8,8,7,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .3s}
+.okm.on{opacity:1}.okm:not(.on){pointer-events:none}.okm[hidden]{display:none}
+body[data-brand="atelier"] .okm{background:rgba(60,45,25,.35)}
+.okc{position:relative;width:min(440px,100%);text-align:center;border-radius:10px;padding:40px 34px 32px;background:#141312;color:#f1ece2;border:1px solid rgba(201,169,110,.45);border-top:2px solid var(--gold);box-shadow:0 30px 80px rgba(0,0,0,.5);transform:translateY(14px) scale(.97);transition:transform .35s cubic-bezier(.2,1.2,.4,1)}
+.okm.on .okc{transform:none}
+body[data-brand="atelier"] .okc{background:#fcf9f4;color:#1e1a17;border-color:rgba(160,120,60,.35);box-shadow:0 30px 80px rgba(70,50,25,.25)}
+.okc .okx{position:absolute;top:8px;right:10px;width:36px;height:36px;border:0;background:none;color:inherit;font-size:26px;line-height:1;opacity:.6;cursor:pointer}
+.okc .okx:hover{opacity:1}
+.okc .ic{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center}
+.okc .ic svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.okc h3{margin:0 0 10px;font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:.01em}
+body[data-brand="atelier"] .okc h3{font-family:var(--orn);font-weight:400;font-size:44px;line-height:1.1}
+.okc p{margin:0 0 22px;line-height:1.6;opacity:.85}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -2383,7 +2398,7 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
       // 1) e-mail hned přes naši schránku, 2) záloha v Netlify Forms; stačí, když projde jedno z toho
       var mail=fetch('/api/poptavka',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
       var back=fetch('/',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
-      Promise.all([mail,back]).then(function(r){if(!r[0]&&!r[1])throw 0;out.textContent=MSG[LANG];f.reset();newQ(f)})
+      Promise.all([mail,back]).then(function(r){if(!r[0]&&!r[1])throw 0;out.textContent='';f.reset();newQ(f);if(window.showSent)showSent()})
         .catch(function(){out.textContent=ERR[LANG].replace('{to}',out.dataset.to)})
         .then(function(){btn.disabled=false});
     });
@@ -2480,5 +2495,14 @@ function chk(){if(document.body.dataset.brand==='atelier'){load();mo.disconnect(
 var sp=document.getElementById('splash');if(sp)sp.querySelectorAll('.half.a,[data-go="atelier"]').forEach(function(a){a.addEventListener('pointerenter',load,{once:true});a.addEventListener('click',load,{once:true})})})();</script>
 <script>/* formuláře: hvězdička u povinných polí */
 document.querySelectorAll('.demo-form [required]').forEach(function(x){if(x.closest('.botq')||x.name==='check')return;var l=x.id&&document.querySelector('label[for="'+x.id+'"]');if(l)l.classList.add('req');x.addEventListener('input',function(){x.classList.remove('bad')})});</script>
+<script>/* okénko „Děkujeme!“ po úspěšném odeslání formuláře */
+(function(){var T={cs:['Děkujeme!','Vaše poptávka byla úspěšně odeslána.<br>Ozveme se Vám co nejdříve.','Zavřít'],en:['Thank you!','Your enquiry has been sent successfully.<br>We will get back to you as soon as possible.','Close'],de:['Vielen Dank!','Ihre Anfrage wurde erfolgreich gesendet.<br>Wir melden uns so schnell wie möglich.','Schließen'],uk:['Дякуємо!','Ваш запит успішно надіслано.<br>Ми зв’яжемося з вами якнайшвидше.','Закрити']};
+var m=document.createElement('div');m.className='okm';m.hidden=true;m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');
+m.innerHTML='<div class="okc"><button type="button" class="okx" aria-label="×">×</button><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3></h3><p></p><button type="button" class="btn primary okb"></button></div>';
+document.body.appendChild(m);var last=null;
+function close(){m.classList.remove('on');setTimeout(function(){m.hidden=true},300);if(last&&last.focus)try{last.focus()}catch(_){}}
+m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.okx,.okb'))close()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
+window.showSent=function(){var l=(typeof LANG!=='undefined'&&T[LANG])?LANG:'cs',t=T[l];m.querySelector('h3').textContent=t[0];m.querySelector('p').innerHTML=t[1];m.querySelector('.okb').textContent=t[2];last=document.activeElement;m.hidden=false;void m.offsetWidth;m.classList.add('on');setTimeout(function(){m.querySelector('.okb').focus()},50)};})();</script>
 </body>
 </html>
