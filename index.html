@@ -1027,7 +1027,7 @@ body[data-brand="atelier"] header{background:var(--tex-light-site)!important;bac
 #nofoto:not(.on){visibility:hidden}
 header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#C9A23E 15%,#E5C66A 50%,#C9A23E 85%,transparent);pointer-events:none}
 /* phone browsers tint their top/bottom bars from the colours touching the screen edges: dark on top (Visuals), cream at the bottom (Atelier) */
-.sp-edge{position:fixed;left:0;right:0;height:3px;z-index:3;pointer-events:none}
+.sp-edge{position:fixed;left:0;right:0;height:3px;z-index:3;pointer-events:none}@media (min-aspect-ratio:1/1){.sp-edge{display:none!important}}
 .sp-edge-t{top:0;background:#151515}.sp-edge-b{bottom:0;background:#F2ECE3}
 .splash.leaving .sp-edge{opacity:0;transition:opacity .4s}
 html.sp-cream{background-color:#F2ECE3!important}
