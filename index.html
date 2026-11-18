@@ -2401,7 +2401,7 @@ body[data-brand="atelier"] .okc h3{font-family:var(--orn);font-weight:400;font-s
       // 1) e-mail hned přes naši schránku, 2) záloha v Netlify Forms; stačí, když projde jedno z toho
       var mail=fetch('/api/poptavka',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
       var back=fetch('/',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
-      Promise.all([mail,back]).then(function(r){if(!r[0]&&!r[1])throw 0;out.textContent='';f.reset();newQ(f);if(window.showSent)showSent()})
+      Promise.all([mail,back]).then(function(r){if(!r[0]&&!r[1])throw 0;out.textContent='';f.reset();newQ(f);if(window.showSent)showSent();if(window.avmTrack)avmTrack(document.body.dataset.brand==='atelier'?'Rezervace odeslána':'Poptávka odeslána')})
         .catch(function(){out.textContent=ERR[LANG].replace('{to}',out.dataset.to)})
         .then(function(){btn.disabled=false});
     });
@@ -2507,5 +2507,14 @@ function close(){m.classList.remove('on');setTimeout(function(){m.hidden=true},3
 m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.okx,.okb'))close()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});
 window.showSent=function(){var l=(typeof LANG!=='undefined'&&T[LANG])?LANG:'cs',t=T[l];m.querySelector('h3').textContent=t[0];m.querySelector('p').innerHTML=t[1];m.querySelector('.okb').textContent=t[2];last=document.activeElement;m.hidden=false;void m.offsetWidth;m.classList.add('on');setTimeout(function(){m.querySelector('.okb').focus()},50)};})();</script>
+<script>/* anonymní měření návštěvnosti (Umami, bez cookies): Visuals a Ateliér zvlášť + důležité události */
+(function(){var sent={},cur=null;function T(){return window.umami}
+function page(){var b=document.body,v=b.classList.contains('splash-open')?'uvod':(b.dataset.brand==='atelier'?'atelier':'visuals');if(v===cur)return;cur=v;
+var go=function(){if(!T())return setTimeout(go,500);T().track(function(p){return Object.assign({},p,{url:'/'+(v==='uvod'?'':v),title:v==='uvod'?'Úvodní obrazovka':(v==='atelier'?'AVM Atelier':'AVM Visuals')})})};go()}
+new MutationObserver(page).observe(document.body,{attributes:true,attributeFilter:['data-brand','class']});
+window.avmTrack=function(n,d){try{T()&&T().track(n,d)}catch(_){}};
+var s=document.createElement('script');s.defer=true;s.src='https://cloud.umami.is/script.js';s.setAttribute('data-website-id','9838a7a6-23c4-45fa-99d6-710ebc827d72');s.setAttribute('data-auto-track','false');s.setAttribute('data-domains','avm-visuals.cz,www.avm-visuals.cz');s.onload=page;document.head.appendChild(s);
+document.addEventListener('click',function(e){var a=e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',w=document.body.dataset.brand==='atelier'?'Atelier':'Visuals';
+if(h==='#atelier-cenik')avmTrack('Ceník');else if(/instagram\.com|facebook\.com|youtu/.test(h)&&!a.closest('.shot'))avmTrack('Sociální síť',{kam:h.split('/')[2],web:w});else if(/^tel:/.test(h))avmTrack('Telefon',{web:w});else if(/^mailto:/.test(h))avmTrack('E-mail',{web:w});else if(a.closest('.shot'))avmTrack('Dlaždice',{nazev:(a.getAttribute('data-title')||(a.querySelector('b')||{}).textContent||'').slice(0,60),web:w})},true)})();</script>
 </body>
 </html>
