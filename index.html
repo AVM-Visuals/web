@@ -1180,6 +1180,10 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
 .xp-opt b{font-family:var(--display);font-weight:600;font-size:22px;letter-spacing:.01em}
 @media (max-width:520px){.xp-optw{margin:-6px 0 20px}.xp-opt{gap:7px;padding:7px 14px;font-size:13px}.xp-opt i{font-size:14px}.xp-opt b{font-size:16px}}
 @media (max-width:350px){.xp-opt{white-space:normal;flex-wrap:wrap;justify-content:center;row-gap:2px}}
+
+/* Vánoční focení: na velké obrazovce stromeček hned vedle „2026“, na mobilu tlačítka pod textem */
+@media (min-width:761px){body[data-brand="atelier"] .season .big{justify-self:start;padding-right:0}body[data-brand="atelier"] .season .xtree{right:auto;left:calc(100% + 14px);height:130%;top:42%}}
+@media (max-width:760px){body[data-brand="atelier"] .season{grid-template-columns:minmax(0,1fr)}.season-btns{flex-direction:row;flex-wrap:wrap}.season-btns .btn{flex:1 1 140px;white-space:nowrap;padding-left:14px;padding-right:14px}}
 </style>
 </head>
 <body class="pattern-dark splash-open" data-brand="visuals">
@@ -2375,8 +2379,11 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
       out.classList.remove('err');var btn=f.querySelector('button[type=submit]');
       if(!f.checkValidity()){f.reportValidity();return}
       btn.disabled=true;
-      fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(f)).toString()})
-        .then(function(r){if(!r.ok)throw 0;out.textContent=MSG[LANG];f.reset();newQ(f)})
+      var body=new URLSearchParams(new FormData(f)).toString(),H={'Content-Type':'application/x-www-form-urlencoded'};
+      // 1) e-mail hned přes naši schránku, 2) záloha v Netlify Forms; stačí, když projde jedno z toho
+      var mail=fetch('/api/poptavka',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
+      var back=fetch('/',{method:'POST',headers:H,body:body}).then(function(r){return r.ok}).catch(function(){return false});
+      Promise.all([mail,back]).then(function(r){if(!r[0]&&!r[1])throw 0;out.textContent=MSG[LANG];f.reset();newQ(f)})
         .catch(function(){out.textContent=ERR[LANG].replace('{to}',out.dataset.to)})
         .then(function(){btn.disabled=false});
     });
