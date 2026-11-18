@@ -4,7 +4,7 @@
 //   SMTP_PASS  – heslo k této schránce
 //   SMTP_HOST  – volitelně, výchozí smtp.forpsi.com
 //   SMTP_PORT  – volitelně, výchozí 465 (SSL)
-//   MAIL_TO_VISUALS / MAIL_TO_ATELIER – volitelně, kam zprávy chodí
+//   MAIL_TO_VISUALS / MAIL_TO_ATELIER – volitelně, kam zprávy chodí (více adres oddělte čárkou)
 import tls from 'node:tls';
 import net from 'node:net';
 
@@ -21,7 +21,7 @@ function smtpSend({ host, port, secure, user, pass, from, to, raw }) {
       [334, () => b64(user)],
       [334, () => b64(pass)],
       [235, () => `MAIL FROM:<${from}>`],
-      [250, () => `RCPT TO:<${to}>`],
+      ...to.map((a) => [250, () => `RCPT TO:<${a}>`]),
       [250, () => `DATA`],
       [354, () => raw.replace(/\r?\n/g, '\r\n').replace(/^\./gm, '..') + '\r\n.'],
       [250, () => `QUIT`],
@@ -46,9 +46,12 @@ function smtpSend({ host, port, secure, user, pass, from, to, raw }) {
 const encH = (s) => /[^\x20-\x7e]/.test(s) ? `=?UTF-8?B?${Buffer.from(s, 'utf8').toString('base64')}?=` : s;
 const wrap64 = (s) => Buffer.from(s, 'utf8').toString('base64').replace(/.{76}/g, '$&\r\n');
 
+// Oba formuláře chodí na obě adresy, aby je kontrolovali dva lidé (lze přepsat proměnnými, adresy oddělené čárkou)
+const BOTH = 'info@avm-visuals.cz,atelier@avm-visuals.cz';
+const list = (v) => String(v).split(',').map((a) => a.trim()).filter(Boolean);
 const FORMS = {
-  'poptavka-visuals': { to: process.env.MAIL_TO_VISUALS || 'info@avm-visuals.cz', label: 'Poptávka AVM Visuals' },
-  'rezervace-atelier': { to: process.env.MAIL_TO_ATELIER || 'atelier@avm-visuals.cz', label: 'Rezervace AVM Atelier' },
+  'poptavka-visuals': { to: list(process.env.MAIL_TO_VISUALS || BOTH), label: 'Poptávka AVM Visuals' },
+  'rezervace-atelier': { to: list(process.env.MAIL_TO_ATELIER || BOTH), label: 'Rezervace AVM Atelier' },
 };
 const FIELDS = [
   ['name', 'Jméno'], ['surname', 'Příjmení'], ['email', 'E-mail'], ['phone', 'Telefon'],
@@ -96,7 +99,7 @@ export default async (req, context) => {
   const bnd = 'avm' + Date.now().toString(36);
   const raw = [
     `From: ${encH('Web AVM Visuals')} <${SMTP_USER}>`,
-    `To: <${form.to}>`,
+    `To: ${form.to.map((a) => `<${a}>`).join(', ')}`,
     `Reply-To: ${encH(`${v.name} ${v.surname}`.slice(0, 120))} <${email}>`,
     `Subject: ${encH(subject)}`,
     `Date: ${new Date().toUTCString()}`,
