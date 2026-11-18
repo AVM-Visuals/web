@@ -314,8 +314,8 @@ body[data-brand="atelier"] h1,body[data-brand="atelier"] h2,.teaser h2{font-fami
 .at-track{display:flex;height:100%;transition:transform 1.8s cubic-bezier(.45,0,.2,1)}
 .at-slider.drag .at-track{transition:none}
 .at-slide{flex:0 0 100%;height:100%;overflow:hidden}
-.at-slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.07);transition:transform 7.5s ease-out;pointer-events:none;user-select:none}
-.at-slide.on img{transform:scale(1)}
+.at-slide img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.07);transition:transform 0s linear 2s;pointer-events:none;user-select:none}
+.at-slide.on img{transform:scale(1);transition:transform 6.5s cubic-bezier(.25,.1,.3,1)}
 .at-fade{display:none}.at-slider{-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 18%,#000 48%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 18%,#000 48%)}
 .at-nav{position:absolute;right:clamp(16px,3vw,40px);top:clamp(16px,3vw,32px);display:flex;gap:8px;z-index:3}
 .at-nav button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(20,16,10,.28);color:#fff;font:400 24px/1 var(--body);cursor:pointer;backdrop-filter:blur(4px);transition:background .2s}
@@ -1477,11 +1477,11 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
         <div class="at-slide"><img src="/a/hero_at_1.jpg" alt="Holčička objímá plyšového medvídka v dětském stanu" style="object-position:50% 38%"></div>
         <div class="at-slide"><img src="/a/hero_at_2.jpg" alt="Novorozenec s plyšákem pod vánoční hvězdou" style="object-position:50% 45%"></div>
         <div class="at-slide"><img src="/a/hero_at_3.jpg" alt="Sourozenci ve vánočních svetrech v dětském stanu" style="object-position:50% 40%"></div>
-        <div class="at-slide"><img src="/a/hero_at_4.jpg" alt="Sestry v krémových šatech na chlupaté dece" style="object-position:50% 50%" loading="lazy"></div>
-        <div class="at-slide"><img src="/a/hero_at_5b.jpg" alt="Usměvavé miminko s plyšovým medvídkem" style="object-position:0% 45%" loading="lazy"></div>
-        <div class="at-slide"><img src="/a/hero_at_6.jpg" alt="Miminko v červeném svetru v dětském stanu" style="object-position:62% 40%" loading="lazy"></div>
-        <div class="at-slide"><img src="/a/hero_at_7.jpg" alt="Holčička s medvídkem a zlatým dárkem" style="object-position:50% 35%" loading="lazy"></div>
-        <div class="at-slide"><img src="/a/hero_at_8.jpg" alt="Rodina s miminkem u vánočního stromku" style="object-position:50% 40%" loading="lazy"></div>
+        <div class="at-slide"><img src="/a/hero_at_4.jpg" alt="Sestry v krémových šatech na chlupaté dece" style="object-position:50% 50%"></div>
+        <div class="at-slide"><img src="/a/hero_at_5b.jpg" alt="Usměvavé miminko s plyšovým medvídkem" style="object-position:0% 45%"></div>
+        <div class="at-slide"><img src="/a/hero_at_6.jpg" alt="Miminko v červeném svetru v dětském stanu" style="object-position:62% 40%"></div>
+        <div class="at-slide"><img src="/a/hero_at_7.jpg" alt="Holčička s medvídkem a zlatým dárkem" style="object-position:50% 35%"></div>
+        <div class="at-slide"><img src="/a/hero_at_8.jpg" alt="Rodina s miminkem u vánočního stromku" style="object-position:50% 40%"></div>
       </div>
       <div class="at-fade" aria-hidden="true"></div>
       <div class="at-nav"><button type="button" class="at-prev" aria-label="Předchozí fotka">‹</button><button type="button" class="at-next" aria-label="Další fotka">›</button></div>
@@ -1761,7 +1761,7 @@ body[data-brand="atelier"] .step::before{content:counter(s)!important;display:bl
     var x0=null,s0=0,mv=0;st.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;x0=e.clientX;s0=st.scrollLeft;mv=0;st.style.scrollSnapType='none';st.style.scrollBehavior='auto'});addEventListener('pointermove',function(e){if(x0==null)return;mv=Math.max(mv,Math.abs(e.clientX-x0));st.scrollLeft=s0-(e.clientX-x0)});addEventListener('pointerup',function(){if(x0==null)return;x0=null;st.style.scrollSnapType='';st.style.scrollBehavior=''});st.addEventListener('click',function(e){if(mv>5){e.preventDefault();mv=0}},true)})})();
 
   (function(){function mark(im){if(im.classList.contains('fi'))return;if(im.complete&&im.naturalWidth){return}im.classList.add('fi');var d=function(){im.classList.add('ld')};im.addEventListener('load',d,{once:true});im.addEventListener('error',d,{once:true})}
-    document.querySelectorAll('img').forEach(function(im){if(!/\/a\/|^a\//.test(im.getAttribute('src')||''))return;im.decoding='async';mark(im)})})();
+    document.querySelectorAll('img').forEach(function(im){if(!/\/a\/|^a\//.test(im.getAttribute('src')||'')||im.closest('.at-slide'))return;im.decoding='async';mark(im)})})();
 
   (function(){var m=document.querySelector('meta[name=theme-color]');function u(){if(m)m.setAttribute('content',document.body.dataset.brand==='atelier'?'#F2ECE3':'#0b0b0b')}u();new MutationObserver(u).observe(document.body,{attributes:true,attributeFilter:['data-brand']})})();
   function setLang(l){setTimeout(function(){window.fitSvc&&fitSvc()},50);
