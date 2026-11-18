@@ -50,8 +50,8 @@ const wrap64 = (s) => Buffer.from(s, 'utf8').toString('base64').replace(/.{76}/g
 const BOTH = 'info@avm-visuals.cz,atelier@avm-visuals.cz';
 const list = (v) => String(v).split(',').map((a) => a.trim()).filter(Boolean);
 const FORMS = {
-  'poptavka-visuals': { to: list(process.env.MAIL_TO_VISUALS || BOTH), label: 'Poptávka AVM Visuals' },
-  'rezervace-atelier': { to: list(process.env.MAIL_TO_ATELIER || BOTH), label: 'Rezervace AVM Atelier' },
+  'poptavka-visuals': { to: list(process.env.MAIL_TO_VISUALS || BOTH), label: 'Poptávka AVM Visuals', sender: 'AVM Visuals - poptávka z webu' },
+  'rezervace-atelier': { to: list(process.env.MAIL_TO_ATELIER || BOTH), label: 'Rezervace AVM Atelier', sender: 'AVM Atelier - poptávka z webu' },
 };
 const FIELDS = [
   ['name', 'Jméno'], ['surname', 'Příjmení'], ['email', 'E-mail'], ['phone', 'Telefon'],
@@ -98,7 +98,7 @@ export default async (req, context) => {
   const subject = `${form.label}: ${v.name} ${v.surname}${v.type ? ' – ' + v.type : ''}`.slice(0, 200);
   const bnd = 'avm' + Date.now().toString(36);
   const raw = [
-    `From: ${encH('Web AVM Visuals')} <${SMTP_USER}>`,
+    `From: ${encH(form.sender)} <${SMTP_USER}>`,
     `To: ${form.to.map((a) => `<${a}>`).join(', ')}`,
     `Reply-To: ${encH(`${v.name} ${v.surname}`.slice(0, 120))} <${email}>`,
     `Subject: ${encH(subject)}`,
