@@ -1227,7 +1227,7 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
         </div>
       </div>
       <figure class="showreel" id="showreel">
-        <video src="/a/showreel.mp4" poster="/a/showreel_poster.jpg" muted playsinline webkit-playsinline preload="auto" aria-label="AVM showreel"></video>
+        <video src="/a/showreel.mp4" data-m="/a/showreel_m.mp4" poster="/a/showreel_poster.jpg" muted playsinline webkit-playsinline preload="none" aria-label="AVM showreel"></video>
         <figcaption class="sr-label"><i></i>AVM SHOWREEL</figcaption>
         <button type="button" class="sr-sound" aria-label="Zvuk" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
       </figure>
@@ -1486,13 +1486,13 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
     <div class="at-slider" aria-roledescription="carousel" aria-label="Ukázky z ateliéru">
       <div class="at-track">
         <div class="at-slide"><img src="/a/hero_at_1.jpg" alt="Holčička objímá plyšového medvídka v dětském stanu" style="object-position:50% 38%"></div>
-        <div class="at-slide"><img src="/a/hero_at_2.jpg" alt="Novorozenec s plyšákem pod vánoční hvězdou" style="object-position:50% 45%"></div>
-        <div class="at-slide"><img src="/a/hero_at_3.jpg" alt="Sourozenci ve vánočních svetrech v dětském stanu" style="object-position:50% 40%"></div>
-        <div class="at-slide"><img src="/a/hero_at_4.jpg" alt="Sestry v krémových šatech na chlupaté dece" style="object-position:50% 50%"></div>
-        <div class="at-slide"><img src="/a/hero_at_5b.jpg" alt="Usměvavé miminko s plyšovým medvídkem" style="object-position:0% 45%"></div>
-        <div class="at-slide"><img src="/a/hero_at_6.jpg" alt="Miminko v červeném svetru v dětském stanu" style="object-position:62% 40%"></div>
-        <div class="at-slide"><img src="/a/hero_at_7.jpg" alt="Holčička s medvídkem a zlatým dárkem" style="object-position:50% 35%"></div>
-        <div class="at-slide"><img src="/a/hero_at_8.jpg" alt="Rodina s miminkem u vánočního stromku" style="object-position:50% 40%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_2.jpg" alt="Novorozenec s plyšákem pod vánoční hvězdou" style="object-position:50% 45%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_3.jpg" alt="Sourozenci ve vánočních svetrech v dětském stanu" style="object-position:50% 40%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_4.jpg" alt="Sestry v krémových šatech na chlupaté dece" style="object-position:50% 50%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_5b.jpg" alt="Usměvavé miminko s plyšovým medvídkem" style="object-position:0% 45%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_6.jpg" alt="Miminko v červeném svetru v dětském stanu" style="object-position:62% 40%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_7.jpg" alt="Holčička s medvídkem a zlatým dárkem" style="object-position:50% 35%"></div>
+        <div class="at-slide"><img data-src="/a/hero_at_8.jpg" alt="Rodina s miminkem u vánočního stromku" style="object-position:50% 40%"></div>
       </div>
       <div class="at-fade" aria-hidden="true"></div>
       <div class="at-nav"><button type="button" class="at-prev" aria-label="Předchozí fotka">‹</button><button type="button" class="at-next" aria-label="Další fotka">›</button></div>
@@ -2214,12 +2214,14 @@ body[data-brand="atelier"] .svc,body[data-brand="atelier"] .svc+.svc{-webkit-bac
   // showreel: waits until the splash animation is over, then starts from the beginning;
   // after the splash click it starts with sound, after one full round the sound turns off and it keeps looping muted
   (function(){var f=document.getElementById('showreel');if(!f)return;var v=f.querySelector('video'),b=f.querySelector('.sr-sound'),vis=true,fresh=true,early=false,earlyT;
+    // telefony a malé obrazovky: lehčí verze (960 px), počítače plná; stahuje se až když je potřeba (po kliknutí na Visuals)
+    try{if(v.dataset.m&&window.matchMedia('(max-width:820px)').matches)v.src=v.dataset.m}catch(_){}
     function sync(){b.setAttribute('aria-pressed',v.muted?'false':'true')}
     function play(){var p=v.play();if(p&&p.catch)p.catch(function(){if(!v.muted){v.muted=true;sync();v.play().catch(function(){})}})}
     b.addEventListener('click',function(e){e.preventDefault();v.muted=!v.muted;if(!v.muted)rounds=0;sync();if(!v.muted&&vis&&active())play()});
     var sp=document.getElementById('splash');
     // the click itself unlocks audio (needed on iPhone): start and stop at once, the real start comes after the splash
-    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){early=false;clearTimeout(earlyT);earlyT=setTimeout(function(){early=true;upd()},2850);v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
+    if(sp)sp.querySelectorAll('[data-go="top"]').forEach(function(a){a.addEventListener('click',function(){v.preload='auto';early=false;clearTimeout(earlyT);earlyT=setTimeout(function(){early=true;upd()},2850);v.muted=false;sync();fresh=true;rounds=0;try{var p=v.play();v.pause();if(p&&p.catch)p.catch(function(){})}catch(_){}try{v.currentTime=0}catch(_){}})});
     var rounds=0;v.addEventListener('ended',function(){rounds++;if(rounds>=1){v.muted=true;sync()}try{v.currentTime=0}catch(_){}if(vis&&active())play()});
     function active(){var bc=document.body.classList,fading=bc.contains('splash-out')&&early;return document.body.dataset.brand!=='atelier'&&!document.hidden&&(fading||!bc.contains('splash-open')&&!bc.contains('splash-out'))}
     var startT=0;
@@ -2407,5 +2409,9 @@ window.fitSvc=fit;
 <div id="brand-veil" aria-hidden="true"></div>
 <script>/* ikony pozadí: zlatá linka pod lištou vždy přesně v mezeře mezi řadami ikon (rozteč 72 px) */
 (function(){var h=document.querySelector('header');if(!h)return;function f(){var y=h.getBoundingClientRect().height%72;document.documentElement.style.setProperty('--icy',y.toFixed(2)+'px')}f();addEventListener('resize',f);addEventListener('load',f);if(window.ResizeObserver)new ResizeObserver(f).observe(h)})();</script>
+<script>/* slider ateliéru: zbývající fotky se stáhnou až při vstupu do Ateliéru (návštěvníci Visuals je nestahují) */
+(function(){function load(){var l=document.querySelectorAll('.at-slide img[data-src]');if(!l.length)return true;l.forEach(function(i){i.src=i.dataset.src;i.removeAttribute('data-src')});return true}
+function chk(){if(document.body.dataset.brand==='atelier'){load();mo.disconnect()}}var mo=new MutationObserver(chk);mo.observe(document.body,{attributes:true,attributeFilter:['data-brand']});chk();
+var sp=document.getElementById('splash');if(sp)sp.querySelectorAll('.half.a,[data-go="atelier"]').forEach(function(a){a.addEventListener('pointerenter',load,{once:true});a.addEventListener('click',load,{once:true})})})();</script>
 </body>
 </html>
